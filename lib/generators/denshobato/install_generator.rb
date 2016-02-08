@@ -10,7 +10,7 @@ module Denshobato
 
       def copy_messages
         sleep 1
-        copy_file './migrations/create_messages.rb', "db/migrate/#{time}_create_denshobato_messagess.rb"
+        copy_file './migrations/create_messages.rb', "db/migrate/#{time}_create_denshobato_messages.rb"
       end
 
       def done
