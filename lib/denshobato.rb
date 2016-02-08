@@ -1,4 +1,4 @@
 require 'denshobato/version'
-require 'denshobato/engine'
+require 'denshobato/engine' if defined?(Rails)
 
 module Denshobato; end

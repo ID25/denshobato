@@ -1,8 +1,8 @@
 module Denshobato
   class Engine < Rails::Engine
-    initializer 'denshobato initialize' do
+    initializer 'initialize Denshobato' do |_app|
       ActiveSupport.on_load(:active_record) do
-        p 'Added to your app!'
+        include Denshobato
       end
     end
   end
