@@ -1,4 +1,10 @@
 require 'denshobato/version'
-require 'denshobato/engine' if defined?(Rails)
 
-module Denshobato; end
+module Denshobato
+  if defined?(ActiveRecord::Base)
+    require 'denshobato/conversation'   # Active Record Conversation model.
+    require 'denshobato/extenders/core' # denshobato_for method.
+
+    ActiveRecord::Base.extend Denshobato::Extenders::Core
+  end
+end
