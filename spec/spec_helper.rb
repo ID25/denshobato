@@ -14,17 +14,21 @@ ActiveRecord::Schema.define(version: 1) do
     t.string :name, default: ''
   end
 
+  create_table :ducks do |t|
+    t.string :name, default: ''
+  end
+
   create_table :denshobato_conversations do |t|
     t.integer  'sender_id'
     t.integer  'recipient_id'
-    t.string   'sender_class'
-    t.string   'recipient_class'
+    t.string   'sender_class',    default: ''
+    t.string   'recipient_class', default: ''
   end
 
   create_table :denshobato_messages do |t|
     t.integer :conversation_id, index: true
     t.integer :sender_id,       index: true
-    t.text :body, default: ''
+    t.text    :body, default: ''
   end
 end
 

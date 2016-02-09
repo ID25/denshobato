@@ -26,7 +26,7 @@ module Denshobato
     end
 
     def columns
-      [[sender_id, sender_class, recipient_id, recipient_class], [sender_id, recipient_class, recipient_id, sender_class], [recipient_id, recipient_class, sender_id, sender_class], [recipient_id, sender_class, sender_id, recipient_class]]
+      [[sender_id, sender_class, recipient_id, recipient_class], [recipient_id, recipient_class, sender_id, sender_class]]
     end
   end
 end

@@ -13,6 +13,10 @@ describe Denshobato::Conversation do
     denshobato_for :user
   end
 
+  class Duck < ActiveRecord::Base
+    denshobato_for :user
+  end
+
   before :each do
     @sender    = User.create(name: 'Eugene')
     @recipient = User.create(name: 'Steve')
@@ -45,12 +49,19 @@ describe Denshobato::Conversation do
 
   describe 'validate uniqueness' do
     let(:admin) { Admin.create(name: 'Admin') }
+    let(:duck)  { Duck.create(name: 'Donald') }
 
     it 'validate uniqueness' do
       admin.conversations.create(recipient_id: @recipient.id, recipient_class: @recipient.class.name, sender_class: admin.class.name)
       model = @recipient.conversations.create(recipient_id: admin.id, recipient_class: admin.class.name, sender_class: @recipient.class.name)
 
       expect(model.errors.messages[:conversation].join('')).to eq 'You already have conversation with this user.'
+    end
+
+    it 'conversations between user and duck' do
+      conversation = duck.conversations.create(sender_class: duck.class.name, recipient_id: @sender.id, recipient_class: @sender.class.name)
+
+      expect(@sender.conversations[0]).to eq conversation
     end
   end
 
