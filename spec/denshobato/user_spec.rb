@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'denshobato/conversation'
+require 'denshobato/models/conversation'
 
 describe Denshobato::Conversation do
   ActiveRecord::Base.extend Denshobato::Extenders::Core
