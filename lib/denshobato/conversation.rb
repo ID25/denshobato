@@ -2,12 +2,17 @@ module Denshobato
   class Conversation < ::ActiveRecord::Base
     self.table_name = 'denshobato_conversations'
 
+    # Has many messages
+    has_many :denshobato_messages, class_name: '::Denshobato::Message', dependent: :destroy
+
     # Validate fields
     validates :recipient_id, :sender_id, presence: { message: 'can`t be empty' }
     validate  :conversation_uniqueness
 
     # Fetch conversations for current_user/admin/duck/customer/whatever model.
     scope :conversations_for, -> (user) { where('sender_id = ? or recipient_id = ?', user, user) }
+
+    alias messages denshobato_messages
 
     private
 

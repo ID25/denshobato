@@ -14,6 +14,12 @@ ActiveRecord::Schema.define(version: 1) do
     t.integer  'sender_id'
     t.integer  'recipient_id'
   end
+
+  create_table :denshobato_messages do |t|
+    t.integer :conversation_id, index: true
+    t.integer :sender_id,       index: true
+    t.text :body, default: ''
+  end
 end
 
 RSpec.configure do |config|

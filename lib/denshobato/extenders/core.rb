@@ -21,7 +21,7 @@ module Denshobato
 
         # Adds has_many association for a model, to allow it create conversations.
         class_eval do
-          has_many :denshobato_conversations, class_name: '::Denshobato::Conversation', foreign_key: 'sender_id'
+          has_many :denshobato_conversations, class_name: '::Denshobato::Conversation', foreign_key: 'sender_id', dependent: :destroy
 
           # Added alias for the sake of brevity.
           alias_method :conversations, :denshobato_conversations

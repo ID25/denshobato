@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'denshobato/conversation'
+require 'denshobato/message'
 
 describe Denshobato::Conversation do
   ActiveRecord::Base.extend Denshobato::Extenders::Core
@@ -59,6 +60,16 @@ describe Denshobato::Conversation do
       another_sender.conversations.create(recipient_id: @sender.id)
 
       expect(Denshobato::Conversation.conversations_for(@sender)).to eq @sender.my_conversations
+    end
+  end
+
+  describe 'has_many messages' do
+    it 'return Associations::CollectionProxy' do
+      @recipient.conversations.create(recipient_id: @sender.id)
+      conversation = @recipient.conversations.first
+      conversation.messages.create(body: 'Moon Sonata', sender_id: @recipient.id)
+
+      expect(conversation.messages).to eq Denshobato::Message.where(conversation_id: conversation.id)
     end
   end
 end
