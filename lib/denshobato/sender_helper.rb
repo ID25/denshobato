@@ -6,11 +6,12 @@ module Denshobato
       Denshobato::Conversation.conversations_for(self)
     end
 
-    def make_conversation_with
+    def make_conversation_with(recipient)
       # Build conversation.
-      # current_user.make_conversation_with do |f| ...
+      # = form_for current_user.make_conversation_with(recipient) do |f|
+      # = f.submit 'Start Chat', class: 'btn btn-primary'
 
-      conversations.build(sender_class: self.class.name)
+      conversations.build(sender_class: self.class.name, recipient_id: recipient.id, recipient_class: recipient.class.name)
     end
   end
 end

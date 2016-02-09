@@ -57,29 +57,6 @@ describe Denshobato::Conversation do
 
       expect(model.errors.messages[:conversation].join('')).to eq 'You already have conversation with this user.'
     end
-
-    it 'conversations between user and duck' do
-      conversation = duck.conversations.create(sender_class: duck.class.name, recipient_id: @sender.id, recipient_class: @sender.class.name)
-
-      expect(@sender.conversations[0]).to eq conversation
-    end
-  end
-
-  describe 'alias attribute for short' do
-    it 'return same association array' do
-      expect(@sender.conversations).to eq @sender.denshobato_conversations
-    end
-  end
-
-  describe 'conversations_for scope' do
-    let(:another_sender) { User.create(name: 'Harry Potter') }
-
-    it 'return conversations where current user is present as sender or recipient' do
-      @recipient.conversations.create(recipient_id: @sender.id, recipient_class: @sender.class.name, sender_class: @recipient_id.class.name)
-      another_sender.conversations.create(recipient_id: @sender.id, recipient_class: @sender.class.name, sender_class: @recipient_id.class.name)
-
-      expect(Denshobato::Conversation.conversations_for(@sender)).to eq @sender.my_conversations
-    end
   end
 
   describe 'has_many messages' do
