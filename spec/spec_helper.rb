@@ -10,9 +10,15 @@ ActiveRecord::Schema.define(version: 1) do
     t.string :name, default: ''
   end
 
+  create_table :admins do |t|
+    t.string :name, default: ''
+  end
+
   create_table :denshobato_conversations do |t|
     t.integer  'sender_id'
     t.integer  'recipient_id'
+    t.string   'sender_class'
+    t.string   'recipient_class'
   end
 
   create_table :denshobato_messages do |t|

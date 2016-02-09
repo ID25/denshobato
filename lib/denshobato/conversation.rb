@@ -10,7 +10,7 @@ module Denshobato
     validate  :conversation_uniqueness
 
     # Fetch conversations for current_user/admin/duck/customer/whatever model.
-    scope :conversations_for, -> (user) { where('sender_id = ? or recipient_id = ?', user, user) }
+    scope :conversations_for, -> (user) { where('sender_id = ? AND sender_class = ? or recipient_id = ? AND recipient_class = ?', user, user.class.name, user, user.class.name) }
 
     alias messages denshobato_messages
 
@@ -18,10 +18,15 @@ module Denshobato
 
     def conversation_uniqueness
       # Checking conversation for uniqueness, when recipient is sender, and vice versa.
-
-      [[sender_id, recipient_id], [recipient_id, sender_id]].each do |column, kolumn|
-        errors.add(:conversation, 'You already have conversation with this user.') if Conversation.where(sender_id: column, recipient_id: kolumn).present?
+      columns.each do |first, second, third, fourth|
+        if Conversation.where(sender_id: first, sender_class: second, recipient_id: third, recipient_class: fourth).present?
+          errors.add(:conversation, 'You already have conversation with this user.')
+        end
       end
+    end
+
+    def columns
+      [[sender_id, sender_class, recipient_id, recipient_class], [sender_id, recipient_class, recipient_id, sender_class], [recipient_id, recipient_class, sender_id, sender_class], [recipient_id, sender_class, sender_id, recipient_class]]
     end
   end
 end

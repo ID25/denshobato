@@ -9,6 +9,10 @@ describe Denshobato::Conversation do
     denshobato_for :user
   end
 
+  class Admin < ActiveRecord::Base
+    denshobato_for :user
+  end
+
   before :each do
     @sender    = User.create(name: 'Eugene')
     @recipient = User.create(name: 'Steve')
@@ -24,7 +28,7 @@ describe Denshobato::Conversation do
 
   describe 'valiadtions' do
     it 'validate sender_id presence' do
-      model = @sender.denshobato_conversations.build(recipient_id: @recipient.id)
+      model = @sender.denshobato_conversations.build(recipient_id: @recipient.id, recipient_class: @recipient.class.name, sender_class: @sender.class.name)
       model.sender_id = nil
       model.save
 
@@ -40,14 +44,18 @@ describe Denshobato::Conversation do
   end
 
   describe 'validate uniqueness' do
+    let(:admin) { Admin.create(name: 'Admin') }
+
     it 'validate uniqueness' do
-      @sender.denshobato_conversations.create(recipient_id: @recipient.id)
-      model = @recipient.denshobato_conversations.create(recipient_id: @sender.id)
+      admin.conversations.create(recipient_id: @recipient.id, recipient_class: @recipient.class.name, sender_class: admin.class.name)
+      model = @recipient.conversations.create(recipient_id: admin.id, recipient_class: admin.class.name, sender_class: @recipient.class.name)
 
-      expect(model.errors.full_messages.join('')).to eq 'Conversation You already have conversation with this user.'
+      expect(model.errors.messages[:conversation].join('')).to eq 'You already have conversation with this user.'
     end
+  end
 
-    it 'alias attribute for short' do
+  describe 'alias attribute for short' do
+    it 'return same association array' do
       expect(@sender.conversations).to eq @sender.denshobato_conversations
     end
   end
@@ -56,8 +64,8 @@ describe Denshobato::Conversation do
     let(:another_sender) { User.create(name: 'Harry Potter') }
 
     it 'return conversations where current user is present as sender or recipient' do
-      @recipient.conversations.create(recipient_id: @sender.id)
-      another_sender.conversations.create(recipient_id: @sender.id)
+      @recipient.conversations.create(recipient_id: @sender.id, recipient_class: @sender.class.name, sender_class: @recipient_id.class.name)
+      another_sender.conversations.create(recipient_id: @sender.id, recipient_class: @sender.class.name, sender_class: @recipient_id.class.name)
 
       expect(Denshobato::Conversation.conversations_for(@sender)).to eq @sender.my_conversations
     end
@@ -65,7 +73,7 @@ describe Denshobato::Conversation do
 
   describe 'has_many messages' do
     it 'return Associations::CollectionProxy' do
-      @recipient.conversations.create(recipient_id: @sender.id)
+      @recipient.conversations.create(recipient_id: @sender.id, recipient_class: @sender.class.name, sender_class: @recipient_id.class.name)
       conversation = @recipient.conversations.first
       conversation.messages.create(body: 'Moon Sonata', sender_id: @recipient.id)
 
