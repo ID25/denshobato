@@ -8,6 +8,11 @@ describe Denshobato::Conversation do
     denshobato_for :user
   end
 
+  before :each do
+    @sender    = User.create(name: 'Eugene')
+    @recipient = User.create(name: 'Steve')
+  end
+
   describe 'specific table in database' do
     conversation = Denshobato::Conversation
 
@@ -17,11 +22,8 @@ describe Denshobato::Conversation do
   end
 
   describe 'valiadtions' do
-    let(:sender)    { User.create(name: 'Eugene') }
-    let(:recipient) { User.create(name: 'Steve') }
-
     it 'validate sender_id presence' do
-      model = sender.denshobato_conversations.build(recipient_id: recipient.id)
+      model = @sender.denshobato_conversations.build(recipient_id: @recipient.id)
       model.sender_id = nil
       model.save
 
@@ -29,7 +31,7 @@ describe Denshobato::Conversation do
     end
 
     it 'validate recipient_id presence' do
-      model = sender.denshobato_conversations.build
+      model = @sender.denshobato_conversations.build
       model.save
 
       expect(model.errors.full_messages.join('')).to eq 'Recipient can`t be empty'
@@ -37,18 +39,26 @@ describe Denshobato::Conversation do
   end
 
   describe 'validate uniqueness' do
-    let(:sender)    { User.create(name: 'Eugene') }
-    let(:recipient) { User.create(name: 'Steve') }
-
     it 'validate uniqueness' do
-      sender.denshobato_conversations.create(recipient_id: recipient.id)
-      model = recipient.denshobato_conversations.create(recipient_id: sender.id)
+      @sender.denshobato_conversations.create(recipient_id: @recipient.id)
+      model = @recipient.denshobato_conversations.create(recipient_id: @sender.id)
 
       expect(model.errors.full_messages.join('')).to eq 'Conversation You already have conversation with this user.'
     end
 
     it 'alias attribute for short' do
-      expect(sender.conversations).to eq sender.denshobato_conversations
+      expect(@sender.conversations).to eq @sender.denshobato_conversations
+    end
+  end
+
+  describe 'conversations_for scope' do
+    let(:another_sender) { User.create(name: 'Harry Potter') }
+
+    it 'return conversations where current user is present as sender or recipient' do
+      @recipient.conversations.create(recipient_id: @sender.id)
+      another_sender.conversations.create(recipient_id: @sender.id)
+
+      expect(Denshobato::Conversation.conversations_for(@sender)).to eq @sender.my_conversations
     end
   end
 end

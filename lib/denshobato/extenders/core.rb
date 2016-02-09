@@ -16,6 +16,9 @@ module Denshobato
       private
 
       def adds_methods_to_model
+        # Adds helper methods for current_user
+        include Denshobato::SenderHelper
+
         # Adds has_many association for a model, to allow it create conversations.
         class_eval do
           has_many :denshobato_conversations, class_name: '::Denshobato::Conversation', foreign_key: 'sender_id'

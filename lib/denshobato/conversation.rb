@@ -6,6 +6,9 @@ module Denshobato
     validates :recipient_id, :sender_id, presence: { message: 'can`t be empty' }
     validate  :conversation_uniqueness
 
+    # Fetch conversations for current_user/admin/duck/customer/whatever model.
+    scope :conversations_for, -> (user) { where('sender_id = ? or recipient_id = ?', user, user) }
+
     private
 
     def conversation_uniqueness
