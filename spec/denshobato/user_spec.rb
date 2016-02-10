@@ -2,6 +2,7 @@ require 'spec_helper'
 require 'denshobato/models/conversation'
 
 describe Denshobato::Conversation do
+  include Denshobato::HelperUtils
   ActiveRecord::Base.extend Denshobato::Extenders::Core
 
   class User < ActiveRecord::Base
@@ -69,6 +70,19 @@ describe Denshobato::Conversation do
 
       expect(user.my_conversations).to include mark.conversations[0]
       expect(user.my_conversations).to include duck.conversations[0]
+    end
+  end
+
+  describe '#find_conversation_with' do
+    let(:user) { User.create(name: 'DHH') }
+    let(:duck) { Duck.create(name: 'Quack') }
+
+    it 'find conversation with user and duck' do
+      user.make_conversation_with(duck).save
+      result       = user.find_conversation_with(duck)
+      conversation = Denshobato::Conversation.find_by(sender_id: user.id, sender_class: class_name(user), recipient_id: duck.id, recipient_class: class_name(duck))
+
+      expect(result).to eq conversation
     end
   end
 end
