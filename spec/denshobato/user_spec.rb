@@ -14,9 +14,9 @@ describe Denshobato::Conversation do
   end
 
   describe 'conversations_for scope' do
-    let(:sender)         { User.create(name: 'Frodo') }
-    let(:recipient)      { User.create(name: 'Harry Potter') }
-    let(:another_sender) { User.create(name: 'Luke') }
+    let(:sender)         { create(:user, name: 'Frodo') }
+    let(:recipient)      { create(:user, name: 'Harry Potter') }
+    let(:another_sender) { create(:user, name: 'Luke') }
 
     it 'return conversations where current user is present as sender or recipient' do
       recipient.conversations.create(recipient_id: sender.id, recipient_class: sender.class.name, sender_class: recipient.class.name)
@@ -27,7 +27,7 @@ describe Denshobato::Conversation do
   end
 
   describe 'alias attribute for short' do
-    let(:sender) { User.create(name: 'Frodo') }
+    let(:sender) { create(:user, name: 'Frodo') }
 
     it 'return same association array' do
       expect(sender.conversations).to eq sender.denshobato_conversations
@@ -35,8 +35,8 @@ describe Denshobato::Conversation do
   end
 
   describe 'chating between two models' do
-    let(:sender) { User.create(name: 'Frodo') }
-    let(:duck)   { Duck.create(name: 'Donald') }
+    let(:sender) { create(:user, name: 'Frodo') }
+    let(:duck)   { create(:duck, name: 'Quack') }
 
     it 'conversations between user and duck' do
       conversation = duck.conversations.create(sender_class: duck.class.name, recipient_id: sender.id, recipient_class: sender.class.name)
@@ -46,8 +46,8 @@ describe Denshobato::Conversation do
   end
 
   describe '#make_conversation_with' do
-    let(:sender)    { User.create(name: 'Me') }
-    let(:recipient) { Duck.create(name: 'You') }
+    let(:sender)    { create(:user, name: 'Me') }
+    let(:recipient) { create(:duck, name: 'You') }
 
     it 'create conversations' do
       model = sender.make_conversation_with(recipient)
@@ -60,9 +60,9 @@ describe Denshobato::Conversation do
   end
 
   describe '#my_conversations' do
-    let(:user) { User.create(name: 'DHH') }
-    let(:duck) { Duck.create(name: 'Quack') }
-    let(:mark) { User.create(name: 'Mark') }
+    let(:user) { create(:user, name: 'DHH') }
+    let(:duck) { create(:duck, name: 'Quack') }
+    let(:mark) { create(:user, name: 'Mark') }
 
     it 'return all conversations where user as sender or recipient' do
       mark.make_conversation_with(user).save
@@ -74,8 +74,8 @@ describe Denshobato::Conversation do
   end
 
   describe '#find_conversation_with' do
-    let(:user) { User.create(name: 'DHH') }
-    let(:duck) { Duck.create(name: 'Quack') }
+    let(:user) { create(:user, name: 'DHH') }
+    let(:duck) { create(:duck, name: 'Quack') }
 
     it 'find conversation with user and duck' do
       user.make_conversation_with(duck).save

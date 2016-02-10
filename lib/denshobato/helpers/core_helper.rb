@@ -1,5 +1,5 @@
 module Denshobato
-  module DenshobatoHelper
+  module CoreHelper
     include Denshobato::HelperUtils
 
     def my_conversations
@@ -21,12 +21,6 @@ module Denshobato
 
       finder = conversation_finder.new(user, self)
       finder.find_by_sender || finder.find_by_recipient
-    end
-
-    private
-
-    def conversation_finder
-      Denshobato::ConversationFinder
     end
   end
 end

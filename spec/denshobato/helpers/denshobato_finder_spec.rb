@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'denshobato/helpers/denshobato_helper'
+require 'denshobato/helpers/core_helper'
 
 describe Denshobato::ConversationFinder do
   include Denshobato::HelperUtils

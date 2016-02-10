@@ -9,5 +9,9 @@ module Denshobato
     def class_name(klass)
       klass.class.name
     end
+
+    def conversation_finder
+      Denshobato::ConversationFinder
+    end
   end
 end

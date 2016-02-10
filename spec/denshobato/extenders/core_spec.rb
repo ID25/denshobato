@@ -9,8 +9,8 @@ describe Denshobato::Extenders::Core do
   end
 
   describe '#denshobato_for' do
-    let(:user)          { User.create(name: 'Eugene') }
-    let(:recipient)     { User.create(name: 'Johnny Depp') }
+    let(:user)          { create(:user, name: 'Eugene') }
+    let(:recipient)     { create(:user, name: 'Johnny Depp') }
     let!(:conversation) { user.denshobato_conversations.create(recipient_id: recipient.id) }
 
     it 'user has_many conversations' do

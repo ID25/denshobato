@@ -18,8 +18,8 @@ describe Denshobato::Conversation do
   end
 
   before :each do
-    @sender    = User.create(name: 'Eugene')
-    @recipient = User.create(name: 'Steve')
+    @sender    = create(:user, name: 'Eugene')
+    @recipient = create(:user, name: 'Steve')
   end
 
   describe 'specific table in database' do
@@ -48,8 +48,8 @@ describe Denshobato::Conversation do
   end
 
   describe 'validate uniqueness' do
-    let(:admin) { Admin.create(name: 'Admin') }
-    let(:duck)  { Duck.create(name: 'Donald') }
+    let(:admin) { create(:admin) }
+    let(:duck)  { create(:duck) }
 
     it 'validate uniqueness' do
       admin.conversations.create(recipient_id: @recipient.id, recipient_class: @recipient.class.name, sender_class: admin.class.name)
@@ -63,7 +63,7 @@ describe Denshobato::Conversation do
     it 'return Associations::CollectionProxy' do
       @recipient.conversations.create(recipient_id: @sender.id, recipient_class: @sender.class.name, sender_class: @recipient_id.class.name)
       conversation = @recipient.conversations.first
-      conversation.messages.create(body: 'Moon Sonata', sender_id: @recipient.id)
+      conversation.messages.create(body: 'Moon Sonata', sender_id: @recipient.id, sender_class: @recipient.class.name)
 
       expect(conversation.messages).to eq Denshobato::Message.where(conversation_id: conversation.id)
     end

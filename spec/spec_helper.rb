@@ -1,5 +1,6 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'database_cleaner'
+require 'factory_girl'
 require 'active_record'
 require 'denshobato'
 
@@ -28,11 +29,18 @@ ActiveRecord::Schema.define(version: 1) do
   create_table :denshobato_messages do |t|
     t.integer :conversation_id, index: true
     t.integer :sender_id,       index: true
-    t.text    :body, default: ''
+    t.string  :sender_class,    default: ''
+    t.text    :body,            default: ''
   end
 end
 
 RSpec.configure do |config|
+  config.include FactoryGirl::Syntax::Methods
+
+  config.before(:all) do
+    FactoryGirl.reload
+  end
+
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
