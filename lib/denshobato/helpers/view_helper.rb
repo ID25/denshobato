@@ -29,5 +29,19 @@ module Denshobato
 
       sender_id + sender_class + recipient_id + recipient_class
     end
+
+    def populate_message_form(form, message)
+      # @message = current_user.build_conversation_message(@conversation)
+      # = form_for [@conversation, @message] do |form|
+      ### = form.text_field :body
+      ### = populate_message_form(form, @message)
+      ### = form.submit
+
+      sender_id       = form.hidden_field :sender_id,       value: message.sender_id
+      sender_class    = form.hidden_field :sender_class,    value: message.sender_class
+      conversation_id = form.hidden_field :conversation_id, value: message.conversation_id
+
+      sender_id + sender_class + conversation_id
+    end
   end
 end
