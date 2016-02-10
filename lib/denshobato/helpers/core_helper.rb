@@ -36,6 +36,10 @@ module Denshobato
       take_conversation.messages.create(body: text, sender_class: class_name(self), sender_id: id)
     end
 
+    def build_conversation_message(conversation)
+      messages.build(conversation_id: conversation.id, sender_id: id, sender_class: class_name(self))
+    end
+
     private
 
     def create_conversation(sender, recipient)
