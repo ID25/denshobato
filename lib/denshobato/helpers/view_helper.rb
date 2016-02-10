@@ -16,5 +16,18 @@ module Denshobato
         finder.send("find_by_#{name}")
       end
     end
+
+    def populate_conversation_form(form, conversation)
+      # = form_for @conversation do |form|
+      ### = populate_conversation_form(form, @conversation)
+      ### = f.submit 'Start Chating', class: 'btn btn-primary'
+
+      sender_id       = form.hidden_field :sender_id,       value: conversation.sender_id
+      sender_class    = form.hidden_field :sender_class,    value: conversation.sender_class
+      recipient_id    = form.hidden_field :recipient_id,    value: conversation.recipient_id
+      recipient_class = form.hidden_field :recipient_class, value: conversation.recipient_class
+
+      sender_id + sender_class + recipient_id + recipient_class
+    end
   end
 end
