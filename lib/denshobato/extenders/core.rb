@@ -16,8 +16,7 @@ module Denshobato
       private
 
       def adds_methods_to_model
-        include Denshobato::CoreHelper    # Adds helper methods for core model
-        include Denshobato::MessageHelper # Adds helper methods for message model
+        include Denshobato::CoreHelper # Adds helper methods for core model
 
         # Adds has_many association for a model, to allow it create conversations.
         class_eval do

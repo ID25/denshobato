@@ -7,7 +7,6 @@ module Denshobato
     require 'denshobato/models/message'              # Active Record Message model
 
     require 'denshobato/helpers/conversation_finder' # Conversation Finder
-    require 'denshobato/helpers/message_helper'      # Add helper methods to message model
     require 'denshobato/helpers/core_helper'         # Add helper methods to core model
     require 'denshobato/extenders/core'              # denshobato_for method
 
