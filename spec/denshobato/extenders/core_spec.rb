@@ -64,4 +64,25 @@ describe Denshobato::Extenders::Core do
       expect(result).to eq conversation
     end
   end
+
+  describe '#build_conversation_message' do
+    let(:user) { create(:user, name: 'DHH') }
+    let(:duck) { create(:duck, name: 'Quack') }
+
+    it 'build message for conversation with user and duck' do
+      user.make_conversation_with(duck).save
+
+      conversation = user.find_conversation_with(duck)
+      message_1 = user.build_conversation_message(conversation)
+      message_1.body = 'Hello from User'
+      message_1.save
+
+      message_2 = duck.build_conversation_message(conversation)
+      message_2.body = 'Hello from Duck'
+      message_2.save
+
+      expect(conversation.messages.first.body).to eq 'Hello from User'
+      expect(conversation.messages.last.body).to  eq 'Hello from Duck'
+    end
+  end
 end
