@@ -1,5 +1,5 @@
 module Denshobato
-  module SenderHelper
+  module DenshobatoHelper
     def my_conversations
       # Fetch conversations for current_user/admin/duck/customer/whatever model.
 

@@ -2,12 +2,18 @@ require 'denshobato/version'
 
 module Denshobato
   if defined?(ActiveRecord::Base)
-    require 'denshobato/models/conversation' # Active Record Conversation model.
-    require 'denshobato/models/message'      # Active Record Message model.
+    require 'denshobato/models/conversation'       # Active Record Conversation model.
+    require 'denshobato/models/message'            # Active Record Message model.
 
-    require 'denshobato/helpers/sender_helper' # Add helper methods to current_user/admin/whatever model.
-    require 'denshobato/extenders/core'        # denshobato_for method.
+    require 'denshobato/helpers/denshobato_helper' # Add helper methods to user/admin/whatever model.
+    require 'denshobato/extenders/core'            # denshobato_for method.
 
     ActiveRecord::Base.extend Denshobato::Extenders::Core
+  end
+
+  if defined?(ActionView::Base)
+    require 'denshobato/helpers/view_helper'
+
+    ActionView::Base.include Denshobato::ViewHelper
   end
 end

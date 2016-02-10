@@ -17,7 +17,7 @@ module Denshobato
 
       def adds_methods_to_model
         # Adds helper methods for current_user
-        include Denshobato::SenderHelper
+        include Denshobato::DenshobatoHelper
 
         # Adds has_many association for a model, to allow it create conversations.
         class_eval do
