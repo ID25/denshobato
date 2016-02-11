@@ -68,4 +68,13 @@ describe Denshobato::Conversation do
       expect(conversation.messages).to eq Denshobato::Message.where(conversation_id: conversation.id)
     end
   end
+
+  describe 'check sender validation' do
+    it 'get error, when sender create conversation with yourself' do
+      result = @sender.make_conversation_with(@sender)
+
+      expect(result.valid?).to be_falsey
+      expect(result.errors[:conversation].join('')).to eq 'You can`t create conversation with yourself'
+    end
+  end
 end
