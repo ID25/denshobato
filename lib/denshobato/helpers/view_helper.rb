@@ -65,6 +65,14 @@ module Denshobato
       return show_filter(fields, obj2) if fields.any? && user != obj2
     end
 
+    def message_from(message)
+      # Show information about message creator
+
+      return unless message
+      klass = Object.const_get(message.sender_class).find(message.sender_id)
+      "#{klass.name} #{klass.last_name}"
+    end
+
     private
 
     def show_filter(fields, obj)
