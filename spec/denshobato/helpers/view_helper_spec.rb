@@ -28,4 +28,12 @@ describe Denshobato::ViewHelper do
       expect(helper.conversation_exists?(sender, recipient)).to be_truthy
     end
   end
+
+  describe '#can_create_conversation?' do
+    let(:sender)    { create(:user, name: 'X') }
+
+    it 'return true if sender isn`t recipient' do
+      expect(helper.can_create_conversation?(sender, sender)).to be_falsey
+    end
+  end
 end

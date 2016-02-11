@@ -8,8 +8,14 @@ module Denshobato
       when_sender(sender, recipient) || when_recipient(sender, recipient)
     end
 
+    def can_create_conversation?(sender, recipient)
+      # If current sender is current recipient, return false
+
+      class_name(sender) == class_name(recipient) && sender.id == recipient.id ? false : true
+    end
+
     %w(sender recipient).each do |name|
-      # Create when_sender and when_recipient methods, which call finder methods find_by.., to fetch existing conversation.
+      # Create when_sender and when_recipient methods, which call finder methods find_by... to fetch existing conversation.
 
       define_method "when_#{name}" do |sender, recipient|
         finder = Denshobato::ConversationFinder.new(sender, recipient)
