@@ -3,7 +3,7 @@ class CreateDenshobatoMessages < ActiveRecord::Migration
     create_table :denshobato_messages do |t|
       t.integer :conversation_id, index: true
       t.integer :sender_id,       index: true
-      t.integer :sender_class,    default: ''
+      t.string  :sender_class,    default: ''
       t.text    :body,            default: ''
 
       t.timestamps

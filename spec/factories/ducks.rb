@@ -1,5 +1,6 @@
 FactoryGirl.define do
   factory :duck do
-    name { 'Donald' }
+    name      { 'Donald' }
+    last_name { '' }
   end
 end

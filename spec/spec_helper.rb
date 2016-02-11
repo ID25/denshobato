@@ -16,7 +16,8 @@ ActiveRecord::Schema.define(version: 1) do
   end
 
   create_table :ducks do |t|
-    t.string :name, default: ''
+    t.string :name,      default: ''
+    t.string :last_name, default: ''
   end
 
   create_table :denshobato_conversations do |t|

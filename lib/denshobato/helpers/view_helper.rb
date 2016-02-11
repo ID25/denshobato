@@ -23,9 +23,9 @@ module Denshobato
       end
     end
 
-    def populate_conversation_form(form, conversation)
+    def fill_conversation_form(form, conversation)
       # = form_for @conversation do |form|
-      ### = populate_conversation_form(form, @conversation)
+      ### = fill_conversation_form(form, @conversation)
       ### = f.submit 'Start Chating', class: 'btn btn-primary'
 
       sender_id       = form.hidden_field :sender_id,       value: conversation.sender_id
@@ -36,11 +36,11 @@ module Denshobato
       sender_id + sender_class + recipient_id + recipient_class
     end
 
-    def populate_message_form(form, message)
+    def fill_message_form(form, message)
       # @message = current_user.build_conversation_message(@conversation)
       # = form_for [@conversation, @message] do |form|
       ### = form.text_field :body
-      ### = populate_message_form(form, @message)
+      ### = fill_message_form(form, @message)
       ### = form.submit
 
       sender_id       = form.hidden_field :sender_id,       value: message.sender_id
@@ -48,6 +48,31 @@ module Denshobato
       conversation_id = form.hidden_field :conversation_id, value: message.conversation_id
 
       sender_id + sender_class + conversation_id
+    end
+
+    def interlocutor_name(user, conversation, *fields)
+      # This method return text with custom fields from model, with which you've conversation
+
+      # Retrive fields
+      sender    = conversation.as_json(only: [:sender_id, :sender_class])
+      recipient = conversation.as_json(only: [:recipient_id, :recipient_class])
+
+      # Get classes by class names
+      obj  = Object.const_get(recipient['recipient_class']).find(recipient['recipient_id'])
+      obj2 = Object.const_get(sender['sender_class']).find(sender['sender_id'])
+
+      return show_filter(fields, obj)  if fields.any? && user != obj
+      return show_filter(fields, obj2) if fields.any? && user != obj2
+    end
+
+    private
+
+    def show_filter(fields, obj)
+      # Adds fields to View
+      # h3 = "Conversation with: #{interlocutor_name(user, conversation, :first_name, :last_name)}"
+      # => Conversation with John Doe
+
+      fields.each_with_object([]) { |field, array| array << obj.send(:try, field) }.join(' ')
     end
   end
 end
