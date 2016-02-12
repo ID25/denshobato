@@ -14,12 +14,12 @@ module Denshobato
       return show_filter(fields, users[:recipient]) if fields.any? && user != users[:recipient]
     end
 
-    def message_from(message)
+    def message_from(message, *fields)
       # Show information about message creator
 
       return unless message
       klass = Object.const_get(message.sender_class).find(message.sender_id)
-      "#{klass.name} #{klass.last_name}"
+      show_filter(fields, klass)
     end
 
     private
