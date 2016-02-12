@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import store from '../store/Store';
+import Message from './Message';
 
 export default class Messages extends Component {
   constructor(props) {
@@ -21,7 +22,15 @@ export default class Messages extends Component {
             <div className="title">Chat</div>
           </div>
           <ul className="messages">
-
+            {
+              messages.map((message, index) => {
+                return (
+                  <div key={index}>
+                    <Message message={message}/>
+                  </div>
+                );
+              })
+            }
           </ul>
         </div>
       </div>
