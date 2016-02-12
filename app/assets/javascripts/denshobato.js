@@ -21011,9 +21011,17 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+	var _dec, _class;
+
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _Store = __webpack_require__(178);
+
+	var _Store2 = _interopRequireDefault(_Store);
+
+	var _reactRedux = __webpack_require__(159);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -21023,18 +21031,25 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var MessagesContainer = function (_Component) {
+	var MessagesContainer = (_dec = (0, _reactRedux.connect)(function (state) {
+	  return {
+	    messages: state.messages
+	  };
+	}), _dec(_class = function (_Component) {
 	  _inherits(MessagesContainer, _Component);
 
-	  function MessagesContainer() {
+	  function MessagesContainer(props) {
 	    _classCallCheck(this, MessagesContainer);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(MessagesContainer).apply(this, arguments));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(MessagesContainer).call(this, props));
 	  }
 
 	  _createClass(MessagesContainer, [{
 	    key: 'render',
 	    value: function render() {
+	      var messages = this.props.messages;
+
+	      console.log(messages);
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -21048,8 +21063,7 @@
 	  }]);
 
 	  return MessagesContainer;
-	}(_react.Component);
-
+	}(_react.Component)) || _class);
 	exports.default = MessagesContainer;
 
 /***/ },
