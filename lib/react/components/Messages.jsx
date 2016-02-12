@@ -3,6 +3,7 @@ import store from '../store/Store';
 import { actions } from '../actions/Index';
 import Message from './Message';
 import MessageForm from './MessageForm';
+import ChatUtils from '../utils/ChatUtils';
 
 export default class Messages extends Component {
   constructor(props) {
@@ -27,7 +28,7 @@ export default class Messages extends Component {
         <div className="chat_window">
           <div className="top_menu">
             <div className="buttons">
-              <div className="button close" ></div>
+              <div className="button close" onClick={ChatUtils.closeChat}></div>
               <div className="button minimize"></div>
               <div className="button maximize"></div>
             </div>
