@@ -1,5 +1,5 @@
 require 'denshobato/version'
-require 'denshobato/engine'
+require 'denshobato/engine' if defined?(Rails)
 require 'denshobato/helpers/helper_utils'            # Helpers Utils
 require 'denshobato/helpers/view_messaging_helper'   # View Helpers for messaging
 require 'denshobato/helpers/react_helper'            # Helpers for React-Redux
