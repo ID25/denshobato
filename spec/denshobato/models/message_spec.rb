@@ -44,4 +44,15 @@ describe Denshobato::Conversation do
       expect(message.conversation.updated_at.utc.to_s).to eq Time.now.utc.to_s
     end
   end
+
+  describe '#sender' do
+    let(:user)  { create(:user, name: 'Mike') }
+    let(:osama) { create(:user, name: 'Steve') }
+
+    it 'return message creator' do
+      user.send_message('Hello', osama)
+
+      expect(Denshobato::Message.first.sender).to eq user
+    end
+  end
 end
