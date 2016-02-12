@@ -10,5 +10,11 @@ module Denshobato
 
     # Alias
     alias conversation denshobato_conversation
+
+    # Methods
+
+    def sender
+      sender_class.constantize.find(sender_id)
+    end
   end
 end
