@@ -22412,6 +22412,11 @@
 	      _Store2.default.dispatch(_Index.actions.messages.create(e.body, conversation.senderId, conversation.conversationId, conversation.senderClass));
 	    };
 
+	    _this.refreshChat = function () {
+	      var id = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
+	      _Store2.default.dispatch(_Index.actions.messages.fetch(id));
+	    };
+
 	    return _this;
 	  }
 
@@ -22449,6 +22454,11 @@
 	              'div',
 	              { className: 'title' },
 	              'Chat'
+	            ),
+	            _react2.default.createElement(
+	              'button',
+	              { className: 'refresh-button btn', onClick: this.refreshChat },
+	              'Refresh'
 	            )
 	          ),
 	          _react2.default.createElement(
@@ -25788,12 +25798,6 @@
 	    key: 'scrollChat',
 	    value: function scrollChat() {
 	      $('.messages').animate({ scrollTop: $('.messages')[0].scrollWidth }, 500);
-	    }
-	  }, {
-	    key: 'refreshChat',
-	    value: function refreshChat() {
-	      var id = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
-	      store.dispatch(actions.messages.fetch(id));
 	    }
 	  }, {
 	    key: 'closeChat',

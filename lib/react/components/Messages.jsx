@@ -20,6 +20,11 @@ export default class Messages extends Component {
     store.dispatch(actions.messages.create(e.body, conversation.senderId, conversation.conversationId, conversation.senderClass));
   };
 
+  refreshChat = () => {
+    let id = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
+    store.dispatch(actions.messages.fetch(id));
+  };
+
   render() {
     const { messages, conversation } = this.props;
 
@@ -33,6 +38,7 @@ export default class Messages extends Component {
               <div className="button maximize"></div>
             </div>
             <div className="title">Chat</div>
+            <button className='refresh-button btn' onClick={this.refreshChat}>Refresh</button>
           </div>
           <ul className="messages">
             {
