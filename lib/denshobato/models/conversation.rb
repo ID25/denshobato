@@ -3,7 +3,7 @@ module Denshobato
     self.table_name = 'denshobato_conversations'
 
     # Has many messages
-    has_many :denshobato_messages, class_name: '::Denshobato::Message', dependent: :destroy, inverse_of: :denshobato_conversation, foreign_key: 'denshobato_conversation_id'
+    has_many :denshobato_messages, class_name: '::Denshobato::Message', dependent: :destroy, inverse_of: :denshobato_conversation
 
     # Validate fields
     validates         :recipient_id, :sender_id, presence: { message: 'can`t be empty' }

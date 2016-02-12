@@ -37,7 +37,7 @@ module Denshobato
     end
 
     def build_conversation_message(conversation)
-      messages.build(denshobato_conversation_id: conversation.id, sender_id: id, sender_class: class_name(self))
+      messages.build(conversation_id: conversation.id, sender_id: id, sender_class: class_name(self))
     end
 
     private

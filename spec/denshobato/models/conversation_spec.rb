@@ -65,7 +65,7 @@ describe Denshobato::Conversation do
       conversation = @recipient.conversations.first
       conversation.messages.create(body: 'Moon Sonata', sender_id: @recipient.id, sender_class: @recipient.class.name)
 
-      expect(conversation.messages).to eq Denshobato::Message.where(denshobato_conversation_id: conversation.id)
+      expect(conversation.messages).to eq Denshobato::Message.where(conversation_id: conversation.id)
     end
   end
 
