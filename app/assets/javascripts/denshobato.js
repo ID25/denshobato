@@ -21200,9 +21200,10 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.CREATE = exports.FETCH = undefined;
+	exports.DELETE = exports.CREATE = exports.FETCH = undefined;
 	exports.fetch = fetch;
 	exports.create = create;
+	exports.deleteMessage = deleteMessage;
 
 	var _Api = __webpack_require__(183);
 
@@ -21212,6 +21213,7 @@
 
 	var FETCH = exports.FETCH = 'FETCH';
 	var CREATE = exports.CREATE = 'CREATE';
+	var DELETE = exports.DELETE = 'DELETE';
 
 	function fetch(id) {
 	  return function (dispatch) {
@@ -21229,6 +21231,14 @@
 	  };
 	}
 
+	function deleteMessage(id) {
+	  return function (dispatch) {
+	    api.deleteMessage(id).then(function (response) {
+	      return dispatch({ type: DELETE, data: response.data });
+	    });
+	  };
+	}
+
 /***/ },
 /* 183 */
 /***/ function(module, exports, __webpack_require__) {
@@ -21241,6 +21251,7 @@
 	exports.fetch = fetch;
 	exports.conversation = conversation;
 	exports.createMessage = createMessage;
+	exports.deleteMessage = deleteMessage;
 
 	var _axios = __webpack_require__(184);
 
@@ -21260,6 +21271,10 @@
 
 	function createMessage(body, sender, conversation, senderClass) {
 	  return _axios2.default.post(API + '/messages/create_message?body=' + body + '&conversation_id=' + conversation + '&sender_id=' + sender + '&sender_class=' + senderClass);
+	}
+
+	function deleteMessage(id) {
+	  return _axios2.default.delete(API + '/messages/delete_message?id=' + id);
 	}
 
 /***/ },
@@ -25634,6 +25649,12 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _Store = __webpack_require__(178);
+
+	var _Store2 = _interopRequireDefault(_Store);
+
+	var _Index = __webpack_require__(249);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -25646,9 +25667,22 @@
 	  _inherits(Message, _Component);
 
 	  function Message() {
+	    var _Object$getPrototypeO;
+
+	    var _temp, _this, _ret;
+
 	    _classCallCheck(this, Message);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Message).apply(this, arguments));
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Message)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.deleteMessage = function () {
+	      var result = confirm('Delete Message?');
+	      if (result) {
+	        _Store2.default.dispatch(_Index.actions.messages.deleteMessage(_this.props.message.id));
+	      };
+	    }, _temp), _possibleConstructorReturn(_this, _ret);
 	  }
 
 	  _createClass(Message, [{
@@ -25687,7 +25721,12 @@
 	              'div',
 	              { className: 'text' },
 	              message.body
-	            )
+	            ),
+	            message.sender_id == sender.senderId ? _react2.default.createElement(
+	              'span',
+	              { className: 'delete-message', onClick: this.deleteMessage },
+	              'X'
+	            ) : undefined
 	          )
 	        )
 	      );

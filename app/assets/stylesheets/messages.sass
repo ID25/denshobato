@@ -103,11 +103,23 @@
       display: inline-block
     .text_wrapper
       display: inline-block
+      position: relative
       padding: 20px
       border-radius: 6px
       width: calc(100% - 85px)
       min-width: 100px
-      position: relative
+      .delete-message
+        text-align: right
+        display: block
+        padding: 10px
+        margin: 0px
+        position: absolute
+        right: 0px
+        top: 0px
+        color: darkgrey
+        &:hover
+          cursor: pointer
+
       &::after, &:before
         top: 18px
         border: solid transparent
