@@ -11,7 +11,6 @@ export default class MessageForm extends Component {
           <div className="bottom_wrapper clearfix">
             <div className="message_input_wrapper">
               <input className="message_input" placeholder="Type your message here..." {...body}/>
-              <input {...senderClass}/>
               </div>
             <div className="send_message">
               <div className="icon"></div>

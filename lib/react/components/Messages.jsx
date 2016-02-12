@@ -16,8 +16,7 @@ export default class Messages extends Component {
 
   handleSubmit = (e) => {
     const { conversation } = this.props;
-    console.log(e);
-    store.dispatch(actions.messages.create(e.body, conversation.senderId, conversation.conversationId));
+    store.dispatch(actions.messages.create(e.body, conversation.senderId, conversation.conversationId, conversation.senderClass));
   };
 
   render() {

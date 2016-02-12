@@ -9,9 +9,9 @@ export function fetch(id) {
   });
 }
 
-export function create(body, sender, conversation) {
+export function create(body, sender, conversation, senderClass) {
   return ((dispatch) => {
-    api.createMessage(body, sender, conversation)
+    api.createMessage(body, sender, conversation, senderClass)
       .then((message) => dispatch({ type: CREATE, message: message.data }));
   });
 }

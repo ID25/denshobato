@@ -21210,9 +21210,9 @@
 	  };
 	}
 
-	function create(body, sender, conversation) {
+	function create(body, sender, conversation, senderClass) {
 	  return function (dispatch) {
-	    api.createMessage(body, sender, conversation).then(function (message) {
+	    api.createMessage(body, sender, conversation, senderClass).then(function (message) {
 	      return dispatch({ type: CREATE, message: message.data });
 	    });
 	  };
@@ -21247,8 +21247,8 @@
 	  return _axios2.default.get(API + '/conversation_info?id=' + id);
 	}
 
-	function createMessage(body, sender, conversation) {
-	  return _axios2.default.post(API + '/create_message?body=' + body + '&conversation_id=' + conversation + '&sender_id=' + sender);
+	function createMessage(body, sender, conversation, senderClass) {
+	  return _axios2.default.post(API + '/create_message?body=' + body + '&conversation_id=' + conversation + '&sender_id=' + sender + '&sender_class=' + senderClass);
 	}
 
 /***/ },
@@ -22394,8 +22394,7 @@
 	    _this.handleSubmit = function (e) {
 	      var conversation = _this.props.conversation;
 
-	      console.log(e);
-	      _Store2.default.dispatch(_Index.actions.messages.create(e.body, conversation.senderId, conversation.conversationId));
+	      _Store2.default.dispatch(_Index.actions.messages.create(e.body, conversation.senderId, conversation.conversationId, conversation.senderClass));
 	    };
 
 	    return _this;
@@ -22544,7 +22543,7 @@
 
 	var _Conversation = __webpack_require__(205);
 
-	var conversationState = { senderId: null, conversationId: null };
+	var conversationState = { senderId: null, conversationId: null, senderClass: null };
 
 	function conversation() {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? conversationState : arguments[0];
@@ -22552,7 +22551,7 @@
 
 	  switch (action.type) {
 	    case _Conversation.CONVERSATION:
-	      return _extends({}, state, { senderId: action.response.sender_id, conversationId: action.response.conversation_id });
+	      return _extends({}, state, { senderId: action.response.sender_id, conversationId: action.response.conversation_id, senderClass: action.response.sender_class });
 	    default:
 	      return state;
 	  }
@@ -25722,8 +25721,7 @@
 	            _react2.default.createElement(
 	              'div',
 	              { className: 'message_input_wrapper' },
-	              _react2.default.createElement('input', _extends({ className: 'message_input', placeholder: 'Type your message here...' }, body)),
-	              _react2.default.createElement('input', senderClass)
+	              _react2.default.createElement('input', _extends({ className: 'message_input', placeholder: 'Type your message here...' }, body))
 	            ),
 	            _react2.default.createElement(
 	              'div',

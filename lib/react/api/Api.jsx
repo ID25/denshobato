@@ -9,6 +9,6 @@ export function conversation(id) {
   return axios.get(`${API}/conversation_info?id=${id}`);
 }
 
-export function createMessage(body, sender, conversation) {
-  return axios.post(`${API}/create_message?body=${body}&conversation_id=${conversation}&sender_id=${sender}`);
+export function createMessage(body, sender, conversation, senderClass) {
+  return axios.post(`${API}/create_message?body=${body}&conversation_id=${conversation}&sender_id=${sender}&sender_class=${senderClass}`);
 }
