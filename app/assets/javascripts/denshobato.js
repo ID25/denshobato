@@ -21248,18 +21248,18 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var API = window.location.origin + '/api/messages';
+	var API = window.location.origin + '/api';
 
 	function fetch(id) {
-	  return _axios2.default.get(API + '/get_conversation_messages?id=' + id);
+	  return _axios2.default.get(API + '/messages/get_conversation_messages?id=' + id);
 	}
 
 	function conversation(id) {
-	  return _axios2.default.get(API + '/conversation_info?id=' + id);
+	  return _axios2.default.get(API + '/conversations/conversation_info?id=' + id);
 	}
 
 	function createMessage(body, sender, conversation, senderClass) {
-	  return _axios2.default.post(API + '/create_message?body=' + body + '&conversation_id=' + conversation + '&sender_id=' + sender + '&sender_class=' + senderClass);
+	  return _axios2.default.post(API + '/messages/create_message?body=' + body + '&conversation_id=' + conversation + '&sender_id=' + sender + '&sender_class=' + senderClass);
 	}
 
 /***/ },
@@ -25513,6 +25513,8 @@
 
 	var _Message2 = _interopRequireDefault(_Message);
 
+	var _reduxForm = __webpack_require__(203);
+
 	var _MessageForm = __webpack_require__(252);
 
 	var _MessageForm2 = _interopRequireDefault(_MessageForm);
@@ -25541,6 +25543,7 @@
 	      var conversation = _this.props.conversation;
 
 	      _Store2.default.dispatch(_Index.actions.messages.create(e.body, conversation.senderId, conversation.conversationId, conversation.senderClass));
+	      _Store2.default.dispatch((0, _reduxForm.reset)('message-form'));
 	    };
 
 	    _this.refreshChat = function () {

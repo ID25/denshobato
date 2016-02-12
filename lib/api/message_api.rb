@@ -5,18 +5,9 @@ class MessageApi < Grape::API
   prefix :api
 
   helpers do
-    def current_user
-      # For now, handle only devise
-
-      id = env['rack.session']['warden.user.user.key'].first.first
-      User.find(id)
-    end
-
-    def class_name(klass)
-      klass.class.name
-    end
-
     def formated_messages(klass)
+      # Prepare JSON for React
+
       { name: klass.sender.name, body: klass.body, lname: klass.sender.last_name, sender_id: klass.sender_id, sender_class: klass.sender_class, id: klass.id, avatar: klass.sender.avatar }
     end
   end
@@ -31,13 +22,6 @@ class MessageApi < Grape::API
       messages.each_with_object([]) do |message, array|
         array << formated_messages(message)
       end
-    end
-
-    desc 'Get info from conversation'
-    get :conversation_info do
-      # Get current user id, and Conversation id
-
-      { sender_id: current_user.id, sender_class: class_name(current_user), conversation_id: Denshobato::Conversation.find(params[:id]).id }
     end
 
     desc 'Create Message in conversation'

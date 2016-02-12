@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import store from '../store/Store';
 import { actions } from '../actions/Index';
 import Message from './Message';
+import { reset } from 'redux-form';
 import MessageForm from './MessageForm';
 import ChatUtils from '../utils/ChatUtils';
 
@@ -18,6 +19,7 @@ export default class Messages extends Component {
   handleSubmit = (e) => {
     const { conversation } = this.props;
     store.dispatch(actions.messages.create(e.body, conversation.senderId, conversation.conversationId, conversation.senderClass));
+    store.dispatch(reset('message-form'));
   };
 
   refreshChat = () => {
