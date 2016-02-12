@@ -21029,6 +21029,10 @@
 
 	var _Messages2 = _interopRequireDefault(_Messages);
 
+	var _ChatUtils = __webpack_require__(253);
+
+	var _ChatUtils2 = _interopRequireDefault(_ChatUtils);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -21056,6 +21060,13 @@
 	    value: function componentDidMount() {
 	      var id = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
 	      _Store2.default.dispatch(_Index.actions.messages.fetch(id));
+	    }
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      if (nextProps.messages.length != this.props.messages.messages.length) {
+	        _ChatUtils2.default.scrollChat();
+	      }
 	    }
 	  }, {
 	    key: 'render',
@@ -21173,8 +21184,8 @@
 	    case _Messages.FETCH:
 	      return _extends({}, state, { messages: action.data });
 	    case _Messages.CREATE:
-	      console.log(action);
-	      return state;
+	      var newState = state.messages.concat([action.message]);
+	      return _extends({}, state, { messages: newState });
 	    default:
 	      return state;
 	  }
@@ -25749,6 +25760,38 @@
 	  form: 'message-form',
 	  fields: ['body', 'senderClass']
 	})(MessageForm);
+
+/***/ },
+/* 253 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var ChatUtils = function () {
+	  function ChatUtils() {
+	    _classCallCheck(this, ChatUtils);
+	  }
+
+	  _createClass(ChatUtils, null, [{
+	    key: 'scrollChat',
+	    value: function scrollChat() {
+	      $('.messages').animate({ scrollTop: $('.messages')[0].scrollWidth }, 500);
+	    }
+	  }]);
+
+	  return ChatUtils;
+	}();
+
+	exports.default = ChatUtils;
+	;
 
 /***/ }
 /******/ ]);

@@ -3,6 +3,7 @@ import store from '../store/Store';
 import { connect } from 'react-redux';
 import { actions } from '../actions/Index';
 import Messages from '../components/Messages';
+import ChatUtils from '../utils/ChatUtils';
 
 @connect((state) => {
   return {
@@ -20,6 +21,12 @@ export default class MessagesContainer extends Component {
     let id = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
     store.dispatch(actions.messages.fetch(id));
   };
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.messages.length != this.props.messages.messages.length) {
+      ChatUtils.scrollChat();
+    }
+  }
 
   render() {
     const { messages, conversation } = this.props;

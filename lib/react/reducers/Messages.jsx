@@ -7,8 +7,8 @@ export function messages(state = messagesState, action) {
   case FETCH:
     return { ...state, messages: action.data };
   case CREATE:
-    console.log(action);
-    return state;
+    let newState = state.messages.concat([action.message]);
+    return { ...state, messages: newState };
   default:
     return state;
   }
