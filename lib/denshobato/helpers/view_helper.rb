@@ -2,6 +2,7 @@ module Denshobato
   module ViewHelper
     include Denshobato::HelperUtils
     include Denshobato::ViewMessagingHelper
+    include Denshobato::ReactHelper
 
     def conversation_exists?(sender, recipient)
       # Check if sender and recipient already have conversation together.
