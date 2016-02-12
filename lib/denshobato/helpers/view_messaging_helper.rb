@@ -3,8 +3,8 @@ module Denshobato
     def interlocutor_avatar(user, image_column, conversation, css_class)
       users = conversation_interlocutors(conversation)
 
-      return show_image(users[:sender].try(image_column),    css_class)  if user != users[:sender]
-      return show_image(users[:recipient].try(image_column), css_class)  if user != users[:recipient]
+      return show_image(users[:sender],    css_class, image_column)  if user != users[:sender]
+      return show_image(users[:recipient], css_class, image_column)  if user != users[:recipient]
     end
 
     def interlocutor_name(user, conversation, *fields)
@@ -37,10 +37,10 @@ module Denshobato
       { sender: obj, recipient: obj2 }
     end
 
-    def show_image(image, css_class)
+    def show_image(user, css_class, image)
       # Show image_tag with user avatar, and css class
 
-      image_tag(image.url, class: css_class)
+      image_tag(user.try(image), class: css_class)
     end
 
     def show_filter(fields, obj)

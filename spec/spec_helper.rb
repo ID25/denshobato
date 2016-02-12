@@ -8,7 +8,8 @@ ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: ':memory:'
 
 ActiveRecord::Schema.define(version: 1) do
   create_table :users do |t|
-    t.string :name, default: ''
+    t.string :name,   default: ''
+    t.string :avatar, default: ''
   end
 
   create_table :admins do |t|
@@ -18,6 +19,7 @@ ActiveRecord::Schema.define(version: 1) do
   create_table :ducks do |t|
     t.string :name,      default: ''
     t.string :last_name, default: ''
+    t.string :avatar, default: ''
   end
 
   create_table :denshobato_conversations do |t|
