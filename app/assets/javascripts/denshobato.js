@@ -21039,7 +21039,8 @@
 
 	var MessagesContainer = (_dec = (0, _reactRedux.connect)(function (state) {
 	  return {
-	    messages: state.messages
+	    messages: state.messages,
+	    conversation: state.conversation
 	  };
 	}), _dec(_class = function (_Component) {
 	  _inherits(MessagesContainer, _Component);
@@ -21059,13 +21060,15 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var messages = this.props.messages;
+	      var _props = this.props;
+	      var messages = _props.messages;
+	      var conversation = _props.conversation;
 
 	      console.log(messages);
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(_Messages2.default, { messages: messages.messages })
+	        _react2.default.createElement(_Messages2.default, { messages: messages.messages, conversation: conversation })
 	      );
 	    }
 	  }]);
@@ -21135,9 +21138,11 @@
 
 	var _Messages = __webpack_require__(181);
 
+	var _Conversation = __webpack_require__(204);
+
 	var _redux = __webpack_require__(165);
 
-	var Reducer = (0, _redux.combineReducers)({ messages: _Messages.messages });
+	var Reducer = (0, _redux.combineReducers)({ messages: _Messages.messages, conversation: _Conversation.conversation });
 
 	exports.default = Reducer;
 
@@ -21209,6 +21214,7 @@
 	  value: true
 	});
 	exports.fetch = fetch;
+	exports.conversation = conversation;
 
 	var _axios = __webpack_require__(184);
 
@@ -21220,6 +21226,10 @@
 
 	function fetch(id) {
 	  return _axios2.default.get(API + '/get_conversation_messages?id=' + id);
+	}
+
+	function conversation(id) {
+	  return _axios2.default.get(API + '/conversation_info?id=' + id);
 	}
 
 /***/ },
@@ -22304,10 +22314,15 @@
 
 	var messages = _interopRequireWildcard(_Messages);
 
+	var _Conversation = __webpack_require__(205);
+
+	var conversation = _interopRequireWildcard(_Conversation);
+
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	var actions = exports.actions = {
-	  messages: messages
+	  messages: messages,
+	  conversation: conversation
 	};
 
 /***/ },
@@ -22331,6 +22346,8 @@
 
 	var _Store2 = _interopRequireDefault(_Store);
 
+	var _Index = __webpack_require__(201);
+
 	var _Message = __webpack_require__(203);
 
 	var _Message2 = _interopRequireDefault(_Message);
@@ -22353,6 +22370,12 @@
 	  }
 
 	  _createClass(Messages, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var id = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
+	      _Store2.default.dispatch(_Index.actions.conversation.conversation(id));
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var messages = this.props.messages;
@@ -22466,6 +22489,65 @@
 	}(_react.Component);
 
 	exports.default = Message;
+
+/***/ },
+/* 204 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	exports.conversation = conversation;
+
+	var _Conversation = __webpack_require__(205);
+
+	var conversationState = { senderId: null, conversationId: null };
+
+	function conversation() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? conversationState : arguments[0];
+	  var action = arguments[1];
+
+	  switch (action.type) {
+	    case _Conversation.CONVERSATION:
+	      console.log(action);
+	      return _extends({}, state, { senderId: action.response.sender_id, conversationId: action.response.conversation_id });
+	    default:
+	      return state;
+	  }
+	}
+
+/***/ },
+/* 205 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.CONVERSATION = undefined;
+	exports.conversation = conversation;
+
+	var _Api = __webpack_require__(183);
+
+	var api = _interopRequireWildcard(_Api);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	var CONVERSATION = exports.CONVERSATION = 'CONVERSATION';
+
+	function conversation(id) {
+	  return function (dispatch) {
+	    api.conversation(id).then(function (response) {
+	      return dispatch({ type: CONVERSATION, response: response.data });
+	    });
+	  };
+	}
 
 /***/ }
 /******/ ]);

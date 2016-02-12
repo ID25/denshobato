@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
 import store from '../store/Store';
+import { actions } from '../actions/Index';
 import Message from './Message';
 
 export default class Messages extends Component {
   constructor(props) {
     super(props);
   };
+
+  componentDidMount() {
+    let id = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
+    store.dispatch(actions.conversation.conversation(id));
+  }
 
   render() {
     const { messages } = this.props;

@@ -7,6 +7,7 @@ import Messages from '../components/Messages';
 @connect((state) => {
   return {
     messages: state.messages,
+    conversation: state.conversation,
   }
 })
 
@@ -21,11 +22,11 @@ export default class MessagesContainer extends Component {
   };
 
   render() {
-    const { messages } = this.props;
+    const { messages, conversation } = this.props;
     console.log(messages);
     return (
       <div>
-        <Messages messages={messages.messages}/>
+        <Messages messages={messages.messages} conversation={conversation}/>
       </div>
     );
   }
