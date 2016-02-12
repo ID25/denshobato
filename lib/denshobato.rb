@@ -1,5 +1,6 @@
 require 'denshobato/version'
 require 'denshobato/helpers/helper_utils'            # Helpers Utils
+require 'denshobato/helpers/view_messaging_helper'   # View Helpers for messaging
 
 module Denshobato
   if defined?(ActiveRecord::Base)

@@ -1,6 +1,7 @@
 module Denshobato
   module ViewHelper
     include Denshobato::HelperUtils
+    include Denshobato::ViewMessagingHelper
 
     def conversation_exists?(sender, recipient)
       # Check if sender and recipient already have conversation together.
@@ -48,39 +49,6 @@ module Denshobato
       conversation_id = form.hidden_field :conversation_id, value: message.conversation_id
 
       sender_id + sender_class + conversation_id
-    end
-
-    def interlocutor_name(user, conversation, *fields)
-      # This method return text with custom fields from model, with which you've conversation
-
-      # Retrive fields
-      sender    = conversation.as_json(only: [:sender_id, :sender_class])
-      recipient = conversation.as_json(only: [:recipient_id, :recipient_class])
-
-      # Get classes by class names
-      obj  = Object.const_get(recipient['recipient_class']).find(recipient['recipient_id'])
-      obj2 = Object.const_get(sender['sender_class']).find(sender['sender_id'])
-
-      return show_filter(fields, obj)  if fields.any? && user != obj
-      return show_filter(fields, obj2) if fields.any? && user != obj2
-    end
-
-    def message_from(message)
-      # Show information about message creator
-
-      return unless message
-      klass = Object.const_get(message.sender_class).find(message.sender_id)
-      "#{klass.name} #{klass.last_name}"
-    end
-
-    private
-
-    def show_filter(fields, obj)
-      # Adds fields to View
-      # h3 = "Conversation with: #{interlocutor_name(user, conversation, :first_name, :last_name)}"
-      # => Conversation with John Doe
-
-      fields.each_with_object([]) { |field, array| array << obj.send(:try, field) }.join(' ')
     end
   end
 end

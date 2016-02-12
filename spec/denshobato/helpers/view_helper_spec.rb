@@ -36,16 +36,4 @@ describe Denshobato::ViewHelper do
       expect(helper.can_create_conversation?(sender, sender)).to be_falsey
     end
   end
-
-  describe '#interlocutor_name' do
-    let(:sender)    { create(:user, name: 'John Smitt') }
-    let(:recipient) { create(:duck, name: 'Donald', last_name: 'Duck') }
-
-    it 'return name of recipient' do
-      sender.make_conversation_with(recipient).save
-      conversation = sender.find_conversation_with(recipient)
-
-      expect(helper.interlocutor_name(sender, conversation, :name, :last_name)).to eq 'Donald Duck'
-    end
-  end
 end
