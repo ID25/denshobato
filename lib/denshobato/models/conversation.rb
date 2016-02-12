@@ -3,7 +3,7 @@ module Denshobato
     self.table_name = 'denshobato_conversations'
 
     # Has many messages
-    has_many :denshobato_messages, class_name: '::Denshobato::Message', dependent: :destroy, inverse_of: :denshobato_conversation
+    has_many :denshobato_messages, class_name: '::Denshobato::Message', dependent: :destroy, inverse_of: :denshobato_conversation, foreign_key: 'denshobato_conversation_id'
 
     # Validate fields
     validates         :recipient_id, :sender_id, presence: { message: 'can`t be empty' }
@@ -11,7 +11,7 @@ module Denshobato
     before_validation :check_sender # sender can't create conversations with yourself.
 
     # Fetch conversations for current_user/admin/duck/customer/whatever model.
-    scope :conversations_for, -> (user) { where('sender_id = ? AND sender_class = ? or recipient_id = ? AND recipient_class = ?', user, user.class.name, user, user.class.name) }
+    scope :conversations_for, -> (user) { where('sender_id = ? AND sender_class = ? or recipient_id = ? AND recipient_class = ?', user, user.class.name, user, user.class.name).order(updated_at: :desc) }
 
     alias messages denshobato_messages
 

@@ -45,7 +45,7 @@ module Denshobato
 
       sender_id       = form.hidden_field :sender_id,       value: message.sender_id
       sender_class    = form.hidden_field :sender_class,    value: message.sender_class
-      conversation_id = form.hidden_field :conversation_id, value: message.conversation_id
+      conversation_id = form.hidden_field :denshobato_conversation_id, value: message.denshobato_conversation_id
 
       sender_id + sender_class + conversation_id
     end

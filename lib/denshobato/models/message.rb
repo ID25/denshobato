@@ -3,10 +3,10 @@ module Denshobato
     self.table_name = 'denshobato_messages'
 
     # Belongs to conversation
-    belongs_to :denshobato_conversation, class_name: '::Denshobato::Conversation', inverse_of: :denshobato_messages
+    belongs_to :denshobato_conversation, class_name: '::Denshobato::Conversation', inverse_of: :denshobato_messages, touch: true
 
     # Validations
-    validates :body, :conversation_id, :sender_id, :sender_class, presence: true
+    validates :body, :denshobato_conversation_id, :sender_id, :sender_class, presence: true
 
     # Alias
     alias conversation denshobato_conversation

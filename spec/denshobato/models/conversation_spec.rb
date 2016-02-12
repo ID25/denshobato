@@ -32,7 +32,7 @@ describe Denshobato::Conversation do
 
   describe 'valiadtions' do
     it 'validate sender_id presence' do
-      model = @sender.denshobato_conversations.build(recipient_id: @recipient.id, recipient_class: @recipient.class.name, sender_class: @sender.class.name)
+      model = @sender.conversations.build(recipient_id: @recipient.id, recipient_class: @recipient.class.name, sender_class: @sender.class.name)
       model.sender_id = nil
       model.save
 
@@ -65,7 +65,7 @@ describe Denshobato::Conversation do
       conversation = @recipient.conversations.first
       conversation.messages.create(body: 'Moon Sonata', sender_id: @recipient.id, sender_class: @recipient.class.name)
 
-      expect(conversation.messages).to eq Denshobato::Message.where(conversation_id: conversation.id)
+      expect(conversation.messages).to eq Denshobato::Message.where(denshobato_conversation_id: conversation.id)
     end
   end
 

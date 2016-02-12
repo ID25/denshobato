@@ -28,7 +28,20 @@ describe Denshobato::Conversation do
       message = user.messages.create(body: 'Text')
 
       expect(message.valid?).to be_falsey
-      expect(message.errors.full_messages.join(', ')).to eq "Conversation can't be blank, Sender class can't be blank"
+      expect(message.errors.full_messages.join(', ')).to eq "Denshobato conversation can't be blank, Sender class can't be blank"
+    end
+  end
+
+  describe 'update conversation updated_at when message was created' do
+    let(:user)  { create(:user, name: 'Mike') }
+    let(:osama) { create(:user, name: 'Steve') }
+
+    it 'does something' do
+      user.make_conversation_with(osama).save
+      user.messages.create(body: 'lol', sender_class: user.class.name, denshobato_conversation_id: user.my_conversations[0].id)
+      message = user.messages[0]
+
+      expect(message.conversation.updated_at.utc.to_s).to eq Time.now.utc.to_s
     end
   end
 end
