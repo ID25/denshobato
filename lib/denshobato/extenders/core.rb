@@ -11,6 +11,10 @@ module Denshobato
         Denshobato::Conversation.class_eval do
           belongs_to klass, class_name: klass.to_s.classify, foreign_key: 'sender_id'
         end
+
+        Denshobato::Message.class_eval do
+          belongs_to klass, class_name: klass.to_s.classify, foreign_key: 'sender_id'
+        end
       end
 
       private

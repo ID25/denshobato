@@ -1,5 +1,7 @@
 module Denshobato
   module ViewMessagingHelper
+    # OPTIMIZE: Metaprogram interlocutors methods.
+
     def interlocutor_avatar(user, image_column, conversation, css_class)
       users = conversation_interlocutors(conversation)
 
