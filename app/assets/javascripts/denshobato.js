@@ -21023,6 +21023,10 @@
 
 	var _reactRedux = __webpack_require__(159);
 
+	var _Messages = __webpack_require__(182);
+
+	var _Messages2 = _interopRequireDefault(_Messages);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -21053,11 +21057,7 @@
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(
-	          'h1',
-	          { className: 'text-success' },
-	          'Hello from Denshobato!'
-	        )
+	        _react2.default.createElement(_Messages2.default, { messages: messages.messages })
 	      );
 	    }
 	  }]);
@@ -21154,6 +21154,83 @@
 	      return state;
 	  }
 	}
+
+/***/ },
+/* 182 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Store = __webpack_require__(178);
+
+	var _Store2 = _interopRequireDefault(_Store);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Messages = function (_Component) {
+	  _inherits(Messages, _Component);
+
+	  function Messages(props) {
+	    _classCallCheck(this, Messages);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Messages).call(this, props));
+	  }
+
+	  _createClass(Messages, [{
+	    key: 'render',
+	    value: function render() {
+	      var messages = this.props.messages;
+
+
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'chat_window' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'top_menu' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'buttons' },
+	              _react2.default.createElement('div', { className: 'button close' }),
+	              _react2.default.createElement('div', { className: 'button minimize' }),
+	              _react2.default.createElement('div', { className: 'button maximize' })
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'title' },
+	              'Chat'
+	            )
+	          ),
+	          _react2.default.createElement('ul', { className: 'messages' })
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Messages;
+	}(_react.Component);
+
+	exports.default = Messages;
 
 /***/ }
 /******/ ]);
