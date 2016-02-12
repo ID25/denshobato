@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import store from '../store/Store';
 import { actions } from '../actions/Index';
 import Message from './Message';
+import MessageForm from './MessageForm';
 
 export default class Messages extends Component {
   constructor(props) {
@@ -13,8 +14,14 @@ export default class Messages extends Component {
     store.dispatch(actions.conversation.conversation(id));
   }
 
+  handleSubmit = (e) => {
+    const { conversation } = this.props;
+    console.log(e);
+    store.dispatch(actions.messages.create(e.body, conversation.senderId, conversation.conversationId));
+  };
+
   render() {
-    const { messages } = this.props;
+    const { messages, conversation } = this.props;
 
     return (
       <div>
@@ -32,12 +39,13 @@ export default class Messages extends Component {
               messages.map((message, index) => {
                 return (
                   <div key={index}>
-                    <Message message={message}/>
+                    <Message message={message} sender={conversation}/>
                   </div>
                 );
               })
             }
           </ul>
+          <MessageForm onSubmit={this.handleSubmit}/>
         </div>
       </div>
     );

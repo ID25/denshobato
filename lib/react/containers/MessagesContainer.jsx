@@ -23,7 +23,6 @@ export default class MessagesContainer extends Component {
 
   render() {
     const { messages, conversation } = this.props;
-    console.log(messages);
     return (
       <div>
         <Messages messages={messages.messages} conversation={conversation}/>
