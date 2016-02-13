@@ -21080,7 +21080,15 @@
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(_Messages2.default, { messages: messages.messages, conversation: conversation })
+	        !messages.loaded ? _react2.default.createElement(
+	          'div',
+	          { className: 'loading' },
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            'LOADING MESSAGES...'
+	          )
+	        ) : _react2.default.createElement(_Messages2.default, { messages: messages.messages, conversation: conversation })
 	      );
 	    }
 	  }]);
@@ -21176,7 +21184,7 @@
 
 	var _Messages = __webpack_require__(182);
 
-	var messagesState = { messages: [] };
+	var messagesState = { messages: [], loaded: false };
 
 	function messages() {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? messagesState : arguments[0];
@@ -21184,7 +21192,7 @@
 
 	  switch (action.type) {
 	    case _Messages.FETCH:
-	      return _extends({}, state, { messages: action.data });
+	      return _extends({}, state, { messages: action.data, loaded: true });
 	    case _Messages.CREATE:
 	      var newState = state.messages.concat([action.message]);
 	      return _extends({}, state, { messages: newState });
@@ -25860,7 +25868,9 @@
 	  _createClass(ChatUtils, null, [{
 	    key: 'scrollChat',
 	    value: function scrollChat() {
-	      $('.messages').animate({ scrollTop: $('.messages')[0].scrollWidth }, 500);
+	      if ($('.messages')[0] != null) {
+	        $('.messages').animate({ scrollTop: $('.messages')[0].scrollWidth }, 500);
+	      }
 	    }
 	  }, {
 	    key: 'closeChat',

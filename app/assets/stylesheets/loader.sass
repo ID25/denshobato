@@ -1,0 +1,70 @@
+.loading
+  font-size: 16px
+  font-weight: bold
+  margin: 100px auto
+  position: relative
+  text-align: center
+  width: 100%
+  max-width: 200px
+  p
+    border-top: solid 1px #c5c5c5
+    color: #f93841
+    padding-top: 15px
+    width: 100%
+    animation-name: loading
+    -webkit-animation: loading 2s ease-out infinite
+    -moz-animation: loading 2s ease-out infinite
+    animation: loading 2s ease-out infinite
+    &:before
+      content: ""
+      -webkit-border-radius: 30px
+      -moz-border-radius: 30px
+      -ms-border-radius: 30px
+      -o-border-radius: 30px
+      border-radius: 30px
+      display: inline-block
+      border-style: solid
+      border-width: 20px 20px 20px 20px
+      border-color: #b2060e transparent transparent transparent
+      position: absolute
+      top: -20px
+      left: -10px
+      animation-name: loading
+      -webkit-animation: loading 2s ease-out infinite
+      -moz-animation: loading 2s ease-out infinite
+      animation: loading 2s ease-out infinite
+
+@-moz-keyframes loading
+  0%
+    left: -15px
+
+  50%
+    left: 185px
+    color: #c5c5c5
+
+  100%
+    left: -15px
+
+
+@-webkit-keyframes loading
+  0%
+    left: -15px
+
+  50%
+    left: 185px
+    color: #c5c5c5
+
+  100%
+    left: -15px
+
+
+@keyframes loading
+  0%
+    left: -15px
+
+  50%
+    left: 185px
+    color: #c5c5c5
+
+  100%
+    left: -15px

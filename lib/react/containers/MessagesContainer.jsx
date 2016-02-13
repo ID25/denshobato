@@ -32,7 +32,15 @@ export default class MessagesContainer extends Component {
     const { messages, conversation } = this.props;
     return (
       <div>
-        <Messages messages={messages.messages} conversation={conversation}/>
+        {do {
+          if (!messages.loaded) {
+            <div className="loading">
+              <p>LOADING MESSAGES...</p>
+            </div>;
+          } else {
+            <Messages messages={messages.messages} conversation={conversation}/>;
+          }
+        }}
       </div>
     );
   }

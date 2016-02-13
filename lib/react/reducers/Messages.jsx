@@ -1,11 +1,11 @@
 import { FETCH, CREATE, DELETE } from '../actions/Messages';
 
-const messagesState = { messages: [] };
+const messagesState = { messages: [], loaded: false };
 
 export function messages(state = messagesState, action) {
   switch (action.type) {
   case FETCH:
-    return { ...state, messages: action.data };
+    return { ...state, messages: action.data, loaded: true };
   case CREATE:
     let newState = state.messages.concat([action.message]);
     return { ...state, messages: newState };
