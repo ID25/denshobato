@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'denshobato/models/conversation'
+Denshobato.autoload :Conversation, 'denshobato/models/conversation'
 
 describe Denshobato::Conversation do
   include Denshobato::HelperUtils

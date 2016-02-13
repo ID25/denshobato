@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'denshobato/helpers/view_messaging_helper'
+Denshobato.autoload :ViewMessagingHelper, 'denshobato/helpers/view_messaging_helper'
 
 describe Denshobato::ViewHelper do
   ActiveRecord::Base.extend Denshobato::Extenders::Core

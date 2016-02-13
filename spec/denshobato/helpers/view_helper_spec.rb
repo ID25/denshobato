@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'denshobato/helpers/view_helper'
+Denshobato.autoload :ViewHelper, 'denshobato/helpers/view_helper'
 
 describe Denshobato::ViewHelper do
   ActiveRecord::Base.extend Denshobato::Extenders::Core
