@@ -27,8 +27,12 @@ export default class Messages extends Component {
     store.dispatch(actions.messages.fetch(id));
   };
 
+  showAll = () => {
+    store.dispatch(actions.messages.showAll());
+  };
+
   render() {
-    const { messages, conversation } = this.props;
+    const { messages, conversation, showAll } = this.props;
 
     return (
       <div>
@@ -43,14 +47,34 @@ export default class Messages extends Component {
             <button className='refresh-button btn' onClick={this.refreshChat}>Refresh</button>
           </div>
           <ul className="messages">
-            {
-              messages.map((message, index) => {
-                return (
-                  <div key={index}>
-                    <Message message={message} sender={conversation}/>
-                  </div>
-                );
-              })
+            { do {
+              if (messages.length >= 50 && !showAll) {
+                <div className='text-center'>
+                  <button className='load-messages' onClick={this.showAll}>Load previous messages</button>
+                </div>;
+              }
+            } }
+
+            { do {
+
+              if (messages.length >= 50 && !showAll) {
+                messages.slice(Math.max(messages.length - 50, 1)).map((message, index) => {
+                  return (
+                    <div key={index}>
+                      <Message message={message} sender={conversation}/>
+                    </div>
+                  );
+                });
+              } else {
+                messages.map((message, index) => {
+                  return (
+                    <div key={index}>
+                      <Message message={message} sender={conversation}/>
+                    </div>
+                  );
+                });
+              }
+            }
             }
           </ul>
           <MessageForm onSubmit={this.handleSubmit}/>

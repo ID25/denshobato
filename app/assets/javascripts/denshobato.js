@@ -21088,7 +21088,7 @@
 	            null,
 	            'LOADING MESSAGES...'
 	          )
-	        ) : _react2.default.createElement(_Messages2.default, { messages: messages.messages, conversation: conversation })
+	        ) : _react2.default.createElement(_Messages2.default, { messages: messages.messages, conversation: conversation, showAll: messages.showAll })
 	      );
 	    }
 	  }]);
@@ -21184,7 +21184,7 @@
 
 	var _Messages = __webpack_require__(182);
 
-	var messagesState = { messages: [], loaded: false };
+	var messagesState = { messages: [], loaded: false, showAll: false };
 
 	function messages() {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? messagesState : arguments[0];
@@ -21202,6 +21202,8 @@
 	      }).indexOf(action.id);
 	      state.messages.splice(index, 1);
 	      return _extends({}, state, { messages: state.messages });
+	    case _Messages.SHOW_ALL:
+	      return _extends({}, state, { showAll: action.data });
 	    default:
 	      return state;
 	  }
@@ -21216,10 +21218,11 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.DELETE = exports.CREATE = exports.FETCH = undefined;
+	exports.SHOW_ALL = exports.DELETE = exports.CREATE = exports.FETCH = undefined;
 	exports.fetch = fetch;
 	exports.create = create;
 	exports.deleteMessage = deleteMessage;
+	exports.showAll = showAll;
 
 	var _Api = __webpack_require__(183);
 
@@ -21230,6 +21233,7 @@
 	var FETCH = exports.FETCH = 'FETCH';
 	var CREATE = exports.CREATE = 'CREATE';
 	var DELETE = exports.DELETE = 'DELETE';
+	var SHOW_ALL = exports.SHOW_ALL = 'SHOW_ALL';
 
 	function fetch(id) {
 	  return function (dispatch) {
@@ -21253,6 +21257,10 @@
 	      return dispatch({ type: DELETE, data: response.data, id: id });
 	    });
 	  };
+	}
+
+	function showAll() {
+	  return { type: SHOW_ALL, data: true };
 	}
 
 /***/ },
@@ -25582,6 +25590,10 @@
 	      _Store2.default.dispatch(_Index.actions.messages.fetch(id));
 	    };
 
+	    _this.showAll = function () {
+	      _Store2.default.dispatch(_Index.actions.messages.showAll());
+	    };
+
 	    return _this;
 	  }
 
@@ -25597,6 +25609,7 @@
 	      var _props = this.props;
 	      var messages = _props.messages;
 	      var conversation = _props.conversation;
+	      var showAll = _props.showAll;
 
 
 	      return _react2.default.createElement(
@@ -25629,7 +25642,22 @@
 	          _react2.default.createElement(
 	            'ul',
 	            { className: 'messages' },
-	            messages.map(function (message, index) {
+	            messages.length >= 50 && !showAll ? _react2.default.createElement(
+	              'div',
+	              { className: 'text-center' },
+	              _react2.default.createElement(
+	                'button',
+	                { className: 'load-messages', onClick: this.showAll },
+	                'Load previous messages'
+	              )
+	            ) : undefined,
+	            messages.length >= 50 && !showAll ? messages.slice(Math.max(messages.length - 50, 1)).map(function (message, index) {
+	              return _react2.default.createElement(
+	                'div',
+	                { key: index },
+	                _react2.default.createElement(_Message2.default, { message: message, sender: conversation })
+	              );
+	            }) : messages.map(function (message, index) {
 	              return _react2.default.createElement(
 	                'div',
 	                { key: index },

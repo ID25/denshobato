@@ -38,7 +38,7 @@ export default class MessagesContainer extends Component {
               <p>LOADING MESSAGES...</p>
             </div>;
           } else {
-            <Messages messages={messages.messages} conversation={conversation}/>;
+            <Messages messages={messages.messages} conversation={conversation} showAll={messages.showAll}/>;
           }
         }}
       </div>

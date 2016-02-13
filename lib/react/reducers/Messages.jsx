@@ -1,6 +1,6 @@
-import { FETCH, CREATE, DELETE } from '../actions/Messages';
+import { FETCH, CREATE, DELETE, SHOW_ALL } from '../actions/Messages';
 
-const messagesState = { messages: [], loaded: false };
+const messagesState = { messages: [], loaded: false, showAll: false };
 
 export function messages(state = messagesState, action) {
   switch (action.type) {
@@ -13,6 +13,8 @@ export function messages(state = messagesState, action) {
     let index = state.messages.map((x) => x.id).indexOf(action.id);
     state.messages.splice(index, 1);
     return { ...state, messages: state.messages };
+  case SHOW_ALL:
+    return { ...state, showAll: action.data };
   default:
     return state;
   }
