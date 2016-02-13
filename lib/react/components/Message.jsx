@@ -18,10 +18,10 @@ export default class Message extends Component {
       <div>
         <li className={`message ${cssClass} appeared`}>
           <div className={`${cssClass}`}>
-            <p className='name'>{`${message.name} ${message.lname}`}</p>
+            <p className='name'>{`${message.full_name}`}</p>
           </div>
           <div className={`${cssClass}`}>
-            <img src={message.avatar.avatar.url} className={`avatar ${cssClass}`}></img>
+            <img src={message.avatar} className={`avatar ${cssClass}`}></img>
           </div>
           <div className="text_wrapper">
             <div className="text">{message.body}</div>

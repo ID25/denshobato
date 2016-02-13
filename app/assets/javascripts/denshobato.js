@@ -67,11 +67,13 @@
 	window.onload = function () {
 	  var domNode = document.getElementById('denshobato-message-panel');
 
-	  (0, _reactDom.render)(_react2.default.createElement(
-	    _reactRedux.Provider,
-	    { store: _Store2.default },
-	    _react2.default.createElement(_MessagesContainer2.default, null)
-	  ), domNode);
+	  if (domNode != null) {
+	    (0, _reactDom.render)(_react2.default.createElement(
+	      _reactRedux.Provider,
+	      { store: _Store2.default },
+	      _react2.default.createElement(_MessagesContainer2.default, null)
+	    ), domNode);
+	  }
 	};
 
 /***/ },
@@ -21186,6 +21188,12 @@
 	    case _Messages.CREATE:
 	      var newState = state.messages.concat([action.message]);
 	      return _extends({}, state, { messages: newState });
+	    case _Messages.DELETE:
+	      var index = state.messages.map(function (x) {
+	        return x.id;
+	      }).indexOf(action.id);
+	      state.messages.splice(index, 1);
+	      return _extends({}, state, { messages: state.messages });
 	    default:
 	      return state;
 	  }
@@ -21234,7 +21242,7 @@
 	function deleteMessage(id) {
 	  return function (dispatch) {
 	    api.deleteMessage(id).then(function (response) {
-	      return dispatch({ type: DELETE, data: response.data });
+	      return dispatch({ type: DELETE, data: response.data, id: id });
 	    });
 	  };
 	}
@@ -25706,13 +25714,13 @@
 	            _react2.default.createElement(
 	              'p',
 	              { className: 'name' },
-	              message.name + ' ' + message.lname
+	              '' + message.full_name
 	            )
 	          ),
 	          _react2.default.createElement(
 	            'div',
 	            { className: '' + cssClass },
-	            _react2.default.createElement('img', { src: message.avatar.avatar.url, className: 'avatar ' + cssClass })
+	            _react2.default.createElement('img', { src: message.avatar, className: 'avatar ' + cssClass })
 	          ),
 	          _react2.default.createElement(
 	            'div',

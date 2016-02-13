@@ -20,6 +20,6 @@ export function create(body, sender, conversation, senderClass) {
 export function deleteMessage(id) {
   return ((dispatch) => {
     api.deleteMessage(id)
-      .then((response) => dispatch({ type: DELETE, data: response.data }));
+      .then((response) => dispatch({ type: DELETE, data: response.data, id: id }));
   });
 }
