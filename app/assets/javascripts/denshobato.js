@@ -21251,9 +21251,9 @@
 	  };
 	}
 
-	function deleteMessage(id) {
+	function deleteMessage(id, userId, userClass) {
 	  return function (dispatch) {
-	    api.deleteMessage(id).then(function (response) {
+	    api.deleteMessage(id, userId, userClass).then(function (response) {
 	      return dispatch({ type: DELETE, data: response.data, id: id });
 	    });
 	  };
@@ -21289,16 +21289,16 @@
 	  return _axios2.default.get(API + '/messages/get_conversation_messages?id=' + id);
 	}
 
-	function conversation(id) {
-	  return _axios2.default.get(API + '/conversations/conversation_info?id=' + id);
+	function conversation(id, user, klass) {
+	  return _axios2.default.get(API + '/conversations/conversation_info?id=' + id + '&user=' + user + '&class=' + klass);
 	}
 
 	function createMessage(body, sender, conversation, senderClass) {
 	  return _axios2.default.post(API + '/messages/create_message?body=' + body + '&conversation_id=' + conversation + '&sender_id=' + sender + '&sender_class=' + senderClass);
 	}
 
-	function deleteMessage(id) {
-	  return _axios2.default.delete(API + '/messages/delete_message?id=' + id);
+	function deleteMessage(id, user, klass) {
+	  return _axios2.default.delete(API + '/messages/delete_message?id=' + id + '&user=' + user + '&class=' + klass);
 	}
 
 /***/ },
@@ -22418,9 +22418,9 @@
 
 	var CONVERSATION = exports.CONVERSATION = 'CONVERSATION';
 
-	function conversation(id) {
+	function conversation(id, user, klass) {
 	  return function (dispatch) {
-	    api.conversation(id).then(function (response) {
+	    api.conversation(id, user, klass).then(function (response) {
 	      return dispatch({ type: CONVERSATION, response: response.data });
 	    });
 	  };
@@ -25601,7 +25601,7 @@
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      var room = document.getElementById('denshobato-message-panel');
-	      _Store2.default.dispatch(_Index.actions.conversation.conversation(room.dataset.room));
+	      _Store2.default.dispatch(_Index.actions.conversation.conversation(room.dataset.room, room.dataset.currentUserId, room.dataset.currentUserClass));
 	    }
 	  }, {
 	    key: 'render',
@@ -25724,7 +25724,8 @@
 	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Message)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.deleteMessage = function () {
 	      var result = confirm('Delete Message?');
 	      if (result) {
-	        _Store2.default.dispatch(_Index.actions.messages.deleteMessage(_this.props.message.id));
+	        var room = document.getElementById('denshobato-message-panel');
+	        _Store2.default.dispatch(_Index.actions.messages.deleteMessage(_this.props.message.id, room.dataset.currentUserId, room.dataset.currentUserClass));
 	      };
 	    }, _temp), _possibleConstructorReturn(_this, _ret);
 	  }

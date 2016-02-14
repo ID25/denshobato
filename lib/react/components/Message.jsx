@@ -6,7 +6,8 @@ export default class Message extends Component {
   deleteMessage = () => {
     let result = confirm('Delete Message?');
     if (result) {
-      store.dispatch(actions.messages.deleteMessage(this.props.message.id));
+      let room = document.getElementById('denshobato-message-panel');
+      store.dispatch(actions.messages.deleteMessage(this.props.message.id, room.dataset.currentUserId, room.dataset.currentUserClass));
     };
   };
 

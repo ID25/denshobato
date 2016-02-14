@@ -13,7 +13,7 @@ export default class Messages extends Component {
 
   componentDidMount() {
     let room = document.getElementById('denshobato-message-panel');
-    store.dispatch(actions.conversation.conversation(room.dataset.room));
+    store.dispatch(actions.conversation.conversation(room.dataset.room, room.dataset.currentUserId, room.dataset.currentUserClass));
   }
 
   handleSubmit = (e) => {

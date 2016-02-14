@@ -5,11 +5,8 @@ class ConversationApi < Grape::API
   prefix :api
 
   helpers do
-    def current_user
-      # For now, handle only devise
-
-      id = env['rack.session']['warden.user.user.key'].first.first
-      User.find(id)
+    def take_current_user(params)
+      params[:class].constantize.find(params[:user])
     end
 
     def class_name(klass)
@@ -22,6 +19,7 @@ class ConversationApi < Grape::API
     get :conversation_info do
       # Get current user id, and Conversation id
 
+      current_user = take_current_user(params)
       { sender_id: current_user.id, sender_class: class_name(current_user), conversation_id: Denshobato::Conversation.find(params[:id]).id }
     end
   end

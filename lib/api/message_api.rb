@@ -5,11 +5,8 @@ class MessageApi < Grape::API
   prefix :api
 
   helpers do
-    def current_user
-      # For now, handle only devise
-
-      id = env['rack.session']['warden.user.user.key'].first.first
-      User.find(id)
+    def take_current_user(params)
+      params[:class].constantize.find(params[:user])
     end
 
     def formated_messages(klass)
@@ -48,6 +45,7 @@ class MessageApi < Grape::API
     delete :delete_message do
       # Delete message from DB
 
+      current_user = take_current_user(params)
       message = message_class.find(params[:id])
       if message.sender.id == current_user.id
         message.destroy
