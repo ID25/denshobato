@@ -20,7 +20,7 @@ module Denshobato
       # Show information about message creator
 
       return unless message
-      klass = Object.const_get(message.sender_class).find(message.sender_id)
+      klass = message.sender_class.constantize.find(message.sender_id)
       show_filter(klass, fields)
     end
 

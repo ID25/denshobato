@@ -13,6 +13,11 @@ module Denshobato
     # Fetch conversations for current_user/admin/duck/customer/whatever model.
     scope :conversations_for, -> (user) { where('sender_id = ? AND sender_class = ? or recipient_id = ? AND recipient_class = ?', user, user.class.name, user, user.class.name).order(updated_at: :desc) }
 
+    # List all messages of conversation
+    def show_messages(type)
+      messages.order("denshobato_messages.created_at #{type.to_s.upcase}")
+    end
+
     alias messages denshobato_messages
 
     private
