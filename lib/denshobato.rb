@@ -29,6 +29,7 @@ module Denshobato
   end
 
   if defined?(ActionView::Base)
+    # Load all view helpers
     Denshobato.autoload :ViewHelper, 'denshobato/helpers/view_helper'
 
     ActionView::Base.include Denshobato::ViewHelper

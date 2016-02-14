@@ -16,10 +16,6 @@ module.exports = {
           presets: ['es2015', 'react', 'stage-0', 'stage-1', 'stage-2', 'stage-3'],
         },
       },
-      {
-        test: /\.sass$/,
-        loaders: ['style', 'css', 'sass'],
-      },
     ],
   },
 };

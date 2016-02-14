@@ -12,6 +12,10 @@ class ConversationApi < Grape::API
     def class_name(klass)
       klass.class.name
     end
+
+    def conversation
+      Denshobato::Conversation
+    end
   end
 
   resource :conversations do
@@ -20,7 +24,7 @@ class ConversationApi < Grape::API
       # Get current user id, and Conversation id
 
       current_user = take_current_user(params)
-      { sender_id: current_user.id, sender_class: class_name(current_user), conversation_id: Denshobato::Conversation.find(params[:id]).id }
+      { sender_id: current_user.id, sender_class: class_name(current_user), conversation_id: conversation.find(params[:id]).id }
     end
   end
 end

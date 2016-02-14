@@ -27,9 +27,7 @@ class MessageApi < Grape::API
 
       messages = Denshobato::Conversation.find(params[:id]).messages.select(:id, :sender_id, :body, :sender_class)
 
-      messages.each_with_object([]) do |message, array|
-        array << formated_messages(message)
-      end
+      messages.each_with_object([]) { |msg, arr| arr << formated_messages(msg) }
     end
 
     desc 'Create Message in conversation'
