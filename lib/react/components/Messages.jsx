@@ -12,8 +12,8 @@ export default class Messages extends Component {
   };
 
   componentDidMount() {
-    let id = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
-    store.dispatch(actions.conversation.conversation(id));
+    let room = document.getElementById('denshobato-message-panel');
+    store.dispatch(actions.conversation.conversation(room.dataset.room));
   }
 
   handleSubmit = (e) => {

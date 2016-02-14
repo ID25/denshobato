@@ -21060,8 +21060,8 @@
 	  _createClass(MessagesContainer, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      var id = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
-	      _Store2.default.dispatch(_Index.actions.messages.fetch(id));
+	      var room = document.getElementById('denshobato-message-panel');
+	      _Store2.default.dispatch(_Index.actions.messages.fetch(room.dataset.room));
 	    }
 	  }, {
 	    key: 'componentWillReceiveProps',
@@ -25600,8 +25600,8 @@
 	  _createClass(Messages, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      var id = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
-	      _Store2.default.dispatch(_Index.actions.conversation.conversation(id));
+	      var room = document.getElementById('denshobato-message-panel');
+	      _Store2.default.dispatch(_Index.actions.conversation.conversation(room.dataset.room));
 	    }
 	  }, {
 	    key: 'render',
@@ -25897,7 +25897,7 @@
 	    key: 'scrollChat',
 	    value: function scrollChat() {
 	      if ($('.messages')[0] != null) {
-	        $('.messages').animate({ scrollTop: $('.messages')[0].scrollWidth }, 500);
+	        $('.messages').animate({ scrollTop: $('.messages')[0].scrollWidth * 999 });
 	      }
 	    }
 	  }, {

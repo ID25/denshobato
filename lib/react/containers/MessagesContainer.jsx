@@ -18,8 +18,8 @@ export default class MessagesContainer extends Component {
   }
 
   componentDidMount() {
-    let id = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
-    store.dispatch(actions.messages.fetch(id));
+    let room = document.getElementById('denshobato-message-panel');
+    store.dispatch(actions.messages.fetch(room.dataset.room));
   };
 
   componentWillReceiveProps(nextProps) {
