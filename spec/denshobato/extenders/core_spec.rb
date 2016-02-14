@@ -85,4 +85,40 @@ describe Denshobato::Extenders::Core do
       expect(conversation.messages.last.body).to  eq 'Hello from Duck'
     end
   end
+
+  describe '#full_name' do
+    let(:duck) { create(:duck, name: 'DHH') }
+
+    it 'expect default full_name to model name' do
+      expect(duck.full_name).to eq 'Duck'
+    end
+
+    it 'custom full_name' do
+      Duck.class_eval do
+        def full_name
+          'Donalnd Duck'
+        end
+      end
+
+      expect(duck.full_name).to eq 'Donalnd Duck'
+    end
+  end
+
+  describe '#image' do
+    let(:duck) { create(:duck, name: 'DHH') }
+
+    it 'expect default image' do
+      expect(duck.image).to eq 'http://i.imgur.com/pGHOaLg.png'
+    end
+
+    it 'custom image' do
+      Duck.class_eval do
+        def image
+          'cat.jpg'
+        end
+      end
+
+      expect(duck.image).to eq 'cat.jpg'
+    end
+  end
 end

@@ -15,7 +15,7 @@ class MessageApi < Grape::API
     def formated_messages(klass)
       # Prepare JSON for React
 
-      { body: klass.body, sender_id: klass.sender_id, sender_class: klass.sender_class, id: klass.id, avatar: klass.image, full_name: klass.full_name }
+      { body: klass.body, sender_id: klass.sender.id, sender_class: klass.sender.class.name, id: klass.id, avatar: klass.sender.try(:image), full_name: klass.sender.try(:full_name) }
     end
 
     def message_class

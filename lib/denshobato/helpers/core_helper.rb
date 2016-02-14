@@ -40,6 +40,15 @@ module Denshobato
       messages.build(conversation_id: conversation.id, sender_id: id, sender_class: class_name(self))
     end
 
+    # Default methods only for built-in Chat Panel
+    def full_name
+      self.class.name.titleize
+    end
+
+    def image
+      'http://i.imgur.com/pGHOaLg.png'
+    end
+
     private
 
     def create_conversation(sender, recipient)
