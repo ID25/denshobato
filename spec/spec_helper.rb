@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(version: 1) do
     t.string   'sender_class',    default: ''
     t.string   'recipient_class', default: ''
 
-    t.timestamps
+    t.timestamps null: false
   end
 
   create_table :denshobato_messages do |t|
