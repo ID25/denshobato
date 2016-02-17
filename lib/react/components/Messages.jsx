@@ -6,6 +6,8 @@ import { reset } from 'redux-form';
 import MessageForm from './MessageForm';
 import ChatUtils from '../utils/ChatUtils';
 
+const room = document.getElementById('denshobato-message-panel');
+
 export default class Messages extends Component {
   static propTypes = {
     conversation: React.PropTypes.shape({
@@ -22,7 +24,6 @@ export default class Messages extends Component {
   };
 
   componentDidMount() {
-    let room = document.getElementById('denshobato-message-panel');
     store.dispatch(actions.conversation.conversation(room.dataset.room, room.dataset.currentUserId, room.dataset.currentUserClass));
   }
 
@@ -33,8 +34,7 @@ export default class Messages extends Component {
   };
 
   refreshChat = () => {
-    let id = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
-    store.dispatch(actions.messages.fetch(id));
+    store.dispatch(actions.messages.fetch(room.dataset.room));
   };
 
   showAll = () => {
@@ -65,6 +65,7 @@ export default class Messages extends Component {
               }
             } }
 
+            {/* TODO: Refactoring this condition. */}
             { do {
 
               if (messages.length >= 50 && !showAll) {

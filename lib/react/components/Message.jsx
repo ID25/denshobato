@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import store from '../store/Store';
 import { actions } from '../actions/Index';
 
+const room = document.getElementById('denshobato-message-panel');
+
 export default class Message extends Component {
   static propTypes = {
     message: React.PropTypes.shape({
@@ -21,7 +23,6 @@ export default class Message extends Component {
   deleteMessage = () => {
     let result = confirm('Delete Message?');
     if (result) {
-      let room = document.getElementById('denshobato-message-panel');
       store.dispatch(actions.messages.deleteMessage(this.props.message.id, room.dataset.currentUserId, room.dataset.currentUserClass));
     };
   };

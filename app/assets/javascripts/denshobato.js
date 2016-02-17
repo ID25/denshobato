@@ -22384,7 +22384,11 @@
 
 	var _Conversation = __webpack_require__(202);
 
-	var conversationState = { senderId: null, conversationId: null, senderClass: null };
+	var conversationState = {
+	  senderId: null,
+	  conversationId: null,
+	  senderClass: null
+	};
 
 	function conversation() {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? conversationState : arguments[0];
@@ -22392,7 +22396,8 @@
 
 	  switch (action.type) {
 	    case _Conversation.CONVERSATION:
-	      return _extends({}, state, { senderId: action.response.sender_id, conversationId: action.response.conversation_id, senderClass: action.response.sender_class });
+	      var data = action.response;
+	      return _extends({}, state, { senderId: data.sender_id, conversationId: data.conversation_id, senderClass: data.sender_class });
 	    default:
 	      return state;
 	  }
@@ -25673,6 +25678,8 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	var room = document.getElementById('denshobato-message-panel');
+
 	var Messages = (_temp = _class = function (_Component) {
 	  _inherits(Messages, _Component);
 
@@ -25689,8 +25696,7 @@
 	    };
 
 	    _this.refreshChat = function () {
-	      var id = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
-	      _Store2.default.dispatch(_Index.actions.messages.fetch(id));
+	      _Store2.default.dispatch(_Index.actions.messages.fetch(room.dataset.room));
 	    };
 
 	    _this.showAll = function () {
@@ -25703,7 +25709,6 @@
 	  _createClass(Messages, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      var room = document.getElementById('denshobato-message-panel');
 	      _Store2.default.dispatch(_Index.actions.conversation.conversation(room.dataset.room, room.dataset.currentUserId, room.dataset.currentUserClass));
 	    }
 	  }, {
@@ -25819,6 +25824,8 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	var room = document.getElementById('denshobato-message-panel');
+
 	var Message = (_temp2 = _class = function (_Component) {
 	  _inherits(Message, _Component);
 
@@ -25836,7 +25843,6 @@
 	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Message)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.deleteMessage = function () {
 	      var result = confirm('Delete Message?');
 	      if (result) {
-	        var room = document.getElementById('denshobato-message-panel');
 	        _Store2.default.dispatch(_Index.actions.messages.deleteMessage(_this.props.message.id, room.dataset.currentUserId, room.dataset.currentUserClass));
 	      };
 	    }, _temp), _possibleConstructorReturn(_this, _ret);

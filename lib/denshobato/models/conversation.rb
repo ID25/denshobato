@@ -18,6 +18,14 @@ module Denshobato
       messages.order("denshobato_messages.created_at #{type.to_s.upcase}")
     end
 
+    def recipient
+      recipient_class.constantize.find(recipient_id)
+    end
+
+    def sender
+      sender_class.constantize.find(sender_id)
+    end
+
     alias messages denshobato_messages
 
     private
