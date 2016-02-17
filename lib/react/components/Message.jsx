@@ -3,6 +3,21 @@ import store from '../store/Store';
 import { actions } from '../actions/Index';
 
 export default class Message extends Component {
+  static propTypes = {
+    message: React.PropTypes.shape({
+      id: React.PropTypes.number.isRequired,
+      body: React.PropTypes.string.isRequired,
+      sender_id: React.PropTypes.number.isRequired,
+      sender_class: React.PropTypes.string.isRequired,
+      avatar: React.PropTypes.string,
+    }),
+    sender: React.PropTypes.shape({
+      senderId: React.PropTypes.number,
+      conversationId: React.PropTypes.number,
+      senderClass: React.PropTypes.string,
+    }),
+  };
+
   deleteMessage = () => {
     let result = confirm('Delete Message?');
     if (result) {

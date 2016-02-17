@@ -7,6 +7,16 @@ import MessageForm from './MessageForm';
 import ChatUtils from '../utils/ChatUtils';
 
 export default class Messages extends Component {
+  static propTypes = {
+    conversation: React.PropTypes.shape({
+      senderId: React.PropTypes.number,
+      conversationId: React.PropTypes.number,
+      senderClass: React.PropTypes.string,
+    }),
+    showAll: React.PropTypes.bool.isRequired,
+    messages: React.PropTypes.arrayOf(React.PropTypes.object),
+  };
+
   constructor(props) {
     super(props);
   };

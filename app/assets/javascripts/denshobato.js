@@ -25639,6 +25639,8 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+	var _class, _temp;
+
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -25671,7 +25673,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var Messages = function (_Component) {
+	var Messages = (_temp = _class = function (_Component) {
 	  _inherits(Messages, _Component);
 
 	  function Messages(props) {
@@ -25773,8 +25775,15 @@
 	  }]);
 
 	  return Messages;
-	}(_react.Component);
-
+	}(_react.Component), _class.propTypes = {
+	  conversation: _react2.default.PropTypes.shape({
+	    senderId: _react2.default.PropTypes.number,
+	    conversationId: _react2.default.PropTypes.number,
+	    senderClass: _react2.default.PropTypes.string
+	  }),
+	  showAll: _react2.default.PropTypes.bool.isRequired,
+	  messages: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.object)
+	}, _temp);
 	exports.default = Messages;
 
 /***/ },
@@ -25789,6 +25798,8 @@
 	exports.default = undefined;
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _class, _temp2;
 
 	var _react = __webpack_require__(1);
 
@@ -25808,7 +25819,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var Message = function (_Component) {
+	var Message = (_temp2 = _class = function (_Component) {
 	  _inherits(Message, _Component);
 
 	  function Message() {
@@ -25880,8 +25891,20 @@
 	  }]);
 
 	  return Message;
-	}(_react.Component);
-
+	}(_react.Component), _class.propTypes = {
+	  message: _react2.default.PropTypes.shape({
+	    id: _react2.default.PropTypes.number.isRequired,
+	    body: _react2.default.PropTypes.string.isRequired,
+	    sender_id: _react2.default.PropTypes.number.isRequired,
+	    sender_class: _react2.default.PropTypes.string.isRequired,
+	    avatar: _react2.default.PropTypes.string
+	  }),
+	  sender: _react2.default.PropTypes.shape({
+	    senderId: _react2.default.PropTypes.number,
+	    conversationId: _react2.default.PropTypes.number,
+	    senderClass: _react2.default.PropTypes.string
+	  })
+	}, _temp2);
 	exports.default = Message;
 
 /***/ },
@@ -25898,6 +25921,8 @@
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _class, _temp;
 
 	var _react = __webpack_require__(1);
 
@@ -25917,7 +25942,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var MessageForm = function (_Component) {
+	var MessageForm = (_temp = _class = function (_Component) {
 	  _inherits(MessageForm, _Component);
 
 	  function MessageForm() {
@@ -25966,8 +25991,13 @@
 	  }]);
 
 	  return MessageForm;
-	}(_react.Component);
-
+	}(_react.Component), _class.propTypes = {
+	  handleSubmit: _react2.default.PropTypes.func.isRequired,
+	  fields: _react2.default.PropTypes.shape({
+	    body: _react2.default.PropTypes.object.isRequired,
+	    senderClass: _react2.default.PropTypes.object.isRequired
+	  })
+	}, _temp);
 	exports.default = MessageForm;
 
 
