@@ -7,7 +7,7 @@ module Denshobato
 
     # Validate fields
     validates         :recipient_id, :sender_id, presence: { message: 'can`t be empty' }
-    validate          :conversation_uniqueness
+    validate          :conversation_uniqueness, on: :create
     before_validation :check_sender # sender can't create conversations with yourself.
 
     # Fetch conversations for current_user/admin/duck/customer/whatever model.
