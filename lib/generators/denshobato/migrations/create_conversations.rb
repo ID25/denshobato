@@ -1,12 +1,10 @@
 class CreateDenshobatoConversations < ActiveRecord::Migration
   def change
     create_table :denshobato_conversations do |t|
-      t.integer :sender_id,       index: true
-      t.integer :recipient_id,    index: true
-      t.string  :sender_class,    default: ''
-      t.string  :recipient_class, default: ''
+      t.references :sender,    polymorphic: true, index: { name: 'conversation_polymorphic_sender' }
+      t.references :recipient, polymorphic: true, index: { name: 'conversation_polymorphic_recipient' }
 
-      t.timestamps
+      t.timestamps null: false
     end
   end
 end
