@@ -2,11 +2,15 @@ module Denshobato
   class Conversation < ::ActiveRecord::Base
     self.table_name = 'denshobato_conversations'
 
+    # Set-up Polymorphic association
+    belongs_to :sender,    polymorphic: true
+    belongs_to :recipient, polymorphic: true
+
     # Has many messages
     has_many :denshobato_messages, class_name: '::Denshobato::Message', dependent: :destroy, inverse_of: :denshobato_conversation
 
     # Validate fields
-    validates         :recipient_id, :sender_id, presence: { message: 'can`t be empty' }
+    validates         :sender_id, :sender_type, :recipient_id, :recipient_type, presence: true
     validate          :conversation_uniqueness, on: :create
     before_validation :check_sender # sender can't create conversations with yourself.
 
@@ -18,33 +22,25 @@ module Denshobato
       messages.order("denshobato_messages.created_at #{type.to_s.upcase}")
     end
 
-    def recipient
-      recipient_class.constantize.find(recipient_id)
-    end
-
-    def sender
-      sender_class.constantize.find(sender_id)
-    end
-
     alias messages denshobato_messages
 
     private
 
     def check_sender
-      errors.add(:conversation, 'You can`t create conversation with yourself') if (sender_class == recipient_class) && (sender_id == recipient_id)
+      errors.add(:conversation, 'You can`t create conversation with yourself') if sender == recipient
     end
 
     def conversation_uniqueness
       # Checking conversation for uniqueness, when recipient is sender, and vice versa.
-      columns.each do |first, second, third, fourth|
-        if Conversation.where(sender_id: first, sender_class: second, recipient_id: third, recipient_class: fourth).present?
-          errors.add(:conversation, 'You already have conversation with this user.')
-        end
+
+      hash = Hash[*columns.flatten]
+      if Conversation.where(hash).present?
+        errors.add(:conversation, 'You already have conversation with this user.')
       end
     end
 
     def columns
-      [[sender_id, sender_class, recipient_id, recipient_class], [recipient_id, recipient_class, sender_id, sender_class]]
+      [['sender_id', sender_id], ['sender_type', sender_type], ['recipient_id', recipient_id], ['recipient_type', recipient_type]]
     end
   end
 end
