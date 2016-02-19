@@ -13,11 +13,11 @@ module Denshobato
   if defined?(ActiveRecord::Base)
     require 'denshobato/extenders/core' # denshobato_for method
 
-    # Active Record Conversation model
-    Denshobato.autoload :Conversation, 'denshobato/models/conversation'
 
-    # Active Record Message model
-    Denshobato.autoload :Message, 'denshobato/models/message'
+    # Active Record Models
+    Denshobato.autoload :Conversation, 'denshobato/models/conversation'
+    Denshobato.autoload :Notification, 'denshobato/models/notification'
+    Denshobato.autoload :Message,      'denshobato/models/message'
 
     # Conversation Finder
     Denshobato.autoload :ConversationFinder, 'denshobato/helpers/conversation_finder'

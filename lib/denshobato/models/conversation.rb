@@ -6,6 +6,9 @@ module Denshobato
     belongs_to :sender,    polymorphic: true
     belongs_to :recipient, polymorphic: true
 
+    # Has Many association
+    has_many :denshobato_notifications, class_name: '::Denshobato::Notification', dependent: :destroy
+
     # Validate fields
     validates         :sender_id, :sender_type, :recipient_id, :recipient_type, presence: true
     validate          :conversation_uniqueness, on: :create
@@ -13,6 +16,9 @@ module Denshobato
 
     # Callbacks
     after_create      :recipient_conversation # Create conversation for recipient, where he is sender.
+
+    # Alias
+    alias notifications denshobato_notifications
 
     private
 
