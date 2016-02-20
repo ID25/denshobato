@@ -34,7 +34,7 @@ module Denshobato
 
       # Show validation error, if author of message not in conversation
 
-      return message_error(id, self) unless conversation.where(id: room.id, sender: self).present? || conversation.where(id: room.id, recipient: self).present?
+      return message_error(id, self) unless user_in_conversation(room, self)
 
       messages.build(params)
     end
@@ -56,6 +56,10 @@ module Denshobato
 
     def message_error(id, author)
       author.messages.build(conversation_id: id)
+    end
+
+    def user_in_conversation(room, author)
+      conversation.where(id: room.id, sender: author).present? || conversation.where(id: room.id, recipient: author).present?
     end
   end
 end

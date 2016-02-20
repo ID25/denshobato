@@ -18,7 +18,7 @@ module Denshobato
     # Methods
     def send_notification(id)
       # Find current conversation
-      conversation = Denshobato::Conversation.find(id)
+      conversation = densh_conversation.find(id)
 
       # Create Notifications
       create_notifications_for(conversation)
@@ -29,14 +29,11 @@ module Denshobato
     def access_to_posting_message
       return unless conversation_id
 
-      conversation = Denshobato::Conversation
-      room = conversation.find(conversation_id)
+      room = densh_conversation.find(conversation_id)
 
       # If author of message not present in conversation, show error
 
-      unless conversation.where(id: room.id, sender: author).present? || conversation.where(id: room.id, recipient: author).present?
-        errors.add(:message, 'You can`t post to this conversation')
-      end
+      errors.add(:message, 'You can`t post to this conversation') unless user_in_conversation(room, author)
     end
 
     def create_notifications_for(conversation)
@@ -45,11 +42,18 @@ module Denshobato
       recipient      = conversation.recipient
 
       # Find conversation, where sender it's recipient
-      conversation_2 = Denshobato::Conversation.find_by(sender: recipient, recipient: sender)
+      conversation_2 = densh_conversation.find_by(sender: recipient, recipient: sender)
 
-      # Send notifications for them
-      notifications.create(conversation_id: conversation.id)
-      notifications.create(conversation_id: conversation_2.id)
+      # Send notifications for new messages to sender and recipient
+      [conversation.id, conversation_2.id].each { |id| notifications.create(conversation_id: id) }
+    end
+
+    def densh_conversation
+      Denshobato::Conversation
+    end
+
+    def user_in_conversation(room, author)
+      conversation.where(id: room.id, sender: author).present? || conversation.where(id: room.id, recipient: author).present?
     end
   end
 end

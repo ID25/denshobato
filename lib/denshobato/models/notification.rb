@@ -4,5 +4,7 @@ module Denshobato
 
     belongs_to :denshobato_message
     belongs_to :denshobato_conversation
+
+    validates :message_id, :conversation_id, presence: true
   end
 end

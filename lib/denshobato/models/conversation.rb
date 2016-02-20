@@ -31,10 +31,10 @@ module Denshobato
     private
 
     def recipient_conversation
-      if Denshobato::Conversation.where(recipient: sender, sender: recipient).present?
+      if densh_conversation.where(recipient: sender, sender: recipient).present?
         errors.add(:conversation, 'You already have conversation with this user')
       else
-        recipient.conversations.create(recipient: sender)
+        recipient.make_conversation_with(sender).save
       end
     end
 
@@ -46,13 +46,16 @@ module Denshobato
       # Checking conversation for uniqueness, when recipient is sender, and vice versa.
 
       hash = Hash[*columns.flatten]
-      if Denshobato::Conversation.where(hash).present?
-        errors.add(:conversation, 'You already have conversation with this user.')
-      end
+
+      errors.add(:conversation, 'You already have conversation with this user.') if densh_conversation.where(hash).present?
     end
 
     def columns
       [['sender_id', sender_id], ['sender_type', sender_type], ['recipient_id', recipient_id], ['recipient_type', recipient_type]]
+    end
+
+    def densh_conversation
+      Denshobato::Conversation
     end
   end
 end
