@@ -1,6 +1,6 @@
 require 'spec_helper'
 Denshobato.autoload :Conversation, 'denshobato/models/conversation'
-Denshobato.autoload :Message, 'denshobato/models/conversation'
+Denshobato.autoload :Message, 'denshobato/models/message'
 
 describe Denshobato::Conversation do
   ActiveRecord::Base.extend Denshobato::Extenders::Core
@@ -14,10 +14,12 @@ describe Denshobato::Conversation do
     let(:osama) { create(:user, name: 'Steve') }
 
     it 'create message, if conversation not exists, then conversation will created, together with the message.' do
-      conversation_message = user.send_message('Hello John', osama)
-      message = Denshobato::Message.first
+      user.send_message('Hello John', osama).save
+      conversation = user.find_conversation_with(osama)
+      user.messages.first.send_notification(conversation.id)
+      message = conversation.messages
 
-      expect(conversation_message).to eq message
+      expect(user.messages).to eq message
     end
   end
 
@@ -25,10 +27,9 @@ describe Denshobato::Conversation do
     let(:user) { create(:user, name: 'Mike') }
 
     it 'get validation error' do
-      message = user.messages.create(body: 'Text')
+      message = user.send_message_to(nil, body: 'Text')
 
-      expect(message.valid?).to be_falsey
-      expect(message.errors.full_messages.join(', ')).to eq "Conversation can't be blank, Sender class can't be blank"
+      expect(message.join(', ')).to eq 'Conversation not present'
     end
   end
 
@@ -36,23 +37,12 @@ describe Denshobato::Conversation do
     let(:user)  { create(:user, name: 'Mike') }
     let(:osama) { create(:user, name: 'Steve') }
 
-    it 'does something' do
+    it 'update conversation' do
       user.make_conversation_with(osama).save
-      user.messages.create(body: 'lol', sender_class: user.class.name, conversation_id: user.my_conversations[0].id)
-      message = user.messages[0]
+      conversation = user.find_conversation_with(osama)
+      user.send_message_to(conversation.id, body: 'lol')
 
-      expect(message.conversation.updated_at.utc.to_s).to eq Time.now.utc.to_s
-    end
-  end
-
-  describe '#sender' do
-    let(:user)  { create(:user, name: 'Mike') }
-    let(:osama) { create(:user, name: 'Steve') }
-
-    it 'return message creator' do
-      user.send_message('Hello', osama)
-
-      expect(Denshobato::Message.first.sender).to eq user
+      expect(conversation.updated_at.utc.to_s).to eq Time.now.utc.to_s
     end
   end
 end
