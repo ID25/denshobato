@@ -1,7 +1,10 @@
 require 'denshobato/version'
 require 'denshobato/engine' if defined?(Rails)
-# Helpers Utils
-Denshobato.autoload :HelperUtils, 'denshobato/helpers/helper_utils'
+
+# Helpers
+Denshobato.autoload :HelperUtils,      'denshobato/helpers/helper_utils'
+Denshobato.autoload :ViewHelper,       'denshobato/helpers/view_helper'
+Denshobato.autoload :ControllerHelper, 'denshobato/helpers/controller_helper'
 
 # View Helpers for messaging
 Denshobato.autoload :ViewMessagingHelper, 'denshobato/helpers/view_messaging_helper'
@@ -24,10 +27,7 @@ module Denshobato
     ActiveRecord::Base.extend Denshobato::Extenders::Core
   end
 
-  if defined?(ActionView::Base)
-    # Load all view helpers
-    Denshobato.autoload :ViewHelper, 'denshobato/helpers/view_helper'
-
-    ActionView::Base.include Denshobato::ViewHelper
-  end
+  # Include Helpers
+  ActionView::Base.include       Denshobato::ViewHelper       if defined?(ActionView::Base)
+  ActionController::Base.include Denshobato::ControllerHelper if defined?(ActionController::Base)
 end
