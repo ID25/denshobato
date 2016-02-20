@@ -1,11 +1,23 @@
 require 'spec_helper'
 Denshobato.autoload :Conversation, 'denshobato/models/conversation'
 
-describe Denshobato::Conversation do
+describe Denshobato::Message, type: :model do
+  it { should validate_presence_of(:body) }
+  it { should validate_presence_of(:author_type) }
+  it { should validate_presence_of(:author_id) }
+  it { should belong_to(:author) }
+  it { should have_many(:denshobato_notifications) }
+
   before :each do
     @user = create(:user, name: 'Eugene')
     @duck = create(:duck, name: 'Donalnd Duck')
     @mark = create(:user, name: 'Mark')
+  end
+
+  describe 'specific table in database' do
+    it 'return correct database table' do
+      expect(Denshobato::Message.table_name).to eq 'denshobato_messages'
+    end
   end
 
   describe '#send_message' do

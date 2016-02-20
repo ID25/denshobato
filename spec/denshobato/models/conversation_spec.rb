@@ -2,7 +2,15 @@ require 'spec_helper'
 Denshobato.autoload :Conversation, 'denshobato/models/conversation'
 Denshobato.autoload :Message, 'denshobato/models/message'
 
-describe Denshobato::Conversation do
+describe Denshobato::Conversation, type: :model do
+  it { should validate_presence_of(:sender_id) }
+  it { should validate_presence_of(:sender_type) }
+  it { should validate_presence_of(:recipient_id) }
+  it { should validate_presence_of(:recipient_type) }
+  it { should belong_to(:sender) }
+  it { should belong_to(:recipient) }
+  it { should have_many(:denshobato_notifications) }
+
   before :each do
     @sender    = create(:user, name: 'Eugene')
     @recipient = create(:user, name: 'Steve')

@@ -1,7 +1,17 @@
 require 'spec_helper'
-Denshobato.autoload :Conversation, 'denshobato/models/conversation'
 
-describe Denshobato::Conversation do
+describe Denshobato::Notification, type: :model do
+  it { should validate_presence_of(:message_id) }
+  it { should validate_presence_of(:conversation_id) }
+  it { should belong_to(:denshobato_message) }
+  it { should belong_to(:denshobato_conversation) }
+
+  describe 'specific table in database' do
+    it 'return correct database table' do
+      expect(Denshobato::Notification.table_name).to eq 'denshobato_notifications'
+    end
+  end
+
   describe 'send notifications to users after create message' do
     let(:user) { create(:user, name: 'DHH') }
     let(:duck) { create(:duck, name: 'Quack') }

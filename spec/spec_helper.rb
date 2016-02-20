@@ -1,5 +1,6 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'database_cleaner'
+require 'shoulda/matchers'
 require 'factory_girl'
 require 'active_record'
 require 'denshobato'
@@ -63,8 +64,17 @@ class Helper
   include Denshobato::ViewHelper
 end
 
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :active_record
+  end
+end
+
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
+  config.include(Shoulda::Matchers::ActiveModel,  type: :model)
+  config.include(Shoulda::Matchers::ActiveRecord, type: :model)
 
   config.before(:all) do
     FactoryGirl.reload
