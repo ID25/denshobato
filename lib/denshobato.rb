@@ -18,9 +18,6 @@ module Denshobato
     Denshobato.autoload :Message,      'denshobato/models/message'
     Denshobato.autoload :Notification, 'denshobato/models/notification'
 
-    # Conversation Finder
-    Denshobato.autoload :ConversationFinder, 'denshobato/helpers/conversation_finder'
-
     # Add helper methods to core model
     Denshobato.autoload :CoreHelper, 'denshobato/helpers/core_helper'
 

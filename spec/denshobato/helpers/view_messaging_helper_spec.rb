@@ -1,11 +1,15 @@
 require 'spec_helper'
 Denshobato.autoload :ViewMessagingHelper, 'denshobato/helpers/view_messaging_helper'
 
-describe Denshobato::ViewHelper do
+describe Denshobato::ViewMessagingHelper do
   ActiveRecord::Base.extend Denshobato::Extenders::Core
 
   class User < ActiveRecord::Base
     denshobato_for :user
+  end
+
+  class Duck < ActiveRecord::Base
+    denshobato_for :duck
   end
 
   class Helper

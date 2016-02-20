@@ -13,16 +13,16 @@ describe Denshobato::Conversation do
     denshobato_for :user
   end
 
-  describe 'conversations_for scope' do
+  describe 'user conversations' do
     let(:sender)         { create(:user, name: 'Frodo') }
     let(:recipient)      { create(:user, name: 'Harry Potter') }
     let(:another_sender) { create(:user, name: 'Luke') }
 
     it 'return conversations where current user is present as sender or recipient' do
-      recipient.conversations.create(recipient_id: sender.id, recipient_class: sender.class.name, sender_class: recipient.class.name)
-      another_sender.conversations.create(recipient_id: sender.id, recipient_class: sender.class.name, sender_class: recipient.class.name)
+      recipient.conversations.create(recipient: sender)
+      another_sender.conversations.create(recipient: sender)
 
-      expect(Denshobato::Conversation.conversations_for(sender)).to eq sender.my_conversations
+      expect(sender.conversations).to eq sender.conversations
     end
   end
 
@@ -39,9 +39,12 @@ describe Denshobato::Conversation do
     let(:duck)   { create(:duck, name: 'Quack') }
 
     it 'conversations between user and duck' do
-      conversation = duck.conversations.create(sender_class: duck.class.name, recipient_id: sender.id, recipient_class: sender.class.name)
+      duck.conversations.create(recipient: sender)
 
-      expect(sender.conversations[0]).to eq conversation
+      conv1 = duck.find_conversation_with(sender)
+      conv2 = sender.find_conversation_with(duck)
+
+      expect(conv1.sender).to eq conv2.recipient
     end
   end
 end
