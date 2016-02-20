@@ -1,6 +1,5 @@
 require 'spec_helper'
 Denshobato.autoload :Conversation, 'denshobato/models/conversation'
-Denshobato.autoload :Message, 'denshobato/models/message'
 
 describe Denshobato::Conversation do
   ActiveRecord::Base.extend Denshobato::Extenders::Core
@@ -43,6 +42,23 @@ describe Denshobato::Conversation do
       user.send_message_to(conversation.id, body: 'lol')
 
       expect(conversation.updated_at.utc.to_s).to eq Time.now.utc.to_s
+    end
+  end
+
+  describe 'access_to_posting_message' do
+    let(:user) { create(:user, name: 'DHH') }
+    let(:duck) { create(:duck, name: 'Quack') }
+    let(:mark) { create(:user, name: 'Mark') }
+
+    it 'user can`t post to duck and mark conversation' do
+      duck.make_conversation_with(mark).save
+      room = duck.find_conversation_with(mark)
+      duck.send_message_to(room.id, body: 'Hi Mark').save
+
+      result = user.send_message_to(room.id, body: 'Hi there')
+
+      expect(result.valid?).to be_falsey
+      expect(result.errors[:message].join('')).to eq 'You can`t post to this conversation'
     end
   end
 end

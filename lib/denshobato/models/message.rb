@@ -53,7 +53,7 @@ module Denshobato
     end
 
     def user_in_conversation(room, author)
-      conversation.where(id: room.id, sender: author).present? || conversation.where(id: room.id, recipient: author).present?
+      densh_conversation.where(id: room.id, sender: author).present? || densh_conversation.where(id: room.id, recipient: author).present?
     end
   end
 end

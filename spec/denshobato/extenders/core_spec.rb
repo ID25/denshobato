@@ -41,7 +41,7 @@ describe Denshobato::Extenders::Core do
     end
   end
 
-  describe '#my_conversations' do
+  describe '#conversations' do
     let(:user) { create(:user, name: 'DHH') }
     let(:duck) { create(:duck, name: 'Quack') }
     let(:mark) { create(:user, name: 'Mark') }
@@ -52,7 +52,7 @@ describe Denshobato::Extenders::Core do
 
       error = mark.make_conversation_with(user)
 
-      expect(user.conversations.count).to   eq 2
+      expect(user.conversations.count).to eq 2
       expect(error.valid?).to be_falsey
       expect(error.errors[:conversation].join('')).to eq 'You already have conversation with this user.'
     end
@@ -104,6 +104,31 @@ describe Denshobato::Extenders::Core do
       end
 
       expect(duck.image).to eq 'cat.jpg'
+    end
+  end
+
+  describe '#send_message_to' do
+    let(:user) { create(:user, name: 'DHH') }
+    let(:duck) { create(:duck, name: 'Quack') }
+
+    it 'initialize message' do
+      user.make_conversation_with(duck).save
+      room = user.find_conversation_with(duck)
+
+      msg = user.send_message_to(room.id, body: 'Hello')
+
+      expect(msg.body).to   eq 'Hello'
+      expect(msg.author).to eq user
+    end
+
+    it 'save message and send notifications' do
+      user.make_conversation_with(duck).save
+      room = user.find_conversation_with(duck)
+      msg  = user.send_message_to(room.id, body: 'Hello')
+      msg.save
+      msg.send_notification(room.id)
+
+      expect(Denshobato::Notification.count).to eq 2
     end
   end
 end
