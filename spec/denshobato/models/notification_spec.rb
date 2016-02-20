@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Denshobato::Notification, type: :model do
   it { should validate_presence_of(:message_id) }
   it { should validate_presence_of(:conversation_id) }
+  it { should validate_uniqueness_of(:message_id).scoped_to(:conversation_id) }
   it { should belong_to(:denshobato_message) }
   it { should belong_to(:denshobato_conversation) }
 

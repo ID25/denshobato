@@ -6,6 +6,7 @@ module Denshobato
     belongs_to :denshobato_conversation, class_name: 'Denshobato::Conversation', foreign_key: 'conversation_id'
 
     validates :message_id, :conversation_id, presence: true
+    validates :message_id, uniqueness: { scope: :conversation_id }
 
     alias message denshobato_message
     alias conversation denshobato_conversation
