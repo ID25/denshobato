@@ -1,10 +1,8 @@
 class CreateDenshobatoNotifications < ActiveRecord::Migration
   def change
     create_table :denshobato_notifications do |t|
-      t.references :denshobato_message, foreign_key: true, index: { name: 'notification_for_message' }
-      t.references :denshobato_conversation, foreign_key: true, index: { name: 'notification_for_conversation' }
-
-      t.timestamps null: false
+      t.integer    :message_id,      index: { name: 'notification_for_message' }
+      t.references :conversation_id, index: { name: 'notification_for_conversation' }
     end
   end
 end

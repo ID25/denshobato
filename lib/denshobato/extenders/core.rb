@@ -18,7 +18,7 @@ module Denshobato
           has_many :denshobato_conversations, as: :sender, class_name: '::Denshobato::Conversation', dependent: :destroy
 
           # Add messages
-          has_many :denshobato_messages, class_name: '::Denshobato::Message', foreign_key: 'sender_id', dependent: :destroy
+          has_many :denshobato_messages, as: :author, class_name: '::Denshobato::Message', dependent: :destroy
 
           # Added alias for the sake of brevity.
           alias_method :conversations, :denshobato_conversations

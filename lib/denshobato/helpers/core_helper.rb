@@ -36,6 +36,16 @@ module Denshobato
       take_conversation.messages.create(body: text, sender_class: class_name(self), sender_id: id)
     end
 
+    def send_message_to(id, params)
+      room = conversation.find(id)
+
+      # Show validation error, if author of message not in conversation
+
+      return message_error(id, self) unless conversation.where(id: room.id, sender: self).present? || conversation.where(id: room.id, recipient: self).present?
+
+      messages.build(params)
+    end
+
     def build_conversation_message(conversation)
       messages.build(conversation_id: conversation.id, sender_id: id, sender_class: class_name(self))
     end
@@ -53,6 +63,10 @@ module Denshobato
 
     def create_conversation(sender, recipient)
       sender.make_conversation_with(recipient).save
+    end
+
+    def message_error(id, author)
+      author.messages.build(conversation_id: id)
     end
   end
 end

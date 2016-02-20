@@ -17,6 +17,14 @@ module Denshobato
     # Callbacks
     after_create      :recipient_conversation # Create conversation for recipient, where he is sender.
 
+    # Methods
+    def messages
+      # Return all messages for conversation
+
+      ids = notifications.pluck(:message_id)
+      Message.find(ids)
+    end
+
     # Alias
     alias notifications denshobato_notifications
 
