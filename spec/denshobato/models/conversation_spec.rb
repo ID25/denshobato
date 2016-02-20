@@ -1,6 +1,6 @@
 require 'spec_helper'
 Denshobato.autoload :Conversation, 'denshobato/models/conversation'
-Denshobato.autoload :Message, 'denshobato/models/conversation'
+Denshobato.autoload :Message, 'denshobato/models/message'
 
 describe Denshobato::Conversation do
   ActiveRecord::Base.extend Denshobato::Extenders::Core
@@ -32,18 +32,18 @@ describe Denshobato::Conversation do
 
   describe 'valiadtions' do
     it 'validate sender_id presence' do
-      model = @sender.conversations.build(recipient_id: @recipient.id, recipient_class: @recipient.class.name, sender_class: @sender.class.name)
+      model = @sender.conversations.build(recipient: @recipient, sender: @sender)
       model.sender_id = nil
       model.save
 
-      expect(model.errors.full_messages.join('')).to eq 'Sender can`t be empty'
+      expect(model.errors.full_messages.join(', ')).to eq "Sender can't be blank"
     end
 
     it 'validate recipient_id presence' do
-      model = @sender.denshobato_conversations.build
+      model = @sender.conversations.build
       model.save
 
-      expect(model.errors.full_messages.join('')).to eq 'Recipient can`t be empty'
+      expect(model.errors.full_messages.join(', ')).to eq "Recipient can't be blank, Recipient type can't be blank"
     end
   end
 
@@ -52,8 +52,8 @@ describe Denshobato::Conversation do
     let(:duck)  { create(:duck) }
 
     it 'validate uniqueness' do
-      admin.conversations.create(recipient_id: @recipient.id, recipient_class: @recipient.class.name, sender_class: admin.class.name)
-      model = @recipient.conversations.create(recipient_id: admin.id, recipient_class: admin.class.name, sender_class: @recipient.class.name)
+      admin.conversations.create(recipient: @recipient, sender: admin)
+      model = @recipient.conversations.create(recipient: admin, sender: @recipient)
 
       expect(model.errors.messages[:conversation].join('')).to eq 'You already have conversation with this user.'
     end
@@ -61,11 +61,14 @@ describe Denshobato::Conversation do
 
   describe 'has_many messages' do
     it 'return Associations::CollectionProxy' do
-      @recipient.conversations.create(recipient_id: @sender.id, recipient_class: @sender.class.name, sender_class: @recipient_id.class.name)
+      @recipient.conversations.create(recipient: @sender, sender: @recipient_id)
       conversation = @recipient.conversations.first
-      conversation.messages.create(body: 'Moon Sonata', sender_id: @recipient.id, sender_class: @recipient.class.name)
+      message = @recipient.messages.build(body: 'Moon Sonata')
+      message.save
 
-      expect(conversation.messages).to eq Denshobato::Message.where(conversation_id: conversation.id)
+      message.send_notification(conversation.id)
+
+      expect(conversation.messages).to eq @recipient.messages
     end
   end
 
