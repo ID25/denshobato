@@ -30,7 +30,7 @@ describe Denshobato::ViewMessagingHelper do
       sender.make_conversation_with(recipient).save
       conversation = sender.find_conversation_with(recipient)
 
-      expect(helper.interlocutor_name(sender, conversation, :name, :last_name)).to eq 'Donald Duck'
+      expect(helper.interlocutor_name(sender, conversation, :name, :last_name)).to eq 'John Smitt'
     end
   end
 
