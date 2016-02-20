@@ -3,20 +3,6 @@ Denshobato.autoload :Conversation, 'denshobato/models/conversation'
 Denshobato.autoload :Message, 'denshobato/models/message'
 
 describe Denshobato::Conversation do
-  ActiveRecord::Base.extend Denshobato::Extenders::Core
-
-  class User < ActiveRecord::Base
-    denshobato_for :user
-  end
-
-  class Admin < ActiveRecord::Base
-    denshobato_for :user
-  end
-
-  class Duck < ActiveRecord::Base
-    denshobato_for :user
-  end
-
   before :each do
     @sender    = create(:user, name: 'Eugene')
     @recipient = create(:user, name: 'Steve')

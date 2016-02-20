@@ -2,12 +2,6 @@ require 'spec_helper'
 Denshobato.autoload :Conversation, 'denshobato/models/conversation'
 
 describe Denshobato::Conversation do
-  ActiveRecord::Base.extend Denshobato::Extenders::Core
-
-  class User < ActiveRecord::Base
-    denshobato_for :user
-  end
-
   describe 'send notifications to users after create message' do
     let(:user) { create(:user, name: 'DHH') }
     let(:duck) { create(:duck, name: 'Quack') }

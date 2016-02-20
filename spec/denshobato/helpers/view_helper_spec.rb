@@ -1,17 +1,6 @@
 require 'spec_helper'
-Denshobato.autoload :ViewHelper, 'denshobato/helpers/view_helper'
 
 describe Denshobato::ViewHelper do
-  ActiveRecord::Base.extend Denshobato::Extenders::Core
-
-  class User < ActiveRecord::Base
-    denshobato_for :user
-  end
-
-  class Helper
-    include Denshobato::ViewHelper
-  end
-
   helper = Helper.new
 
   describe '#conversation_exists?' do

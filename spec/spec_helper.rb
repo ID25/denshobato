@@ -43,6 +43,26 @@ ActiveRecord::Schema.define(version: 1) do
   end
 end
 
+ActiveRecord::Base.extend Denshobato::Extenders::Core
+
+class User < ActiveRecord::Base
+  denshobato_for :user
+end
+
+class Admin < ActiveRecord::Base
+  denshobato_for :user
+end
+
+class Duck < ActiveRecord::Base
+  denshobato_for :user
+end
+
+Denshobato.autoload :ViewHelper, 'denshobato/helpers/view_helper'
+
+class Helper
+  include Denshobato::ViewHelper
+end
+
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
 

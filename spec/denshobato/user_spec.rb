@@ -2,17 +2,6 @@ require 'spec_helper'
 Denshobato.autoload :Conversation, 'denshobato/models/conversation'
 
 describe Denshobato::Conversation do
-  include Denshobato::HelperUtils
-  ActiveRecord::Base.extend Denshobato::Extenders::Core
-
-  class User < ActiveRecord::Base
-    denshobato_for :user
-  end
-
-  class Duck < ActiveRecord::Base
-    denshobato_for :user
-  end
-
   describe 'user conversations' do
     let(:sender)         { create(:user, name: 'Frodo') }
     let(:recipient)      { create(:user, name: 'Harry Potter') }

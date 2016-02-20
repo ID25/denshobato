@@ -2,80 +2,61 @@ require 'spec_helper'
 require 'denshobato/extenders/core'
 
 describe Denshobato::Extenders::Core do
-  include Denshobato::HelperUtils
-  ActiveRecord::Base.extend Denshobato::Extenders::Core
-
-  class User < ActiveRecord::Base
-    denshobato_for :user
-  end
-
-  class Duck < ActiveRecord::Base
-    denshobato_for :user
+  before :each do
+    @user = create(:user, name: 'Eugene')
+    @duck = create(:duck, name: 'Donalnd Duck')
+    @mark = create(:user, name: 'Mark')
   end
 
   describe '#denshobato_for' do
-    let(:user)          { create(:user, name: 'Eugene') }
-    let(:recipient)     { create(:user, name: 'Johnny Depp') }
-    let!(:conversation) { user.conversations.create(recipient: recipient) }
+    let!(:conversation) { @user.conversations.create(recipient: @duck) }
 
     it 'user has_many conversations' do
-      expect(user.denshobato_conversations.count).to eq 1
-      expect(user.denshobato_conversations.class.inspect).to include 'ActiveRecord_Associations_CollectionProxy'
+      expect(@user.denshobato_conversations.count).to eq 1
+      expect(@user.denshobato_conversations.class.inspect).to include 'ActiveRecord_Associations_CollectionProxy'
     end
 
     it 'conversation belongs_to user' do
-      expect(conversation.sender).to eq user
+      expect(conversation.sender).to eq @user
     end
   end
 
   describe '#make_conversation_with' do
-    let(:sender)    { create(:user, name: 'Me') }
-    let(:recipient) { create(:duck, name: 'You') }
-
     it 'create conversations' do
-      model = sender.make_conversation_with(recipient)
+      model = @user.make_conversation_with(@duck)
 
-      expect(model.sender).to    eq sender
-      expect(model.recipient).to eq recipient
+      expect(model.sender).to    eq @user
+      expect(model.recipient).to eq @duck
       expect(model.valid?).to be_truthy
     end
   end
 
   describe '#conversations' do
-    let(:user) { create(:user, name: 'DHH') }
-    let(:duck) { create(:duck, name: 'Quack') }
-    let(:mark) { create(:user, name: 'Mark') }
-
     it 'return all conversations where user as sender or recipient' do
-      mark.make_conversation_with(user).save
-      duck.make_conversation_with(user).save
+      @mark.make_conversation_with(@user).save
+      @duck.make_conversation_with(@user).save
 
-      error = mark.make_conversation_with(user)
+      error = @mark.make_conversation_with(@user)
 
-      expect(user.conversations.count).to eq 2
+      expect(@user.conversations.count).to eq 2
       expect(error.valid?).to be_falsey
       expect(error.errors[:conversation].join('')).to eq 'You already have conversation with this user.'
     end
   end
 
   describe '#find_conversation_with' do
-    let(:user) { create(:user, name: 'DHH') }
-    let(:duck) { create(:duck, name: 'Quack') }
-
     it 'find conversation with user and duck' do
-      user.make_conversation_with(duck).save
-      result       = user.find_conversation_with(duck)
-      conversation = Denshobato::Conversation.find_by(sender: user, recipient: duck)
+      @user.make_conversation_with(@duck).save
+      result       = @user.find_conversation_with(@duck)
+      conversation = Denshobato::Conversation.find_by(sender: @user, recipient: @duck)
 
       expect(result).to eq conversation
     end
   end
 
   describe '#full_name' do
-    let(:duck) { create(:duck, name: 'DHH') }
-
     it 'expect default full_name to model name' do
-      expect(duck.full_name).to eq 'Duck'
+      expect(@duck.full_name).to eq 'Duck'
     end
 
     it 'custom full_name' do
@@ -85,15 +66,13 @@ describe Denshobato::Extenders::Core do
         end
       end
 
-      expect(duck.full_name).to eq 'Donalnd Duck'
+      expect(@duck.full_name).to eq 'Donalnd Duck'
     end
   end
 
   describe '#image' do
-    let(:duck) { create(:duck, name: 'DHH') }
-
     it 'expect default image' do
-      expect(duck.image).to eq 'http://i.imgur.com/pGHOaLg.png'
+      expect(@duck.image).to eq 'http://i.imgur.com/pGHOaLg.png'
     end
 
     it 'custom image' do
@@ -103,28 +82,25 @@ describe Denshobato::Extenders::Core do
         end
       end
 
-      expect(duck.image).to eq 'cat.jpg'
+      expect(@duck.image).to eq 'cat.jpg'
     end
   end
 
   describe '#send_message_to' do
-    let(:user) { create(:user, name: 'DHH') }
-    let(:duck) { create(:duck, name: 'Quack') }
-
     it 'initialize message' do
-      user.make_conversation_with(duck).save
-      room = user.find_conversation_with(duck)
+      @user.make_conversation_with(@duck).save
+      room = @user.find_conversation_with(@duck)
 
-      msg = user.send_message_to(room.id, body: 'Hello')
+      msg = @user.send_message_to(room.id, body: 'Hello')
 
       expect(msg.body).to   eq 'Hello'
-      expect(msg.author).to eq user
+      expect(msg.author).to eq @user
     end
 
     it 'save message and send notifications' do
-      user.make_conversation_with(duck).save
-      room = user.find_conversation_with(duck)
-      msg  = user.send_message_to(room.id, body: 'Hello')
+      @user.make_conversation_with(@duck).save
+      room = @user.find_conversation_with(@duck)
+      msg  = @user.send_message_to(room.id, body: 'Hello')
       msg.save
       msg.send_notification(room.id)
 
