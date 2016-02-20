@@ -24,19 +24,22 @@ ActiveRecord::Schema.define(version: 1) do
   end
 
   create_table :denshobato_conversations do |t|
-    t.integer  'sender_id'
-    t.integer  'recipient_id'
-    t.string   'sender_class',    default: ''
-    t.string   'recipient_class', default: ''
+    t.references :sender,    polymorphic: true, index: { name: 'conversation_polymorphic_sender' }
+    t.references :recipient, polymorphic: true, index: { name: 'conversation_polymorphic_recipient' }
 
     t.timestamps null: false
   end
 
   create_table :denshobato_messages do |t|
-    t.integer :conversation_id, index: true
-    t.integer :sender_id,       index: true
-    t.string  :sender_class,    default: ''
-    t.text    :body,            default: ''
+    t.text :body, default: ''
+    t.references :author, polymorphic: true, index: { name: 'message_polymorphic_author' }
+
+    t.timestamps null: false
+  end
+
+  create_table :denshobato_notifications do |t|
+    t.integer    :message_id,      index: { name: 'notification_for_message' }
+    t.references :conversation_id, index: { name: 'notification_for_conversation' }
   end
 end
 

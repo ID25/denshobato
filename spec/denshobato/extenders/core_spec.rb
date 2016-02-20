@@ -9,10 +9,14 @@ describe Denshobato::Extenders::Core do
     denshobato_for :user
   end
 
+  class Duck < ActiveRecord::Base
+    denshobato_for :user
+  end
+
   describe '#denshobato_for' do
     let(:user)          { create(:user, name: 'Eugene') }
     let(:recipient)     { create(:user, name: 'Johnny Depp') }
-    let!(:conversation) { user.denshobato_conversations.create(recipient_id: recipient.id) }
+    let!(:conversation) { user.conversations.create(recipient: recipient) }
 
     it 'user has_many conversations' do
       expect(user.denshobato_conversations.count).to eq 1
@@ -20,7 +24,7 @@ describe Denshobato::Extenders::Core do
     end
 
     it 'conversation belongs_to user' do
-      expect(conversation.user).to eq user
+      expect(conversation.sender).to eq user
     end
   end
 
@@ -31,9 +35,8 @@ describe Denshobato::Extenders::Core do
     it 'create conversations' do
       model = sender.make_conversation_with(recipient)
 
-      expect(model.sender_class).to    eq sender.class.name
-      expect(model.recipient_id).to    eq recipient.id
-      expect(model.recipient_class).to eq recipient.class.name
+      expect(model.sender).to    eq sender
+      expect(model.recipient).to eq recipient
       expect(model.valid?).to be_truthy
     end
   end
@@ -47,8 +50,11 @@ describe Denshobato::Extenders::Core do
       mark.make_conversation_with(user).save
       duck.make_conversation_with(user).save
 
-      expect(user.my_conversations).to include mark.conversations[0]
-      expect(user.my_conversations).to include duck.conversations[0]
+      error = mark.make_conversation_with(user)
+
+      expect(user.conversations.count).to   eq 2
+      expect(error.valid?).to be_falsey
+      expect(error.errors[:conversation].join('')).to eq 'You already have conversation with this user.'
     end
   end
 
@@ -59,30 +65,9 @@ describe Denshobato::Extenders::Core do
     it 'find conversation with user and duck' do
       user.make_conversation_with(duck).save
       result       = user.find_conversation_with(duck)
-      conversation = Denshobato::Conversation.find_by(sender_id: user.id, sender_class: class_name(user), recipient_id: duck.id, recipient_class: class_name(duck))
+      conversation = Denshobato::Conversation.find_by(sender: user, recipient: duck)
 
       expect(result).to eq conversation
-    end
-  end
-
-  describe '#build_conversation_message' do
-    let(:user) { create(:user, name: 'DHH') }
-    let(:duck) { create(:duck, name: 'Quack') }
-
-    it 'build message for conversation with user and duck' do
-      user.make_conversation_with(duck).save
-
-      conversation = user.find_conversation_with(duck)
-      message_1 = user.build_conversation_message(conversation)
-      message_1.body = 'Hello from User'
-      message_1.save
-
-      message_2 = duck.build_conversation_message(conversation)
-      message_2.body = 'Hello from Duck'
-      message_2.save
-
-      expect(conversation.messages.first.body).to eq 'Hello from User'
-      expect(conversation.messages.last.body).to  eq 'Hello from Duck'
     end
   end
 

@@ -22,7 +22,7 @@ module Denshobato
       # Return all messages for conversation
 
       ids = notifications.pluck(:message_id)
-      Message.find(ids)
+      Denshobato::Message.find(ids)
     end
 
     # Alias
@@ -31,7 +31,11 @@ module Denshobato
     private
 
     def recipient_conversation
-      recipient.conversations.first_or_create(recipient_id: sender.id, recipient_type: sender.class.name)
+      if Denshobato::Conversation.where(recipient: sender, sender: recipient).present?
+        errors.add(:conversation, 'You already have conversation with this user')
+      else
+        recipient.conversations.create(recipient: sender)
+      end
     end
 
     def check_sender
@@ -42,7 +46,7 @@ module Denshobato
       # Checking conversation for uniqueness, when recipient is sender, and vice versa.
 
       hash = Hash[*columns.flatten]
-      if Conversation.where(hash).present?
+      if Denshobato::Conversation.where(hash).present?
         errors.add(:conversation, 'You already have conversation with this user.')
       end
     end
