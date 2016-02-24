@@ -13,6 +13,6 @@ export function createMessage(body, sender, conversation, senderClass) {
   return axios.post(`${API}/messages/create_message?body=${body}&conversation_id=${conversation}&sender_id=${sender}&sender_class=${senderClass}`);
 }
 
-export function deleteMessage(id, user, klass) {
-  return axios.delete(`${API}/messages/delete_message?id=${id}&user=${user}&class=${klass}`);
+export function deleteMessage(id, conversation) {
+  return axios.delete(`${API}/messages/delete_message?id=${id}&conversation=${conversation}`);
 }

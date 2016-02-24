@@ -24,7 +24,7 @@ class ConversationApi < Grape::API
       # Get current user id, and Conversation id
 
       current_user = take_current_user(params)
-      { sender_id: current_user.id, sender_class: class_name(current_user), conversation_id: conversation.find(params[:id]).id }
+      { author: current_user.email, conversation_id: conversation.find(params[:id]).id, sender_id: current_user.id, sender_class: class_name(current_user) }
     end
   end
 end

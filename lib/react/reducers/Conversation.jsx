@@ -1,8 +1,9 @@
 import { CONVERSATION } from '../actions/Conversation';
 
 const conversationState = {
-  senderId: null,
+  author: null,
   conversationId: null,
+  senderId: null,
   senderClass: null,
 };
 
@@ -10,7 +11,7 @@ export function conversation(state = conversationState, action) {
   switch (action.type) {
   case CONVERSATION:
     let data = action.response;
-    return { ...state, senderId: data.sender_id, conversationId: data.conversation_id, senderClass: data.sender_class };
+    return { ...state, conversationId: data.conversation_id, author: data.author, senderId: data.sender_id, senderClass: data.sender_class };
   default:
     return state;
   }

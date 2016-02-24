@@ -21251,9 +21251,9 @@
 	  };
 	}
 
-	function deleteMessage(id, userId, userClass) {
+	function deleteMessage(id, conversation) {
 	  return function (dispatch) {
-	    api.deleteMessage(id, userId, userClass).then(function (response) {
+	    api.deleteMessage(id, conversation).then(function (response) {
 	      return dispatch({ type: DELETE, data: response.data, id: id });
 	    });
 	  };
@@ -21297,8 +21297,8 @@
 	  return _axios2.default.post(API + '/messages/create_message?body=' + body + '&conversation_id=' + conversation + '&sender_id=' + sender + '&sender_class=' + senderClass);
 	}
 
-	function deleteMessage(id, user, klass) {
-	  return _axios2.default.delete(API + '/messages/delete_message?id=' + id + '&user=' + user + '&class=' + klass);
+	function deleteMessage(id, conversation) {
+	  return _axios2.default.delete(API + '/messages/delete_message?id=' + id + '&conversation=' + conversation);
 	}
 
 /***/ },
@@ -22385,8 +22385,9 @@
 	var _Conversation = __webpack_require__(202);
 
 	var conversationState = {
-	  senderId: null,
+	  author: null,
 	  conversationId: null,
+	  senderId: null,
 	  senderClass: null
 	};
 
@@ -22397,7 +22398,7 @@
 	  switch (action.type) {
 	    case _Conversation.CONVERSATION:
 	      var data = action.response;
-	      return _extends({}, state, { senderId: data.sender_id, conversationId: data.conversation_id, senderClass: data.sender_class });
+	      return _extends({}, state, { conversationId: data.conversation_id, author: data.author, senderId: data.sender_id, senderClass: data.sender_class });
 	    default:
 	      return state;
 	  }
@@ -25843,7 +25844,7 @@
 	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Message)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.deleteMessage = function () {
 	      var result = confirm('Delete Message?');
 	      if (result) {
-	        _Store2.default.dispatch(_Index.actions.messages.deleteMessage(_this.props.message.id, room.dataset.currentUserId, room.dataset.currentUserClass));
+	        _Store2.default.dispatch(_Index.actions.messages.deleteMessage(_this.props.message.id, _this.props.sender.conversationId));
 	      };
 	    }, _temp), _possibleConstructorReturn(_this, _ret);
 	  }
@@ -25855,7 +25856,7 @@
 	      var message = _props.message;
 	      var sender = _props.sender;
 
-	      var cssClass = message.sender_id == sender.senderId ? 'left' : 'right';
+	      var cssClass = message.author == sender.author ? 'left' : 'right';
 
 	      return _react2.default.createElement(
 	        'div',
@@ -25885,11 +25886,11 @@
 	              { className: 'text' },
 	              message.body
 	            ),
-	            message.sender_id == sender.senderId ? _react2.default.createElement(
+	            _react2.default.createElement(
 	              'span',
 	              { className: 'delete-message', onClick: this.deleteMessage },
 	              'X'
-	            ) : undefined
+	            )
 	          )
 	        )
 	      );
@@ -25901,14 +25902,11 @@
 	  message: _react2.default.PropTypes.shape({
 	    id: _react2.default.PropTypes.number.isRequired,
 	    body: _react2.default.PropTypes.string.isRequired,
-	    sender_id: _react2.default.PropTypes.number.isRequired,
-	    sender_class: _react2.default.PropTypes.string.isRequired,
-	    avatar: _react2.default.PropTypes.string
+	    author: _react2.default.PropTypes.string.isRequired
 	  }),
 	  sender: _react2.default.PropTypes.shape({
-	    senderId: _react2.default.PropTypes.number,
-	    conversationId: _react2.default.PropTypes.number,
-	    senderClass: _react2.default.PropTypes.string
+	    author: _react2.default.PropTypes.string,
+	    conversationId: _react2.default.PropTypes.number
 	  })
 	}, _temp2);
 	exports.default = Message;

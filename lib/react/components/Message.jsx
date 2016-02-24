@@ -9,27 +9,24 @@ export default class Message extends Component {
     message: React.PropTypes.shape({
       id: React.PropTypes.number.isRequired,
       body: React.PropTypes.string.isRequired,
-      sender_id: React.PropTypes.number.isRequired,
-      sender_class: React.PropTypes.string.isRequired,
-      avatar: React.PropTypes.string,
+      author: React.PropTypes.string.isRequired,
     }),
     sender: React.PropTypes.shape({
-      senderId: React.PropTypes.number,
+      author: React.PropTypes.string,
       conversationId: React.PropTypes.number,
-      senderClass: React.PropTypes.string,
     }),
   };
 
   deleteMessage = () => {
     let result = confirm('Delete Message?');
     if (result) {
-      store.dispatch(actions.messages.deleteMessage(this.props.message.id, room.dataset.currentUserId, room.dataset.currentUserClass));
+      store.dispatch(actions.messages.deleteMessage(this.props.message.id, this.props.sender.conversationId));
     };
   };
 
   render() {
     const { message, sender } = this.props;
-    const cssClass = (message.sender_id == sender.senderId) ? 'left' : 'right';
+    const cssClass = (message.author == sender.author) ? 'left' : 'right';
 
     return (
       <div>
@@ -42,11 +39,7 @@ export default class Message extends Component {
           </div>
           <div className="text_wrapper">
             <div className="text">{message.body}</div>
-              {do {
-                if (message.sender_id == sender.senderId) {
-                  <span className='delete-message' onClick={this.deleteMessage}>X</span>;
-                }
-              }}
+            <span className='delete-message' onClick={this.deleteMessage}>X</span>
           </div>
         </li>
       </div>

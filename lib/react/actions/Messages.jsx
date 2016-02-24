@@ -18,9 +18,9 @@ export function create(body, sender, conversation, senderClass) {
   });
 }
 
-export function deleteMessage(id, userId, userClass) {
+export function deleteMessage(id, conversation) {
   return ((dispatch) => {
-    api.deleteMessage(id, userId, userClass)
+    api.deleteMessage(id, conversation)
       .then((response) => dispatch({ type: DELETE, data: response.data, id: id }));
   });
 }

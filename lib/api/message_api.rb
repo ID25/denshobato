@@ -12,11 +12,38 @@ class MessageApi < Grape::API
     def formated_messages(klass)
       # Prepare JSON for React
 
-      { body: klass.body, sender_id: klass.sender.id, sender_class: klass.sender.class.name, id: klass.id, avatar: klass.sender.try(:image), full_name: klass.sender.try(:full_name) }
+      { body: klass.body, id: klass.id, author: klass.author.email, full_name: klass.author.full_name, avatar: klass.author.image }
+    end
+
+    def send_notification(id, message)
+      # Find current conversation
+      conversation = densh_conversation.find(id)
+
+      # Create Notifications
+      create_notifications_for(conversation, message)
+    end
+
+    def create_notifications_for(conversation, message)
+      # Take sender and recipient
+      sender         = conversation.sender
+      recipient      = conversation.recipient
+
+      # Find conversation, where sender it's recipient
+      conversation_2 = recipient.find_conversation_with(sender)
+
+      # If recipient delete their conversation, create it for him
+      conversation_2 = create_conversation_for_recipient(sender, recipient) if conversation_2.nil?
+
+      # Send notifications for new messages to sender and recipient
+      [conversation.id, conversation_2.id].each { |id| message.notifications.create(conversation_id: id) }
     end
 
     def message_class
       Denshobato::Message
+    end
+
+    def densh_conversation
+      Denshobato::Conversation
     end
   end
 
@@ -25,7 +52,7 @@ class MessageApi < Grape::API
     get :get_conversation_messages do
       # Fetch all messages from conversation
 
-      messages = Denshobato::Conversation.find(params[:id]).messages.select(:id, :sender_id, :body, :sender_class)
+      messages = Denshobato::Conversation.find(params[:id]).messages
 
       messages.each_with_object([]) { |msg, arr| arr << formated_messages(msg) }
     end
@@ -34,23 +61,27 @@ class MessageApi < Grape::API
     post :create_message do
       # Create message in conversation
 
-      message = message_class.new(body: params[:body], conversation_id: params[:conversation_id], sender_id: params[:sender_id], sender_class: params[:sender_class])
+      user = params[:sender_class].constantize.find(params[:sender_id])
+      message = user.hato_messages.build(body: params[:body])
 
-      message.save ? formated_messages(message) : error!({ error: message.errors.full_messages.join(' ') }, 422)
+      if message.save
+        id = params[:conversation_id]
+        send_notification(id, message)
+        formated_messages(message)
+      else
+        error!({ error: message.errors.full_messages.join(' ') }, 422)
+      end
     end
 
     desc 'Delete Message'
     delete :delete_message do
       # Delete message from DB
 
-      current_user = take_current_user(params)
+      # current_user = take_current_user(params)
+
       message = message_class.find(params[:id])
-      if message.sender.id == current_user.id
-        message.destroy
-        { info: 'success' }
-      else
-        { info: 'error' }
-      end
+      conversation = params[:conversation]
+      densh_conversation.where(id: conversation).includes(:denshobato_notifications).where(denshobato_notifications: { message_id: message.id }).first.notifications.first.destroy
     end
   end
 end
