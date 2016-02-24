@@ -2,7 +2,16 @@ module Denshobato
   module CoreHelper
     include Denshobato::HelperUtils
     def my_conversations
-      conversation.my_conversations(self)
+      # Return active user conversations (not in trash)
+
+      trashed = block_given? ? yield : false
+      conversation.my_conversations(self, trashed)
+    end
+
+    def trashed_conversations
+      # Return trashed conversations
+
+      my_conversations { true }
     end
 
     def make_conversation_with(recipient)

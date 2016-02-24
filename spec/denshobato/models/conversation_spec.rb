@@ -169,12 +169,45 @@ describe Denshobato::Conversation, type: :model do
     end
   end
 
-  describe 'sent conversation to trash' do
+  describe '#to_trash' do
     let(:user) { create(:user, name: 'DHH') }
     let(:duck) { create(:duck, name: 'Quack') }
     let(:wolf) { create(:user, name: 'Wolf') }
 
-    it 'return active conversation' do
+    it 'move conversation to trash' do
+      user.make_conversation_with(duck).save
+      user.make_conversation_with(wolf).save
+
+      conversation = user.find_conversation_with(wolf)
+      conversation.to_trash
+
+      expect(conversation.trashed).to be_truthy
+    end
+  end
+
+  describe '#from_trash' do
+    let(:user) { create(:user, name: 'DHH') }
+    let(:duck) { create(:duck, name: 'Quack') }
+    let(:wolf) { create(:user, name: 'Wolf') }
+
+    it 'move conversation to trash' do
+      user.make_conversation_with(duck).save
+      user.make_conversation_with(wolf).save
+
+      conversation = user.find_conversation_with(wolf)
+      conversation.to_trash
+      conversation.from_trash
+
+      expect(conversation.trashed).to be_falsey
+    end
+  end
+
+  describe '#my_conversations' do
+    let(:user) { create(:user, name: 'DHH') }
+    let(:duck) { create(:duck, name: 'Quack') }
+    let(:wolf) { create(:user, name: 'Wolf') }
+
+    it 'return active conversations' do
       user.make_conversation_with(duck).save
       user.make_conversation_with(wolf).save
 
@@ -182,6 +215,23 @@ describe Denshobato::Conversation, type: :model do
       conversation.to_trash
 
       expect(user.my_conversations).not_to include conversation
+    end
+  end
+
+  describe '#trashed_conversations' do
+    let(:user) { create(:user, name: 'DHH') }
+    let(:duck) { create(:duck, name: 'Quack') }
+    let(:wolf) { create(:user, name: 'Wolf') }
+
+    it 'return trashed conversations' do
+      user.make_conversation_with(duck).save
+      user.make_conversation_with(wolf).save
+
+      conversation = user.find_conversation_with(wolf)
+      conversation.to_trash
+
+      expect(user.trashed_conversations).to     include conversation
+      expect(user.trashed_conversations).not_to include user.my_conversations
     end
   end
 end

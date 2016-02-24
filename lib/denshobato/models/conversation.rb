@@ -19,7 +19,7 @@ module Denshobato
     after_destroy     :remove_messages, if: :both_conversation_removed? # Remove messages and notifications
 
     # Scopes
-    scope :my_conversations, ->(user) { where(trashed: false, sender: user) }
+    scope :my_conversations, ->(user, bool) { where(trashed: bool, sender: user) }
 
     # Methods
     def messages
@@ -30,7 +30,16 @@ module Denshobato
     end
 
     def to_trash
-      update(trashed: true)
+      # Move conversation to trash
+
+      bool = block_given? ? yield : true
+      update(trashed: bool)
+    end
+
+    def from_trash
+      # Move conversation from trash, to active
+
+      to_trash { false }
     end
 
     # Alias
