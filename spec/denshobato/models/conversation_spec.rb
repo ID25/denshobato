@@ -168,4 +168,20 @@ describe Denshobato::Conversation, type: :model do
         .to('Can`t delete message, as long as it belongs to the conversation')
     end
   end
+
+  describe 'sent conversation to trash' do
+    let(:user) { create(:user, name: 'DHH') }
+    let(:duck) { create(:duck, name: 'Quack') }
+    let(:wolf) { create(:user, name: 'Wolf') }
+
+    it 'return active conversation' do
+      user.make_conversation_with(duck).save
+      user.make_conversation_with(wolf).save
+
+      conversation = user.find_conversation_with(wolf)
+      conversation.to_trash
+
+      expect(user.my_conversations).not_to include conversation
+    end
+  end
 end

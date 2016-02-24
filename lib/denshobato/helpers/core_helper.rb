@@ -1,6 +1,10 @@
 module Denshobato
   module CoreHelper
     include Denshobato::HelperUtils
+    def my_conversations
+      conversation.my_conversations(self)
+    end
+
     def make_conversation_with(recipient)
       # Build conversation.
       # = form_for current_user.make_conversation_with(recipient) do |f|

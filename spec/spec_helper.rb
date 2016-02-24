@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 1) do
   end
 
   create_table :denshobato_conversations do |t|
+    t.boolean    :trashed,   default: false
     t.references :sender,    polymorphic: true, index: { name: 'conversation_polymorphic_sender' }
     t.references :recipient, polymorphic: true, index: { name: 'conversation_polymorphic_recipient' }
 

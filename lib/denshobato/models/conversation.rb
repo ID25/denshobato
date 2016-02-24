@@ -18,12 +18,19 @@ module Denshobato
     after_create      :recipient_conversation # Create conversation for recipient, where he is sender.
     after_destroy     :remove_messages, if: :both_conversation_removed? # Remove messages and notifications
 
+    # Scopes
+    scope :my_conversations, ->(user) { where(trashed: false, sender: user) }
+
     # Methods
     def messages
       # Return all messages for conversation
 
       ids = notifications.pluck(:message_id)
       densh_message.where(id: ids)
+    end
+
+    def to_trash
+      update(trashed: true)
     end
 
     # Alias
