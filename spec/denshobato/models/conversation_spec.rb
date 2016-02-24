@@ -11,23 +11,10 @@ describe Denshobato::Conversation, type: :model do
   it { should belong_to(:recipient) }
   it { should have_many(:denshobato_notifications) }
 
-  def create_conversation_and_messages
-    user.make_conversation_with(duck).save
-    @room = user.find_conversation_with(duck)
-    @msg  = user.send_message_to(@room.id, body: 'Hello')
-    @msg2 = duck.send_message_to(@room.id, body: 'Hi user')
-    create_msg(@msg, @room)
-    create_msg(@msg2, @room)
-  end
-
-  def create_msg(msg, room)
-    msg.save
-    msg.send_notification(room.id)
-  end
-
   before :each do
-    @sender    = create(:user, name: 'Eugene')
-    @recipient = create(:user, name: 'Steve')
+    @user = create(:user, name: 'DHH')
+    @duck = create(:duck, name: 'Quack')
+    @wolf = create(:user, name: 'Wolf')
   end
 
   describe 'specific table in database' do
@@ -40,7 +27,7 @@ describe Denshobato::Conversation, type: :model do
 
   describe 'valiadtions' do
     it 'validate sender_id presence' do
-      model = @sender.conversations.build(recipient: @recipient, sender: @sender)
+      model = @user.conversations.build(recipient: @duck, sender: @user)
       model.sender_id = nil
       model.save
 
@@ -48,7 +35,7 @@ describe Denshobato::Conversation, type: :model do
     end
 
     it 'validate recipient_id presence' do
-      model = @sender.conversations.build
+      model = @user.conversations.build
       model.save
 
       expect(model.errors.full_messages.join(', ')).to eq "Recipient can't be blank, Recipient type can't be blank"
@@ -56,12 +43,9 @@ describe Denshobato::Conversation, type: :model do
   end
 
   describe 'validate uniqueness' do
-    let(:admin) { create(:admin) }
-    let(:duck)  { create(:duck) }
-
     it 'validate uniqueness' do
-      admin.conversations.create(recipient: @recipient, sender: admin)
-      model = @recipient.conversations.create(recipient: admin, sender: @recipient)
+      @user.conversations.create(recipient: @duck, sender: @user)
+      model = @duck.conversations.create(recipient: @user, sender: @duck)
 
       expect(model.errors.messages[:conversation].join('')).to eq 'You already have conversation with this user.'
     end
@@ -69,20 +53,20 @@ describe Denshobato::Conversation, type: :model do
 
   describe 'has_many messages' do
     it 'return Associations::CollectionProxy' do
-      @recipient.conversations.create(recipient: @sender, sender: @recipient_id)
-      conversation = @recipient.conversations.first
-      message = @recipient.messages.build(body: 'Moon Sonata')
+      @duck.conversations.create(recipient: @user, sender: @duck)
+      conversation = @duck.conversations.first
+      message      = @duck.messages.build(body: 'Moon Sonata')
       message.save
 
       message.send_notification(conversation.id)
 
-      expect(conversation.messages).to eq @recipient.messages
+      expect(conversation.messages).to eq @duck.messages
     end
   end
 
   describe 'check sender validation' do
     it 'get error, when sender create conversation with yourself' do
-      result = @sender.make_conversation_with(@sender)
+      result = @user.make_conversation_with(@user)
 
       expect(result.valid?).to be_falsey
       expect(result.errors[:conversation].join('')).to eq 'You can`t create conversation with yourself'
@@ -90,43 +74,34 @@ describe Denshobato::Conversation, type: :model do
   end
 
   describe 'remove messages, if other users remove conversation' do
-    let(:user) { create(:user, name: 'DHH') }
-    let(:duck) { create(:duck, name: 'Quack') }
-
     it 'both users remove their conversation, messages from this conversation will delete' do
       create_conversation_and_messages
-      user.conversations[0].destroy
-      duck.conversations[0].destroy
+      @user.conversations[0].destroy
+      @duck.conversations[0].destroy
 
       expect(@room.messages).to eq []
     end
   end
 
   describe 'conversation member has access to messages, when other member delete conversation' do
-    let(:user) { create(:user, name: 'DHH') }
-    let(:duck) { create(:duck, name: 'Quack') }
-
     it 'user remove conversation, messages still in db' do
       create_conversation_and_messages
-      user.conversations[0].destroy
-      room2 = duck.find_conversation_with(user)
+      @user.conversations[0].destroy
+      room2 = @duck.find_conversation_with(@user)
 
       expect(room2.messages).to eq [@msg, @msg2]
     end
   end
 
   describe 'user create new conversation with same recipient' do
-    let(:user) { create(:user, name: 'DHH') }
-    let(:duck) { create(:duck, name: 'Quack') }
-
     it 'user with new conversation see only new messages' do
       create_conversation_and_messages
 
-      user.conversations.destroy_all
-      user.make_conversation_with(duck).save
-      room  = user.find_conversation_with(duck)
-      room2 = duck.find_conversation_with(user)
-      @msg  = user.send_message('Hello again', duck)
+      @user.conversations.destroy_all
+      @user.make_conversation_with(@duck).save
+      room  = @user.find_conversation_with(@duck)
+      room2 = @duck.find_conversation_with(@user)
+      @msg  = @user.send_message('Hello again', @duck)
       @msg.save
       @msg.send_notification(room.id)
 
@@ -135,30 +110,27 @@ describe Denshobato::Conversation, type: :model do
   end
 
   describe 'remove extra messages, after multiple removing conversation' do
-    let(:user) { create(:user, name: 'DHH') }
-    let(:duck) { create(:duck, name: 'Quack') }
-
     it 'remove messages which not belong to any conversations' do
-      user.make_conversation_with(duck).save
-      room = user.find_conversation_with(duck)
-      msg  = user.send_message('First user message', duck)
+      @user.make_conversation_with(@duck).save
+      room = @user.find_conversation_with(@duck)
+      msg  = @user.send_message('First user message', @duck)
       create_msg(msg, room)
 
-      duck_room = duck.find_conversation_with(user)
-      msg2 = duck.send_message('First duck message', user)
+      duck_room = @duck.find_conversation_with(@user)
+      msg2 = @duck.send_message('First duck message', @user)
       create_msg(msg2, duck_room)
 
       room.destroy
-      user.make_conversation_with(duck).save
+      @user.make_conversation_with(@duck).save
 
-      msg3      = user.send_message('Hello again', duck)
-      new_room  = user.find_conversation_with(duck)
+      msg3      = @user.send_message('Hello again', @duck)
+      new_room  = @user.find_conversation_with(@duck)
       create_msg(msg3, new_room)
 
       duck_room.destroy
-      duck.make_conversation_with(user).save
-      new_duck_room = duck.find_conversation_with(user)
-      msg4 = duck.send_message('In new duck conversation', user)
+      @duck.make_conversation_with(@user).save
+      new_duck_room = @duck.find_conversation_with(@user)
+      msg4 = @duck.send_message('In new duck conversation', @user)
       create_msg(msg4, new_duck_room)
 
       expect(new_room.messages).to eq [msg3, msg4]
@@ -170,68 +142,40 @@ describe Denshobato::Conversation, type: :model do
   end
 
   describe '#to_trash' do
-    let(:user) { create(:user, name: 'DHH') }
-    let(:duck) { create(:duck, name: 'Quack') }
-    let(:wolf) { create(:user, name: 'Wolf') }
-
     it 'move conversation to trash' do
-      user.make_conversation_with(duck).save
-      user.make_conversation_with(wolf).save
+      create_conversation(@user, @duck, @wolf)
+      @conversation.to_trash
 
-      conversation = user.find_conversation_with(wolf)
-      conversation.to_trash
-
-      expect(conversation.trashed).to be_truthy
+      expect(@conversation.trashed).to be_truthy
     end
   end
 
   describe '#from_trash' do
-    let(:user) { create(:user, name: 'DHH') }
-    let(:duck) { create(:duck, name: 'Quack') }
-    let(:wolf) { create(:user, name: 'Wolf') }
-
     it 'move conversation to trash' do
-      user.make_conversation_with(duck).save
-      user.make_conversation_with(wolf).save
+      create_conversation(@user, @duck, @wolf)
+      @conversation.to_trash
+      @conversation.from_trash
 
-      conversation = user.find_conversation_with(wolf)
-      conversation.to_trash
-      conversation.from_trash
-
-      expect(conversation.trashed).to be_falsey
+      expect(@conversation.trashed).to be_falsey
     end
   end
 
   describe '#my_conversations' do
-    let(:user) { create(:user, name: 'DHH') }
-    let(:duck) { create(:duck, name: 'Quack') }
-    let(:wolf) { create(:user, name: 'Wolf') }
-
     it 'return active conversations' do
-      user.make_conversation_with(duck).save
-      user.make_conversation_with(wolf).save
+      create_conversation(@user, @duck, @wolf)
+      @conversation.to_trash
 
-      conversation = user.find_conversation_with(wolf)
-      conversation.to_trash
-
-      expect(user.my_conversations).not_to include conversation
+      expect(@user.my_conversations).not_to include @conversation
     end
   end
 
   describe '#trashed_conversations' do
-    let(:user) { create(:user, name: 'DHH') }
-    let(:duck) { create(:duck, name: 'Quack') }
-    let(:wolf) { create(:user, name: 'Wolf') }
-
     it 'return trashed conversations' do
-      user.make_conversation_with(duck).save
-      user.make_conversation_with(wolf).save
+      create_conversation(@user, @duck, @wolf)
+      @conversation.to_trash
 
-      conversation = user.find_conversation_with(wolf)
-      conversation.to_trash
-
-      expect(user.trashed_conversations).to     include conversation
-      expect(user.trashed_conversations).not_to include user.my_conversations
+      expect(@user.trashed_conversations).to     include @conversation
+      expect(@user.trashed_conversations).not_to include @user.my_conversations
     end
   end
 end

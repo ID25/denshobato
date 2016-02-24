@@ -3,6 +3,7 @@ require 'database_cleaner'
 require 'shoulda/matchers'
 require 'factory_girl'
 require 'active_record'
+require 'spec_helpers/conversation_helper'
 require 'denshobato'
 
 ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: ':memory:')
@@ -76,6 +77,8 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.include(Shoulda::Matchers::ActiveModel,  type: :model)
   config.include(Shoulda::Matchers::ActiveRecord, type: :model)
+
+  config.include ConversationHelper
 
   config.before(:all) do
     FactoryGirl.reload
