@@ -9,7 +9,7 @@ describe Denshobato::Extenders::Core do
   end
 
   describe '#denshobato_for' do
-    let!(:conversation) { @user.conversations.create(recipient: @duck) }
+    let!(:conversation) { @user.hato_conversations.create(recipient: @duck) }
 
     it 'user has_many conversations' do
       expect(@user.denshobato_conversations.count).to eq 1
@@ -38,7 +38,7 @@ describe Denshobato::Extenders::Core do
 
       error = @mark.make_conversation_with(@user)
 
-      expect(@user.conversations.count).to eq 2
+      expect(@user.hato_conversations.count).to eq 2
       expect(error.valid?).to be_falsey
       expect(error.errors[:conversation].join('')).to eq 'You already have conversation with this user.'
     end

@@ -21,8 +21,8 @@ module Denshobato
           has_many :denshobato_messages, as: :author, class_name: '::Denshobato::Message', dependent: :destroy
 
           # Added alias for the sake of brevity.
-          alias_method :conversations, :denshobato_conversations
-          alias_method :messages,      :denshobato_messages
+          alias_method :hato_conversations, :denshobato_conversations
+          alias_method :hato_messages,      :denshobato_messages
         end
       end
     end

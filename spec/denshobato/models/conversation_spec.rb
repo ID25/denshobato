@@ -27,7 +27,7 @@ describe Denshobato::Conversation, type: :model do
 
   describe 'valiadtions' do
     it 'validate sender_id presence' do
-      model = @user.conversations.build(recipient: @duck, sender: @user)
+      model = @user.hato_conversations.build(recipient: @duck, sender: @user)
       model.sender_id = nil
       model.save
 
@@ -35,7 +35,7 @@ describe Denshobato::Conversation, type: :model do
     end
 
     it 'validate recipient_id presence' do
-      model = @user.conversations.build
+      model = @user.hato_conversations.build
       model.save
 
       expect(model.errors.full_messages.join(', ')).to eq "Recipient can't be blank, Recipient type can't be blank"
@@ -44,8 +44,8 @@ describe Denshobato::Conversation, type: :model do
 
   describe 'validate uniqueness' do
     it 'validate uniqueness' do
-      @user.conversations.create(recipient: @duck, sender: @user)
-      model = @duck.conversations.create(recipient: @user, sender: @duck)
+      @user.hato_conversations.create(recipient: @duck, sender: @user)
+      model = @duck.hato_conversations.create(recipient: @user, sender: @duck)
 
       expect(model.errors.messages[:conversation].join('')).to eq 'You already have conversation with this user.'
     end
@@ -53,14 +53,14 @@ describe Denshobato::Conversation, type: :model do
 
   describe 'has_many messages' do
     it 'return Associations::CollectionProxy' do
-      @duck.conversations.create(recipient: @user, sender: @duck)
-      conversation = @duck.conversations.first
-      message      = @duck.messages.build(body: 'Moon Sonata')
+      @duck.hato_conversations.create(recipient: @user, sender: @duck)
+      conversation = @duck.hato_conversations.first
+      message      = @duck.hato_messages.build(body: 'Moon Sonata')
       message.save
 
       message.send_notification(conversation.id)
 
-      expect(conversation.messages).to eq @duck.messages
+      expect(conversation.messages).to eq @duck.hato_messages
     end
   end
 
@@ -76,8 +76,8 @@ describe Denshobato::Conversation, type: :model do
   describe 'remove messages, if other users remove conversation' do
     it 'both users remove their conversation, messages from this conversation will delete' do
       create_conversation_and_messages
-      @user.conversations[0].destroy
-      @duck.conversations[0].destroy
+      @user.hato_conversations[0].destroy
+      @duck.hato_conversations[0].destroy
 
       expect(@room.messages).to eq []
     end
@@ -86,7 +86,7 @@ describe Denshobato::Conversation, type: :model do
   describe 'conversation member has access to messages, when other member delete conversation' do
     it 'user remove conversation, messages still in db' do
       create_conversation_and_messages
-      @user.conversations[0].destroy
+      @user.hato_conversations[0].destroy
       room2 = @duck.find_conversation_with(@user)
 
       expect(room2.messages).to eq [@msg, @msg2]
@@ -97,7 +97,7 @@ describe Denshobato::Conversation, type: :model do
     it 'user with new conversation see only new messages' do
       create_conversation_and_messages
 
-      @user.conversations.destroy_all
+      @user.hato_conversations.destroy_all
       @user.make_conversation_with(@duck).save
       room  = @user.find_conversation_with(@duck)
       room2 = @duck.find_conversation_with(@user)

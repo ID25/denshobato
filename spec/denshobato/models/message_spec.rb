@@ -24,10 +24,10 @@ describe Denshobato::Message, type: :model do
     it 'create message, if conversation not exists, then conversation will created, together with the message.' do
       @user.send_message('Hello John', @duck).save
       conversation = @user.find_conversation_with(@duck)
-      @user.messages.first.send_notification(conversation.id)
+      @user.hato_messages.first.send_notification(conversation.id)
       message = conversation.messages
 
-      expect(@user.messages).to eq message
+      expect(@user.hato_messages).to eq message
     end
   end
 

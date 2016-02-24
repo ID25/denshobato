@@ -19,7 +19,7 @@ module Denshobato
       # = form_for current_user.make_conversation_with(recipient) do |f|
       # = f.submit 'Start Chat', class: 'btn btn-primary'
 
-      conversations.build(recipient: recipient)
+      hato_conversations.build(recipient: recipient)
     end
 
     def find_conversation_with(user)
@@ -50,10 +50,9 @@ module Denshobato
       room = conversation.find(id)
 
       # Show validation error, if author of message not in conversation
-
       return message_error(id, self) unless user_in_conversation(room, self)
 
-      messages.build(params)
+      hato_messages.build(params)
     end
 
     # Default methods only for built-in Chat Panel
@@ -72,7 +71,9 @@ module Denshobato
     end
 
     def message_error(id, author)
-      author.messages.build(conversation_id: id)
+      # TODO: Return validation error with most efficient way
+
+      author.hato_messages.build(conversation_id: id)
     end
 
     def user_in_conversation(room, author)

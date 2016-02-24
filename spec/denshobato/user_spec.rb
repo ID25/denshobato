@@ -8,10 +8,10 @@ describe Denshobato::Conversation do
     let(:another_sender) { create(:user, name: 'Luke') }
 
     it 'return conversations where current user is present as sender or recipient' do
-      recipient.conversations.create(recipient: sender)
-      another_sender.conversations.create(recipient: sender)
+      recipient.hato_conversations.create(recipient: sender)
+      another_sender.hato_conversations.create(recipient: sender)
 
-      expect(sender.conversations).to eq sender.conversations
+      expect(sender.hato_conversations).to eq sender.hato_conversations
     end
   end
 
@@ -19,7 +19,7 @@ describe Denshobato::Conversation do
     let(:sender) { create(:user, name: 'Frodo') }
 
     it 'return same association array' do
-      expect(sender.conversations).to eq sender.denshobato_conversations
+      expect(sender.hato_conversations).to eq sender.denshobato_conversations
     end
   end
 
@@ -28,7 +28,7 @@ describe Denshobato::Conversation do
     let(:duck)   { create(:duck, name: 'Quack') }
 
     it 'conversations between user and duck' do
-      duck.conversations.create(recipient: sender)
+      duck.hato_conversations.create(recipient: sender)
 
       conv1 = duck.find_conversation_with(sender)
       conv2 = sender.find_conversation_with(duck)

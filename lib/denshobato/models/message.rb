@@ -17,7 +17,6 @@ module Denshobato
 
     # Alias
     alias notifications denshobato_notifications
-    alias sender author
 
     # Methods
     def send_notification(id)
