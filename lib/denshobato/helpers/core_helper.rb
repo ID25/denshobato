@@ -30,6 +30,10 @@ module Denshobato
     def send_message_to(id, params)
       return errors.add(:message, 'Conversation not present') unless id
 
+      # Expect record id
+      # If id == active record object, get their id
+      id = id.id if id.is_a?(ActiveRecord::Base)
+
       room = conversation.find(id)
 
       # Show validation error, if author of message not in conversation

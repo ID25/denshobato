@@ -16,13 +16,14 @@ module Denshobato
 
     # Callbacks
     after_create      :recipient_conversation # Create conversation for recipient, where he is sender.
+    after_destroy     :remove_messages, if: :both_conversation_removed? # Remove messages and notifications
 
     # Methods
     def messages
       # Return all messages for conversation
 
       ids = notifications.pluck(:message_id)
-      Denshobato::Message.find(ids)
+      densh_message.where(id: ids)
     end
 
     # Alias
@@ -45,9 +46,23 @@ module Denshobato
     def conversation_uniqueness
       # Checking conversation for uniqueness, when recipient is sender, and vice versa.
 
-      hash = Hash[*columns.flatten]
+      hash = Hash[*columns.flatten] # => { sender_id: 1, sender_type: 'User' ... }
 
       errors.add(:conversation, 'You already have conversation with this user.') if densh_conversation.where(hash).present?
+    end
+
+    def remove_messages
+      # When sender and recipient remove their conversation together
+      # remove all messages belongs to this conversation and notifications
+
+      densh_message.where(id: messages.map(&:id)).destroy_all
+      notifications.destroy_all
+    end
+
+    def both_conversation_removed?
+      # Check when both conversations removed
+
+      densh_conversation.where(sender: recipient, recipient: sender).count == 0
     end
 
     def columns
@@ -56,6 +71,10 @@ module Denshobato
 
     def densh_conversation
       Denshobato::Conversation
+    end
+
+    def densh_message
+      Denshobato::Message
     end
   end
 end
