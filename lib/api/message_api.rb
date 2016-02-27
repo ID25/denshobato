@@ -61,11 +61,21 @@ class MessageApi < Grape::API
     post :create_message do
       # Create message in conversation
 
-      user = params[:sender_class].constantize.find(params[:sender_id])
-      message = user.hato_messages.build(body: params[:body])
+      params do
+        requires :message, type: Hash do
+          requires :body,            type: String
+          requires :sender_class,    type: String
+          requires :sender,          type: Integer
+          requires :conversation_id, type: Integer
+        end
+      end
+
+      message_params = params[:message]
+      user = message_params[:sender_class].constantize.find(message_params[:sender])
+      message = user.hato_messages.build(body: message_params[:body])
 
       if message.save
-        id = params[:conversation_id]
+        id = message_params[:conversation_id]
         send_notification(id, message)
         formated_messages(message)
       else

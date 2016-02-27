@@ -18,7 +18,7 @@ export default class Message extends Component {
   };
 
   deleteMessage = () => {
-    let result = confirm('Delete Message?');
+    let result = confirm('Delete Message from your conversation?');
     if (result) {
       store.dispatch(actions.messages.deleteMessage(this.props.message.id, this.props.sender.conversationId));
     };
@@ -26,22 +26,19 @@ export default class Message extends Component {
 
   render() {
     const { message, sender } = this.props;
-    const cssClass = (message.author == sender.author) ? 'left' : 'right';
+    const cssClass = (message.author == sender.author) ? 'recipient' : 'sender';
 
     return (
-      <div>
-        <li className={`message ${cssClass} appeared`}>
-          <div className={`${cssClass}`}>
-            <p className='name'>{`${message.full_name}`}</p>
+      <div className={`chat-message chat-message-${cssClass}`}>
+        <img className='chat-image chat-image-default' src={message.avatar} />
+        <div className='chat-message-wrapper'>
+          <div className='chat-message-content'>
+            <p>{message.body}</p>
           </div>
-          <div className={`${cssClass}`}>
-            <img src={message.avatar} className={`avatar ${cssClass}`}></img>
+          <div className='chat-details'>
+            <span className='chat-message-localization font-size-small' onClick={this.deleteMessage}>Remove message</span>
           </div>
-          <div className="text_wrapper">
-            <div className="text">{message.body}</div>
-            <span className='delete-message' onClick={this.deleteMessage}>X</span>
-          </div>
-        </li>
+        </div>
       </div>
     );
   }

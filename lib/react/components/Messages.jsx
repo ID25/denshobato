@@ -27,8 +27,15 @@ export default class Messages extends Component {
     store.dispatch(actions.conversation.conversation(room.dataset.room, room.dataset.currentUserId, room.dataset.currentUserClass));
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.messages.length != this.props.messages.length) {
+      this.refreshChat();
+    }
+  }
+
   handleSubmit = (e) => {
     const { conversation } = this.props;
+    this.refreshChat();
     store.dispatch(actions.messages.create(e.body, conversation.senderId, conversation.conversationId, conversation.senderClass));
     store.dispatch(reset('message-form'));
   };
@@ -46,17 +53,25 @@ export default class Messages extends Component {
 
     return (
       <div>
-        <div className="chat_window">
-          <div className="top_menu">
-            <div className="buttons">
-              <div className="button close" onClick={ChatUtils.closeChat}></div>
-              <div className="button minimize"></div>
-              <div className="button maximize"></div>
-            </div>
-            <div className="title">Chat</div>
-            <button className='refresh-button btn' onClick={this.refreshChat}>Refresh</button>
+        <div className="top_menu">
+          <div className="buttons">
+            <div className="button close-button" onClick={ChatUtils.closeChat}></div>
+            <div className="button minimize"></div>
+            <div className="button maximize"></div>
           </div>
-          <ul className="messages">
+          <div className="title">
+            <div className="chat-header">
+              <div className="header-description">
+                <p>
+                  {`Chat with ${conversation.recipient}`}
+                </p>
+              </div>
+            </div>
+          </div>
+          <button className="refresh-button btn" onClick={this.refreshChat}>Refresh</button>
+        </div>
+        <div className='chat-wrapper'>
+          <div className='chat-message padding'>
             { do {
               if (messages.length >= 50 && !showAll) {
                 <div className='text-center'>
@@ -67,7 +82,6 @@ export default class Messages extends Component {
 
             {/* TODO: Refactoring this condition. */}
             { do {
-
               if (messages.length >= 50 && !showAll) {
                 messages.slice(Math.max(messages.length - 50, 1)).map((message, index) => {
                   return (
@@ -87,8 +101,8 @@ export default class Messages extends Component {
               }
             }
             }
-          </ul>
-          <MessageForm onSubmit={this.handleSubmit}/>
+            <MessageForm onSubmit={this.handleSubmit}/>
+          </div>
         </div>
       </div>
     );

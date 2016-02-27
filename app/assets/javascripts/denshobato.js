@@ -21294,7 +21294,7 @@
 	}
 
 	function createMessage(body, sender, conversation, senderClass) {
-	  return _axios2.default.post(API + '/messages/create_message?body=' + body + '&conversation_id=' + conversation + '&sender_id=' + sender + '&sender_class=' + senderClass);
+	  return _axios2.default.post(API + '/messages/create_message', { message: { body: body, conversation_id: conversation, sender: sender, sender_class: senderClass } });
 	}
 
 	function deleteMessage(id, conversation) {
@@ -22388,7 +22388,9 @@
 	  author: null,
 	  conversationId: null,
 	  senderId: null,
-	  senderClass: null
+	  senderClass: null,
+	  recipient: null,
+	  recipientClass: null
 	};
 
 	function conversation() {
@@ -22398,7 +22400,7 @@
 	  switch (action.type) {
 	    case _Conversation.CONVERSATION:
 	      var data = action.response;
-	      return _extends({}, state, { conversationId: data.conversation_id, author: data.author, senderId: data.sender_id, senderClass: data.sender_class });
+	      return _extends({}, state, { conversationId: data.conversation_id, author: data.author, senderId: data.sender_id, senderClass: data.sender_class, recipient: data.recipient, recipientClass: data.recipient_class });
 	    default:
 	      return state;
 	  }
@@ -25692,6 +25694,7 @@
 	    _this.handleSubmit = function (e) {
 	      var conversation = _this.props.conversation;
 
+	      _this.refreshChat();
 	      _Store2.default.dispatch(_Index.actions.messages.create(e.body, conversation.senderId, conversation.conversationId, conversation.senderClass));
 	      _Store2.default.dispatch((0, _reduxForm.reset)('message-form'));
 	    };
@@ -25713,6 +25716,13 @@
 	      _Store2.default.dispatch(_Index.actions.conversation.conversation(room.dataset.room, room.dataset.currentUserId, room.dataset.currentUserClass));
 	    }
 	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      if (nextProps.messages.length != this.props.messages.length) {
+	        this.refreshChat();
+	      }
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _props = this.props;
@@ -25726,31 +25736,43 @@
 	        null,
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'chat_window' },
+	          { className: 'top_menu' },
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'top_menu' },
+	            { className: 'buttons' },
+	            _react2.default.createElement('div', { className: 'button close-button', onClick: _ChatUtils2.default.closeChat }),
+	            _react2.default.createElement('div', { className: 'button minimize' }),
+	            _react2.default.createElement('div', { className: 'button maximize' })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'title' },
 	            _react2.default.createElement(
 	              'div',
-	              { className: 'buttons' },
-	              _react2.default.createElement('div', { className: 'button close', onClick: _ChatUtils2.default.closeChat }),
-	              _react2.default.createElement('div', { className: 'button minimize' }),
-	              _react2.default.createElement('div', { className: 'button maximize' })
-	            ),
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'title' },
-	              'Chat'
-	            ),
-	            _react2.default.createElement(
-	              'button',
-	              { className: 'refresh-button btn', onClick: this.refreshChat },
-	              'Refresh'
+	              { className: 'chat-header' },
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'header-description' },
+	                _react2.default.createElement(
+	                  'p',
+	                  null,
+	                  'Chat with ' + conversation.recipient
+	                )
+	              )
 	            )
 	          ),
 	          _react2.default.createElement(
-	            'ul',
-	            { className: 'messages' },
+	            'button',
+	            { className: 'refresh-button btn', onClick: this.refreshChat },
+	            'Refresh'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'chat-wrapper' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'chat-message padding' },
 	            messages.length >= 50 && !showAll ? _react2.default.createElement(
 	              'div',
 	              { className: 'text-center' },
@@ -25772,9 +25794,9 @@
 	                { key: index },
 	                _react2.default.createElement(_Message2.default, { message: message, sender: conversation })
 	              );
-	            })
-	          ),
-	          _react2.default.createElement(_MessageForm2.default, { onSubmit: this.handleSubmit })
+	            }),
+	            _react2.default.createElement(_MessageForm2.default, { onSubmit: this.handleSubmit })
+	          )
 	        )
 	      );
 	    }
@@ -25842,7 +25864,7 @@
 	    }
 
 	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Message)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.deleteMessage = function () {
-	      var result = confirm('Delete Message?');
+	      var result = confirm('Delete Message from your conversation?');
 	      if (result) {
 	        _Store2.default.dispatch(_Index.actions.messages.deleteMessage(_this.props.message.id, _this.props.sender.conversationId));
 	      };
@@ -25856,40 +25878,31 @@
 	      var message = _props.message;
 	      var sender = _props.sender;
 
-	      var cssClass = message.author == sender.author ? 'left' : 'right';
+	      var cssClass = message.author == sender.author ? 'recipient' : 'sender';
 
 	      return _react2.default.createElement(
 	        'div',
-	        null,
+	        { className: 'chat-message chat-message-' + cssClass },
+	        _react2.default.createElement('img', { className: 'chat-image chat-image-default', src: message.avatar }),
 	        _react2.default.createElement(
-	          'li',
-	          { className: 'message ' + cssClass + ' appeared' },
+	          'div',
+	          { className: 'chat-message-wrapper' },
 	          _react2.default.createElement(
 	            'div',
-	            { className: '' + cssClass },
+	            { className: 'chat-message-content' },
 	            _react2.default.createElement(
 	              'p',
-	              { className: 'name' },
-	              '' + message.full_name
+	              null,
+	              message.body
 	            )
 	          ),
 	          _react2.default.createElement(
 	            'div',
-	            { className: '' + cssClass },
-	            _react2.default.createElement('img', { src: message.avatar, className: 'avatar ' + cssClass })
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'text_wrapper' },
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'text' },
-	              message.body
-	            ),
+	            { className: 'chat-details' },
 	            _react2.default.createElement(
 	              'span',
-	              { className: 'delete-message', onClick: this.deleteMessage },
-	              'X'
+	              { className: 'chat-message-localization font-size-small', onClick: this.deleteMessage },
+	              'Remove message'
 	            )
 	          )
 	        )
@@ -26032,7 +26045,7 @@
 	  _createClass(ChatUtils, null, [{
 	    key: 'scrollChat',
 	    value: function scrollChat() {
-	      var messages = document.getElementsByClassName('messages')[0];
+	      var messages = document.getElementsByClassName('chat-wrapper')[0];
 	      if (messages != null) {
 	        $(messages).animate({ scrollTop: messages.scrollWidth * 999 });
 	      };
@@ -26040,7 +26053,7 @@
 	  }, {
 	    key: 'closeChat',
 	    value: function closeChat() {
-	      $('.messages').slideToggle();
+	      $('.chat-message').slideToggle();
 	    }
 	  }]);
 
