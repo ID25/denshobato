@@ -19,14 +19,14 @@ module Denshobato
     after_destroy     :remove_messages, if: :both_conversation_removed? # Remove messages and notifications
 
     # Scopes
-    scope :my_conversations, ->(user, bool) { where(trashed: bool, sender: user) }
+    scope :my_conversations, ->(user, bool) { includes(:recipient).where(trashed: bool, sender: user) }
 
     # Methods
     def messages
       # Return all messages for conversation
 
       ids = notifications.pluck(:message_id)
-      densh_message.where(id: ids)
+      densh_message.includes(:author).where(id: ids)
     end
 
     def to_trash

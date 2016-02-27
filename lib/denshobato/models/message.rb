@@ -28,7 +28,9 @@ module Denshobato
     end
 
     def message_time
-      created_at.strftime("%a %b %d | %I:%M %p")
+      # Formatted time for chat panel
+
+      created_at.strftime('%a %b %d | %I:%M %p')
     end
 
     private
@@ -66,6 +68,8 @@ module Denshobato
     end
 
     def user_in_conversation(room, author)
+      # Check if user already in conversation
+
       densh_conversation.where(id: room.id, sender: author).present? || densh_conversation.where(id: room.id, recipient: author).present?
     end
 
@@ -80,7 +84,7 @@ module Denshobato
     end
 
     def message_belongs_to_conversation?
-      # Check if message still respond to any conversation
+      # Check if message have live notifications for any conversation
 
       densh_conversation.where(id: notifications.pluck(:conversation_id)).present?
     end
