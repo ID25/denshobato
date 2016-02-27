@@ -3,28 +3,26 @@ Denshobato.autoload :Conversation, 'denshobato/models/conversation'
 Denshobato.autoload :Message, 'denshobato/models/message'
 
 describe Denshobato::Blacklist, type: :model do
+  before :each do
+    @user = create(:user, name: 'Eugene')
+    @duck = create(:duck, name: 'Duck')
+
+    @user.add_to_blacklist(@duck).save
+  end
+
   describe '#add_to_blacklist' do
-    let(:user) { create(:user, name: 'Eugene') }
-    let(:duck) { create(:duck, name: 'Duck') }
-
     it 'user block duck' do
-      user.add_to_blacklist(duck).save
-      klass = user.add_to_blacklist(duck)
+      klass = @user.add_to_blacklist(@duck)
 
-      expect(user.blacklist).to include Denshobato::Blacklist.find_by(blocker: user, blocked: duck)
+      expect(@user.blacklist).to include Denshobato::Blacklist.find_by(blocker: @user, blocked: @duck)
       expect(klass.valid?).to be_falsey
       expect(klass.errors.full_messages).to eq ['Blocker User already in your blacklist', 'Blocker type User already in your blacklist']
     end
   end
 
   describe 'duck can`t start conversation with user' do
-    let(:user) { create(:user, name: 'Eugene') }
-    let(:duck) { create(:duck, name: 'Duck') }
-
     it 'user block duck, and duck can`t start conversation with user' do
-      user.add_to_blacklist(duck).save
-
-      result = duck.make_conversation_with(user)
+      result = @duck.make_conversation_with(@user)
 
       expect(result.valid?).to be_falsey
       expect(result.errors[:blacklist]).to eq ['You`re in blacklist']
@@ -32,15 +30,36 @@ describe Denshobato::Blacklist, type: :model do
   end
 
   describe 'duck can`t send message to user' do
-    let(:user) { create(:user, name: 'Eugene') }
-    let(:duck) { create(:duck, name: 'Duck') }
-
     it 'user block duck, and duck can`t start conversation with user' do
-      user.add_to_blacklist(duck).save
-
-      result = duck.send_message('Hello, user', user)
+      result = @duck.send_message('Hello, user', @user)
 
       expect(result).to eq ['You`re in blacklist']
+    end
+  end
+
+  describe 'user can`t start conversation with blocked user' do
+    it 'user block duck, and duck can`t start conversation with user' do
+      result = @user.make_conversation_with(@duck)
+
+      expect(result.valid?).to be_falsey
+      expect(result.errors[:blacklist].join('')).to eq 'Remove user from blacklist, to start conversation'
+    end
+  end
+
+  describe 'user can`t send message to blocked user' do
+    it 'user block duck, and duck can`t start conversation with user' do
+      result = @user.send_message('Hello blocked user', @duck)
+
+      expect(result.join('')).to eq 'Remove user from blacklist, to start conversation'
+    end
+  end
+
+  describe 'remove user from blacklist' do
+    it 'remove user from blacklist' do
+      result = @user.remove_from_blacklist(@duck)
+      result.destroy
+
+      expect(@user.reload.blacklist).to match_array []
     end
   end
 end

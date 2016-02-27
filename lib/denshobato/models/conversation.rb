@@ -88,6 +88,10 @@ module Denshobato
       if hato_blacklist.where(blocker: recipient, blocked: sender).present?
         errors.add(:blacklist, 'You`re in blacklist')
       end
+
+      if hato_blacklist.where(blocker: sender, blocked: recipient).present?
+        errors.add(:blacklist, 'Remove user from blacklist, to start conversation')
+      end
     end
 
     def columns

@@ -16,6 +16,10 @@ module Denshobato
       sender == recipient ? false : true
     end
 
+    def user_in_black_list?(blocker, blocked)
+      hato_blacklist.where(blocker: blocker, blocked: blocked).present?
+    end
+
     def fill_conversation_form(form, recipient)
       # = form_for @conversation do |form|
       ### = fill_conversation_form(form, @conversation)

@@ -45,7 +45,7 @@ describe Denshobato::Message, type: :model do
       conversation = @user.find_conversation_with(@duck)
       @user.send_message_to(conversation.id, body: 'lol')
 
-      expect(conversation.updated_at.utc.to_s).to eq Time.now.utc.to_s
+      expect(conversation.updated_at.utc.strftime('%a %b %d | %I:%M %p')).to eq Time.now.utc.strftime('%a %b %d | %I:%M %p')
     end
   end
 

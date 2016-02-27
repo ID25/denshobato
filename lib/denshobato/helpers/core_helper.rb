@@ -71,6 +71,12 @@ module Denshobato
       blacklist.build(blocked: user)
     end
 
+    def remove_from_blacklist(user)
+      # Removeu user from blacklist
+
+      hato_blacklist.find_by(blocker: self, blocked: user)
+    end
+
     # Default methods only for built-in Chat Panel
     def full_name
       # Set up default name for chat panel
