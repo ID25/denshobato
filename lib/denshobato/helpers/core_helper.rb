@@ -77,6 +77,12 @@ module Denshobato
       hato_blacklist.find_by(blocker: self, blocked: user)
     end
 
+    def my_blacklist
+      # Show blocked users
+
+      blacklist.includes(:blocked)
+    end
+
     # Default methods only for built-in Chat Panel
     def full_name
       # Set up default name for chat panel
