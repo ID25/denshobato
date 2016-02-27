@@ -5,6 +5,8 @@ module Denshobato
       desc 'Add the migrations'
 
       def copy_conversations
+        p 'Copying migrations'
+
         copy_file './migrations/create_conversations.rb', "db/migrate/#{time}_create_denshobato_conversations.rb"
       end
 
@@ -16,6 +18,11 @@ module Denshobato
       def copy_notifications
         sleep 1
         copy_file './migrations/create_notifications.rb', "db/migrate/#{time}_create_denshobato_notifications.rb"
+      end
+
+      def copy_blacklists
+        sleep 1
+        copy_file './migrations/create_blacklists.rb.rb', "db/migrate/#{time}_create_denshobato_blacklists.rb"
       end
 
       def done

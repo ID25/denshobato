@@ -178,15 +178,4 @@ describe Denshobato::Conversation, type: :model do
       expect(@user.trashed_conversations).not_to include @user.my_conversations
     end
   end
-
-  describe '#add_to_blacklist' do
-    it 'user block duck' do
-      @user.add_to_blacklist(@duck).save
-      klass = @user.add_to_blacklist(@duck)
-
-      expect(@user.blacklist).to include Denshobato::Blacklist.find_by(blocker: @user, blocked: @duck)
-      expect(klass.valid?).to be_falsey
-      expect(klass.errors.full_messages).to eq ['Blocker User already in your blacklist', 'Blocker type User already in your blacklist']
-    end
-  end
 end

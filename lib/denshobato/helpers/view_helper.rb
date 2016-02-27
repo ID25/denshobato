@@ -7,7 +7,7 @@ module Denshobato
     def conversation_exists?(sender, recipient)
       # Check if sender and recipient already have conversation together.
 
-      conversation.find_by(sender: sender, recipient: recipient)
+      hato_conversation.find_by(sender: sender, recipient: recipient)
     end
 
     def can_create_conversation?(sender, recipient)
