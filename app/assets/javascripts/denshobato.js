@@ -25878,12 +25878,23 @@
 	      var message = _props.message;
 	      var sender = _props.sender;
 
+	      console.log(message);
 	      var cssClass = message.author == sender.author ? 'recipient' : 'sender';
 
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'chat-message chat-message-' + cssClass },
+	        _react2.default.createElement(
+	          'span',
+	          { className: 'message-author' },
+	          message.full_name
+	        ),
 	        _react2.default.createElement('img', { className: 'chat-image chat-image-default', src: message.avatar }),
+	        _react2.default.createElement(
+	          'span',
+	          { className: 'message-time' },
+	          message.time
+	        ),
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'chat-message-wrapper' },
@@ -25902,7 +25913,7 @@
 	            _react2.default.createElement(
 	              'span',
 	              { className: 'chat-message-localization font-size-small', onClick: this.deleteMessage },
-	              'Remove message'
+	              'Remove'
 	            )
 	          )
 	        )

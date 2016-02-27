@@ -26,17 +26,20 @@ export default class Message extends Component {
 
   render() {
     const { message, sender } = this.props;
+    console.log(message);
     const cssClass = (message.author == sender.author) ? 'recipient' : 'sender';
 
     return (
       <div className={`chat-message chat-message-${cssClass}`}>
+        <span className='message-author'>{message.full_name}</span>
         <img className='chat-image chat-image-default' src={message.avatar} />
+        <span className='message-time'>{message.time}</span>
         <div className='chat-message-wrapper'>
           <div className='chat-message-content'>
             <p>{message.body}</p>
           </div>
           <div className='chat-details'>
-            <span className='chat-message-localization font-size-small' onClick={this.deleteMessage}>Remove message</span>
+            <span className='chat-message-localization font-size-small' onClick={this.deleteMessage}>Remove</span>
           </div>
         </div>
       </div>
