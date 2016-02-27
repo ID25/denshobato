@@ -23,6 +23,10 @@ module Denshobato
     Denshobato.autoload :Blacklist,    'denshobato/models/blacklist'
 
     # Add helper methods to core model
+    Denshobato.autoload :ConversationHelper, 'denshobato/helpers/core_modules/conversation_helper'
+    Denshobato.autoload :MessageHelper, 'denshobato/helpers/core_modules/message_helper'
+    Denshobato.autoload :BlacklistHelper, 'denshobato/helpers/core_modules/blacklist_helper'
+    Denshobato.autoload :ChatPanelHelper, 'denshobato/helpers/core_modules/chat_panel_helper'
     Denshobato.autoload :CoreHelper, 'denshobato/helpers/core_helper'
 
     ActiveRecord::Base.extend Denshobato::Extenders::Core
