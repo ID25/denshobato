@@ -8,5 +8,6 @@ module Denshobato
 
     # Validation
     validates :blocker_id, :blocker_type, uniqueness: { scope: [:blocked_id, :blocked_type], message: 'User already in your blacklist' }
+    validates :blocked_id, :blocked_type, :blocker_id, :blocker_type, presence: true
   end
 end

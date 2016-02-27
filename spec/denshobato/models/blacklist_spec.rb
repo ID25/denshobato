@@ -3,6 +3,13 @@ Denshobato.autoload :Conversation, 'denshobato/models/conversation'
 Denshobato.autoload :Message, 'denshobato/models/message'
 
 describe Denshobato::Blacklist, type: :model do
+  it { should validate_presence_of(:blocker_id) }
+  it { should validate_presence_of(:blocker_type) }
+  it { should validate_presence_of(:blocked_id) }
+  it { should validate_presence_of(:blocked_type) }
+  it { should belong_to(:blocker) }
+  it { should belong_to(:blocked) }
+
   before :each do
     @user = create(:user, name: 'Eugene')
     @duck = create(:duck, name: 'Duck')
