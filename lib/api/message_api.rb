@@ -12,7 +12,7 @@ class MessageApi < Grape::API
     def formated_messages(klass)
       # Prepare JSON for React
 
-      { body: klass.body, id: klass.id, author: klass.author.email, full_name: klass.author.full_name, avatar: klass.author.image, time: klass.created_at.strftime("%a %b %d | %I:%M %p") }
+      { body: klass.body, id: klass.id, author: klass.author.email, full_name: klass.author.full_name, avatar: klass.author.image, time: klass.message_time }
     end
 
     def send_notification(id, message)

@@ -27,6 +27,10 @@ module Denshobato
       create_notifications_for(conversation)
     end
 
+    def message_time
+      created_at.strftime("%a %b %d | %I:%M %p")
+    end
+
     private
 
     def skip_deleting_messages
