@@ -44,6 +44,11 @@ ActiveRecord::Schema.define(version: 1) do
     t.integer  :message_id,      index: { name: 'notification_for_message' }
     t.integer  :conversation_id, index: { name: 'notification_for_conversation' }
   end
+
+  create_table :denshobato_blacklists do |t|
+    t.references :blocker, polymorphic: true, index: { name: 'blocker_user' }
+    t.references :blocked, polymorphic: true, index: { name: 'blocked_user' }
+  end
 end
 
 ActiveRecord::Base.extend Denshobato::Extenders::Core

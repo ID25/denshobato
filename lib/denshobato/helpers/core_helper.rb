@@ -55,6 +55,13 @@ module Denshobato
       hato_messages.build(params)
     end
 
+    def add_to_blacklist(user)
+      # Add user to blacklist
+      # User can`t create conversation, and can`t send message to blocker model
+
+      blacklist.build(blocked: user)
+    end
+
     # Default methods only for built-in Chat Panel
     def full_name
       self.class.name.titleize

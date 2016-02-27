@@ -1,7 +1,7 @@
 module ConversationHelper
-  def create_conversation(sender, recipient, other_recipient)
+  def create_conversation(sender, recipient, other_recipient = nil)
     sender.make_conversation_with(recipient).save
-    sender.make_conversation_with(other_recipient).save
+    sender.make_conversation_with(other_recipient).save if other_recipient
 
     @conversation = sender.find_conversation_with(other_recipient)
   end

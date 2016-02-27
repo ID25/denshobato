@@ -20,9 +20,14 @@ module Denshobato
           # Add messages
           has_many :denshobato_messages, as: :author, class_name: '::Denshobato::Message', dependent: :destroy
 
+          # Add blacklists
+          has_many :denshobato_blacklists, as: :blocker, class_name: '::Denshobato::Blacklist', dependent: :destroy
+
+
           # Added alias for the sake of brevity.
           alias_method :hato_conversations, :denshobato_conversations
           alias_method :hato_messages,      :denshobato_messages
+          alias_method :blacklist,          :denshobato_blacklists
         end
       end
     end

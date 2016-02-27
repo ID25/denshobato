@@ -20,6 +20,7 @@ module Denshobato
     Denshobato.autoload :Conversation, 'denshobato/models/conversation'
     Denshobato.autoload :Message,      'denshobato/models/message'
     Denshobato.autoload :Notification, 'denshobato/models/notification'
+    Denshobato.autoload :Blacklist,    'denshobato/models/blacklist'
 
     # Add helper methods to core model
     Denshobato.autoload :CoreHelper, 'denshobato/helpers/core_helper'
