@@ -124,10 +124,23 @@ $color-blue: #8AC0D9
   .chat-message
     margin-bottom: $spacing
     width: 100%
+    padding: 15px
     +clearfix
     &:last-of-type
       margin-bottom: 0
       position: relative
+
+    .full-name-recipient
+      display: block
+      font-size: 12px
+      font-style: italic
+      color: grey
+      margin-top: 0px
+
+    .full-name-sender
+      @extend .full-name-recipient
+      text-align: right
+      color: sienna
 
     .chat-message-wrapper
       max-width: 70%
@@ -156,6 +169,20 @@ $color-blue: #8AC0D9
 
     &.chat-message-recipient
 
+      .message-time
+        font-size: xx-small
+        display: block
+        margin: 0 auto
+        position: absolute
+        margin-top: -3px
+        left: 96px
+
+      .message-author
+        font-size: small
+        position: absolute
+        top: 76px
+        left: 17px
+
       .chat-message-wrapper,
       .chat-message-content
         float: left
@@ -169,6 +196,20 @@ $color-blue: #8AC0D9
         border-top-color: $color-green - 20
 
     &.chat-message-sender
+
+      .message-time
+        font-size: xx-small
+        display: block
+        margin: 0 auto
+        position: absolute
+        margin-top: -3px
+        right: 96px
+
+      .message-author
+        font-size: small
+        position: absolute
+        top: 77px
+        right: 10px
 
       .chat-message-wrapper,
       .chat-message-content
@@ -194,9 +235,19 @@ $color-blue: #8AC0D9
       width: 100%
       +clearfix
 
-      span
-        margin-right: 4px
+      .chat-message-localization
         color: #8A8A8A
+        margin: 0px 0px 0px 0px
+        display: block
+        font-size: 10px
+        border: 1px solid rgba(0, 0, 0, 0.23)
+        padding: 2px 0px 2px 7px
+        border-radius: 37px
+        width: 51px
+        &:hover
+          background: #F1F1F1
+          color: black
+          border: 1px solid white
 
 .chat-wrapper::-webkit-scrollbar
   width: 6px
