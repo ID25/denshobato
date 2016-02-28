@@ -31,7 +31,7 @@ module Denshobato
       recipient_id + recipient_type
     end
 
-    def fill_message_form(form, user, room)
+    def fill_message_form(form, user, room_id)
       # @message = current_user.build_conversation_message(@conversation)
       # = form_for [@conversation, @message] do |form|
       ### = form.text_field :body
@@ -40,7 +40,7 @@ module Denshobato
 
       sender_id       = form.hidden_field :sender_id,       value: user.id
       sender_class    = form.hidden_field :sender_type,     value: user.class.name
-      conversation_id = form.hidden_field :conversation_id, value: room.id
+      conversation_id = form.hidden_field :conversation_id, value: room_id
 
       sender_id + sender_class + conversation_id
     end

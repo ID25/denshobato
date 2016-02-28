@@ -30,7 +30,10 @@ module Denshobato
                     <%= javascript_include_tag 'denshobato' %>
                   </body>
 
-                4. In the page with your conversation, e.g  # => conversation/32
+                4. Mount API route in your routes.rb
+                   mount Denshobato::DenshobatoApi => '/'
+
+                5. In the page with your conversation, e.g  # => conversation/32
                    Add this helper with arguments,
 
                    = render_denshobato_messages(@conversation, current_user)
