@@ -38,6 +38,8 @@ module Denshobato
       ### = fill_message_form(form, @message)
       ### = form.submit
 
+      room_id = room_id.id if room_id.is_a?(ActiveRecord::Base)
+
       sender_id       = form.hidden_field :sender_id,       value: user.id
       sender_class    = form.hidden_field :sender_type,     value: user.class.name
       conversation_id = form.hidden_field :conversation_id, value: room_id
