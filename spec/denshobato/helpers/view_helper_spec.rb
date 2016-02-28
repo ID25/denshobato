@@ -25,4 +25,14 @@ describe Denshobato::ViewHelper do
       expect(helper.can_create_conversation?(sender, sender)).to be_falsey
     end
   end
+
+  describe '#devise_url_helper' do
+    let(:user) { create(:user) }
+    let(:duck) { create(:duck) }
+
+    it 'return correct url' do
+      expect(helper.devise_url_helper(:new, user, :session)).to        eq :new_user_session
+      expect(helper.devise_url_helper(:edit, duck, :registration)). to eq :edit_duck_registration
+    end
+  end
 end
