@@ -26,7 +26,6 @@ export default class Message extends Component {
 
   render() {
     const { message, sender } = this.props;
-    console.log(message);
     const cssClass = (message.author == sender.author) ? 'recipient' : 'sender';
 
     return (

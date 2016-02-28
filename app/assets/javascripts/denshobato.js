@@ -25878,7 +25878,6 @@
 	      var message = _props.message;
 	      var sender = _props.sender;
 
-	      console.log(message);
 	      var cssClass = message.author == sender.author ? 'recipient' : 'sender';
 
 	      return _react2.default.createElement(
