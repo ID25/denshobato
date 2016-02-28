@@ -38,7 +38,7 @@ module Denshobato
     def show_image(user, image, css_class)
       # Show image_tag with user avatar, and css class
 
-      image_tag(user.try(image), class: css_class)
+      image_tag(user.try(image) || '', class: css_class)
     end
 
     def show_filter(klass, fields)

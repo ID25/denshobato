@@ -20,6 +20,18 @@ module Denshobato
       hato_blacklist.where(blocker: blocker, blocked: blocked).present?
     end
 
+    def devise_url_helper(action, user, controller)
+      # Polymorphic devise urls
+      # E.g, you have two models, seller and customer
+      # Then you can create helper like current_account
+      # And use this method for url's
+
+      # devise_url_helper(:edit, current_account, :registration)
+      # => :edit_seller_registration, or :edit_customer_registration
+
+      "#{action}_#{user.class.name.downcase}_#{controller}".to_sym
+    end
+
     def fill_conversation_form(form, recipient)
       # = form_for @conversation do |form|
       ### = fill_conversation_form(form, @conversation)

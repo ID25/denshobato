@@ -22,7 +22,7 @@ module Denshobato
 
       def copy_blacklists
         sleep 1
-        copy_file './migrations/create_blacklists.rb.rb', "db/migrate/#{time}_create_denshobato_blacklists.rb"
+        copy_file './migrations/create_blacklists.rb', "db/migrate/#{time}_create_denshobato_blacklists.rb"
       end
 
       def done
