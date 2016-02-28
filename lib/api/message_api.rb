@@ -52,7 +52,7 @@ class MessageApi < Grape::API
     get :get_conversation_messages do
       # Fetch all messages from conversation
 
-      messages = Denshobato::Conversation.find(params[:id]).messages
+      messages = Denshobato::Conversation.find(params[:id]).messages.includes(:author)
 
       messages.each_with_object([]) { |msg, arr| arr << formated_messages(msg) }
     end
