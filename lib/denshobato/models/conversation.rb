@@ -23,7 +23,7 @@ module Denshobato
 
     # Scopes
     scope :my_conversations, lambda { |user, bool|
-      bool ? where(trashed: bool, sender: user) : includes(:recipient).where(trashed: bool, sender: user)
+      bool ? where(trashed: bool, sender: user).order(updated_at: :desc) : includes(:recipient).where(trashed: bool, sender: user).order(updated_at: :desc)
     }
 
     # Methods

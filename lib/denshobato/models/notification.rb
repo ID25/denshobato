@@ -4,7 +4,7 @@ module Denshobato
 
     # Associations
     belongs_to :denshobato_message,      class_name: 'Denshobato::Message', foreign_key: 'message_id', dependent: :destroy
-    belongs_to :denshobato_conversation, class_name: 'Denshobato::Conversation', foreign_key: 'conversation_id'
+    belongs_to :denshobato_conversation, class_name: 'Denshobato::Conversation', foreign_key: 'conversation_id', touch: true
 
     # Validations
     validates :message_id, :conversation_id, presence: true
