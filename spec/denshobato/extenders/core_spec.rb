@@ -71,8 +71,8 @@ describe Denshobato::Extenders::Core do
   end
 
   describe '#image' do
-    it 'expect default image' do
-      expect(@duck.image).to eq 'http://i.imgur.com/pGHOaLg.png'
+    it 'expect default image with gravatar format, when model don`t have email field' do
+      expect(@duck.image).to eq 'https://secure.gravatar.com/avatar/e13743a7f1db7f4246badd6fd6ff54ff/?d=mm'
     end
 
     it 'custom image' do
