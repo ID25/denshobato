@@ -14,8 +14,8 @@ module Denshobato
     # Validate fields
     validates         :sender_id, :sender_type, :recipient_id, :recipient_type, presence: true
     validate          :conversation_uniqueness, on: :create
-    before_validation :check_sender # Sender can't create conversations with yourself.
-    before_validation :blocked_user # Check if blocked user try to start conversation
+    before_validation :check_sender # Sender can't create conversation with himself
+    before_validation :blocked_user # Check if blocked user tries to start conversation
 
     # Callbacks
     after_create      :recipient_conversation # Create conversation for recipient, where he is sender.
@@ -28,7 +28,7 @@ module Denshobato
 
     # Methods
     def messages
-      # Return all messages for conversation
+      # Return all messages of conversation
 
       ids = notifications.pluck(:message_id)
       hato_message.where(id: ids)
@@ -42,7 +42,7 @@ module Denshobato
     end
 
     def from_trash
-      # Move conversation from trash, to active
+      # Move conversation from trash
 
       to_trash { false }
     end
@@ -65,7 +65,7 @@ module Denshobato
     end
 
     def conversation_uniqueness
-      # Checking conversation for uniqueness, when recipient is sender, and vice versa.
+      # Check conversation for uniqueness, when recipient is sender, and vice versa.
 
       hash = Hash[*columns.flatten] # => { sender_id: 1, sender_type: 'User' ... }
 
@@ -74,14 +74,14 @@ module Denshobato
 
     def remove_messages
       # When sender and recipient remove their conversation together
-      # remove all messages belongs to this conversation and notifications
+      # remove all messages and notifications belonging to this conversation
 
       hato_message.where(id: messages.map(&:id)).destroy_all
       notifications.destroy_all
     end
 
     def both_conversation_removed?
-      # Check when both conversations removed
+      # Check when both conversations are removed
 
       hato_conversation.where(sender: recipient, recipient: sender).empty?
     end

@@ -47,7 +47,7 @@ module Denshobato
 
       room = hato_conversation.find(conversation_id)
 
-      # If author of message not present in conversation, show error
+      # If author of message is not present in conversation, show error
 
       errors.add(:message, 'You can`t post to this conversation') unless user_in_conversation(room, author)
     end
@@ -57,10 +57,10 @@ module Denshobato
       sender         = conversation.sender
       recipient      = conversation.recipient
 
-      # Find conversation, where sender it's recipient
+      # Find conversation where sender it's recipient
       conversation_2 = recipient.find_conversation_with(sender)
 
-      # If recipient delete their conversation, create it for him
+      # If recipient deletes conversation, create it for him
       conversation_2 = create_conversation_for_recipient(sender, recipient) if conversation_2.nil?
 
       # Send notifications for new messages to sender and recipient
@@ -68,14 +68,14 @@ module Denshobato
     end
 
     def user_in_conversation(room, author)
-      # Check if user already in conversation
+      # Check if user is already in conversation
 
       hato_conversation.where(id: room.id, sender: author).present? || hato_conversation.where(id: room.id, recipient: author).present?
     end
 
     def create_conversation_for_recipient(sender, recipient)
       # Create Conversation for recipient
-      # Skip callbacks, because conversation for sender already exists
+      # Skip callbacks, because conversation for sender exists already
 
       conv = hato_conversation.new(sender: recipient, recipient: sender)
       hato_conversation.skip_callback(:create, :after, :recipient_conversation)
@@ -84,7 +84,7 @@ module Denshobato
     end
 
     def message_belongs_to_conversation?
-      # Check if message have live notifications for any conversation
+      # Check if message has live notifications for any conversation
 
       hato_conversation.where(id: notifications.pluck(:conversation_id)).present?
     end

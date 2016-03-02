@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ['ID25']
   spec.email         = ['xid25x@gmail.com']
 
-  spec.summary       = 'Denshobato - private messaging between users.'
-  spec.description   = 'Denshobato - private messaging between users.'
+  spec.summary       = 'Denshobato - private messaging between models'
+  spec.description   = 'Denshobato - private messaging between models'
   spec.homepage      = 'https://github.com/ID25/denshobato'
   spec.license       = 'MIT'
 

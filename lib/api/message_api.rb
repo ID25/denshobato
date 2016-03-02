@@ -31,10 +31,10 @@ class MessageApi < Grape::API
       # Find conversation, where sender it's recipient
       conversation_2 = recipient.find_conversation_with(sender)
 
-      # If recipient delete their conversation, create it for him
+      # If recipient deletes the conversation, create it again
       conversation_2 = create_conversation_for_recipient(sender, recipient) if conversation_2.nil?
 
-      # Send notifications for new messages to sender and recipient
+      # Send notifications of new messages to sender and recipient
       [conversation.id, conversation_2.id].each { |id| message.notifications.create(conversation_id: id) }
     end
 
@@ -59,7 +59,7 @@ class MessageApi < Grape::API
 
     desc 'Create Message in conversation'
     post :create_message do
-      # Create message in conversation
+      # Create a message in conversation
 
       params do
         requires :message, type: Hash do
@@ -87,10 +87,9 @@ class MessageApi < Grape::API
     delete :delete_message do
       # Delete message from DB
 
-      # current_user = take_current_user(params)
-
       message = message_class.find(params[:id])
       conversation = params[:conversation]
+
       densh_conversation.where(id: conversation).includes(:denshobato_notifications).where(denshobato_notifications: { message_id: message.id }).first.notifications.first.destroy
     end
   end
