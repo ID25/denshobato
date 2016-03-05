@@ -9,9 +9,6 @@ Denshobato.autoload :ControllerHelper, 'denshobato/helpers/controller_helper'
 # View Helpers for messaging
 Denshobato.autoload :ViewMessagingHelper, 'denshobato/helpers/view_messaging_helper'
 
-# Helpers for React-Redux
-Denshobato.autoload :ReactHelper, 'denshobato/helpers/react_helper'
-
 module Denshobato
   if defined?(ActiveRecord::Base)
     require 'denshobato/extenders/core' # denshobato_for method
@@ -26,7 +23,7 @@ module Denshobato
     Denshobato.autoload :ConversationHelper, 'denshobato/helpers/core_modules/conversation_helper'
     Denshobato.autoload :MessageHelper, 'denshobato/helpers/core_modules/message_helper'
     Denshobato.autoload :BlacklistHelper, 'denshobato/helpers/core_modules/blacklist_helper'
-    Denshobato.autoload :ChatPanelHelper, 'denshobato/helpers/core_modules/chat_panel_helper'
+    Denshobato.autoload :ChatPanelHelper, 'denshobato/helpers/core_modules/chat_panel_helper' if defined?(DenshobatoChatPanel)
     Denshobato.autoload :CoreHelper, 'denshobato/helpers/core_helper'
 
     ActiveRecord::Base.extend Denshobato::Extenders::Core
