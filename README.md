@@ -3,6 +3,7 @@
 ![alt text](http://i.imgur.com/NuhMPrg.png "Denshobato")
 
 ##### [Install Gem](#install_gem)
+##### [Tutorial](#tutorial)
 ##### [Conversation API](#conversation)
 ##### [Message API](#message)
 ##### [Trash API](#trash)
@@ -44,6 +45,9 @@ Add this line to your model. This will make it able to send messages.
 ```ruby
   denshobato_for :your_class
 ```
+
+### <a name="tutorial"> </a>Tutorial
+[Create messaging system between seller and customer.](http://id25.github.io/2016/03/01/make-private-dialog-between-seller-and-customer.html)
 
 ### Example:
 ```ruby
