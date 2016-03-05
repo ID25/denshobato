@@ -10,7 +10,7 @@
 ##### [BlackList API](#blacklist)
 ##### [Controller Herper API](#controller)
 ##### [View Herper API](#view)
-##### [Addons](#addons)
+##### [Extensions](#extensions-1)
 
 ### <a name="install_gem"> </a>Install Gem
 
@@ -75,7 +75,7 @@ You're ready!
 ```ruby
 current_user.make_conversation_with(customer)
 # => #<Denshobato::Conversation id: nil, sender_id: 1, sender_type: "User", recipient_id: 1,
-     #	recipient_type: "User", created_at: nil, updated_at: nil, trashed: false>
+     #  recipient_type: "User", created_at: nil, updated_at: nil, trashed: false>
 
 # Example:
 # In your view:
@@ -199,7 +199,7 @@ def create
   @message = current_account.send_message_to(conversation_id, message_params)
 
   if @message.save
-	# Important, send notifications after save message
+  # Important, send notifications after save message
     @message.send_notification(conversation_id)
     redirect_to conversation_path(conversation_id)
   else
@@ -305,7 +305,7 @@ Check if conversation exists, return `true` or `false`
 # @conversation = current_user.find_conversation(@user)
 
 - if conversation_exists?(current_user, @user)
-	= link_to 'Open chat', your_path(@conversation)
+  = link_to 'Open chat', your_path(@conversation)
 ```
 
 Check if user can create conversation with another user
@@ -373,7 +373,7 @@ And in your view
 
 ***
 
-### <a name="addons"></a>Addons
+### <a name="extensions"></a>Extensions
 ![alt text](http://i.imgur.com/0sUUfDl.jpg "Screen")
 Denshobato has addon [denshobato_chat_panel](https://github.com/ID25/denshobato_chat_panel). This is simple chat panel for you. If you don't need any special customization for dialog panel, or if you want to try messaging quickly, you can use chat panel.
 
