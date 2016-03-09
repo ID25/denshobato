@@ -2,6 +2,9 @@
 
 ![alt text](http://i.imgur.com/NuhMPrg.png "Denshobato")
 
+Denshobato is a Rails gem that helps models communicate with each other. It gives simple api for creating a complete conversation system. You can create conversation with any model. Denshobato provides api methods for making conversation, messages, blacklists and trash. It also provides Helper methods for controller and view.
+***
+
 ##### [Install Gem](#install_gem)
 ##### [Tutorial](#-tutorial)
 ##### [Conversation API](#conversation)
@@ -227,8 +230,8 @@ end
   = button_to 'Move from Trash', from_trash_path(id: room), class: 'btn btn-warning', method: :patch
 
 # Route
-patch 'to_trash/:id',   to: 'conversations#to_trash',   as: :to_trash
-patch 'from_trash/:id', to: 'conversations#from_trash', as: :from_trash
+patch :to_trash,   to: 'conversations#to_trash',   as: :to_trash
+patch :from_trash, to: 'conversations#from_trash', as: :from_trash
 
 # In your conversation controller
 %w(to_trash from_trash).each do |name|
@@ -257,8 +260,8 @@ end
         class: 'btn btn-danger'
 
 # Routes
-post 'black_list/:user',            to: 'users#add_to_blacklist',      as: :black_list
-post 'remove_from_blacklist/:user', to: 'users#remove_from_blacklist', as: :remove_from_blacklist
+post :black_list,            to: 'users#add_to_blacklist',      as: :black_list
+post :remove_from_blacklist, to: 'users#remove_from_blacklist', as: :remove_from_blacklist
 
 # Controller
 [%w(add_to_blacklist save), %w(remove_from_blacklist destroy)].each do |name, action|
@@ -341,7 +344,7 @@ Show avatar for recipient
 ```ruby
 = interlocutor_avatar(current_user, :user_avatar, @conversation, 'img-responsive')
 
-# => <img src="..."/>
+# => <img src="..." class='img-responsive'/>
 ```
 
 Show the last message, it's author and his avatar
