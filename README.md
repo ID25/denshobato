@@ -3,7 +3,7 @@
 ![alt text](http://i.imgur.com/NuhMPrg.png "Denshobato")
 
 ##### [Install Gem](#install_gem)
-##### [Tutorial](#tutorial)
+##### [Tutorial](#-tutorial)
 ##### [Conversation API](#conversation)
 ##### [Message API](#message)
 ##### [Trash API](#trash)
@@ -12,15 +12,15 @@
 ##### [View Herper API](#view)
 ##### [Extensions](#extensions-1)
 
-### <a name="install_gem"> </a>Install Gem
-
-#### Requirements
+### Requirements
 ```
 Rails 4.
 
 Rails 3 isn't supported.
 Not ready for 5, while it is in Beta.
 ```
+
+### <a name="install_gem"> </a>Install Gem
 
 ```ruby
 gem 'denshobato'
@@ -43,11 +43,15 @@ rake db:migrate
 
 Add this line to your model. This will make it able to send messages.
 ```ruby
-  denshobato_for :your_class
+denshobato_for :your_class
 ```
 
 ### <a name="tutorial"> </a>Tutorial
-[Create messaging system between seller and customer.](http://id25.github.io/2016/03/01/make-private-dialog-between-seller-and-customer.html)
+#### Create messaging system between reseller and customer.
+[Part 1](http://id25.github.io/2016/03/01/make-private-dialog-between-reseller-and-customer-part-1.html)
+
+[Part 2](http://id25.github.io/2016/03/02/make-private-dialog-between-reseller-and-customer-part-2.html)
+
 
 ### Example:
 ```ruby
@@ -379,6 +383,9 @@ Denshobato has addon [denshobato_chat_panel](https://github.com/ID25/denshobato_
 
 That`s all for now.
 
+## Upcoming features
++ Conference
++ Read/Unread messages
 
 ## Issues
 
