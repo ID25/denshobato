@@ -2,6 +2,9 @@
 
 ![alt text](http://i.imgur.com/NuhMPrg.png "Denshobato")
 
+[![Gem Version](https://badge.fury.io/rb/denshobato.svg)](https://badge.fury.io/rb/denshobato)
+[![Build Status](https://travis-ci.org/ID25/denshobato.svg?branch=master)](https://travis-ci.org/ID25/denshobato)
+
 Denshobato is a Rails gem that helps models communicate with each other. It gives simple api for creating a complete conversation system. You can create conversation with any model. Denshobato provides api methods for making conversation, messages, blacklists and trash. It also provides Helper methods for controller and view.
 ***
 
