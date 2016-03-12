@@ -1,5 +1,4 @@
 require 'denshobato/version'
-require 'denshobato/engine' if defined?(Rails)
 
 # Helpers
 Denshobato.autoload :HelperUtils,      'denshobato/helpers/helper_utils'
@@ -23,7 +22,6 @@ module Denshobato
     Denshobato.autoload :ConversationHelper, 'denshobato/helpers/core_modules/conversation_helper'
     Denshobato.autoload :MessageHelper, 'denshobato/helpers/core_modules/message_helper'
     Denshobato.autoload :BlacklistHelper, 'denshobato/helpers/core_modules/blacklist_helper'
-    Denshobato.autoload :ChatPanelHelper, 'denshobato/helpers/core_modules/chat_panel_helper' if defined?(DenshobatoChatPanel)
     Denshobato.autoload :CoreHelper, 'denshobato/helpers/core_helper'
 
     ActiveRecord::Base.extend Denshobato::Extenders::Core
